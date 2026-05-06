@@ -1,0 +1,13 @@
+view_name: analytics.vw_top_contributors
+description: "Summary of top comment contributors, including participation, sentiment, and reply counts."
+columns:
+  - name: contributor_id
+    description: "Identifier of the comment contributor."
+  - name: comment_count
+    description: "Total number of comments authored by the contributor."
+  - name: avg_sentiment
+    description: "Average sentiment score of the contributor's comments."
+  - name: total_replies
+    description: "Total number of replies received by the contributor's comments."
+  - name: distinct_article_count
+    description: "Number of distinct articles the contributor commented on."

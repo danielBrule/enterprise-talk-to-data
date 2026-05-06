@@ -1,0 +1,15 @@
+view_name: analytics.vw_ingestion_errors
+description: "Pipeline ingestion errors captured from the ops_pipeline_errors table for diagnostics and monitoring."
+columns:
+  - name: error_id
+    description: "Unique error identifier."
+  - name: stage
+    description: "Pipeline stage where the error occurred."
+  - name: data_id
+    description: "Identifier of the data item associated with the error."
+  - name: error_type
+    description: "Type or category of the error."
+  - name: error_message
+    description: "Detailed error message."
+  - name: attempted_at
+    description: "Timestamp when the error was recorded."
