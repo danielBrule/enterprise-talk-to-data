@@ -1,0 +1,13 @@
+name: contributors
+description: "A category focused on users or contributors who post comments, their activity volume, sentiment, and reach across articles."
+related_views:
+  - analytics.vw_top_contributors
+business_meaning: |
+  Contributor analytics identify the most active voices in the community and support moderation, influencer evaluation, and engagement strategy.
+key_terms:
+  - contributor_id
+  - comment_count
+  - avg_sentiment
+  - distinct_article_count
+limitations: |
+  Contributor behavior is measured only by logged comments; it does not capture reader influence outside the comment stream or anonymous participation."

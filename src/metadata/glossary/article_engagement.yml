@@ -1,0 +1,15 @@
+name: article engagement
+description: "A category describing metrics and insights around reader interaction with articles, including comments, sentiment, replies, and keyword coverage."
+related_views:
+  - analytics.vw_article_engagement
+business_meaning: |
+  Article engagement helps editorial stakeholders identify which content resonates with readers and where to focus
+  promotion, analysis, or moderation resources. It is used to evaluate article performance beyond page views.
+key_terms:
+  - comment_count
+  - avg_comment_sentiment
+  - total_replies
+  - keyword_count
+limitations: |
+  Article engagement metrics are only as good as comment coverage and keyword tagging quality. High comment volume may
+  indicate controversy rather than positive reception.

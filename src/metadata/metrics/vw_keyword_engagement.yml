@@ -1,0 +1,50 @@
+view_name: analytics.vw_keyword_engagement
+category: keyword trends
+purpose: "Summarizes keyword performance across articles by measuring article coverage, comment volume, sentiment, and contributor engagement per keyword."
+business_meaning: |
+  This view helps editorial and SEO teams understand which topics attract conversation, how sentiment varies by keyword,
+  and which keywords are driving interaction across multiple articles.
+columns:
+  - name: keyword_id
+    description: "Primary keyword identifier from core_keywords."
+  - name: full_keyword
+    description: "The full normalized keyword text."
+  - name: article_count
+    description: "Number of distinct articles associated with the keyword."
+  - name: comment_count
+    description: "Total number of comments on articles tagged with the keyword."
+  - name: avg_comment_sentiment
+    description: "Average sentiment score for comments on keyword-associated articles."
+  - name: contributor_count
+    description: "Number of distinct contributors who commented on keyword-associated articles."
+limitations:
+  - "Keyword association is based on the core_article_keywords link table and may not capture implicit topic relevance."
+  - "Sentiment is derived from comments, not the keyword or article text itself, so it reflects reader reaction rather than keyword tone."
+  - "Keywords with very low article coverage can produce unstable average sentiment values."
+example_questions:
+  - natural_language_question: "Which keywords appear in the most articles and have the highest average comment sentiment?"
+    expected_view: analytics.vw_keyword_engagement
+    expected_sql: |
+      SELECT keyword_id, full_keyword, article_count, avg_comment_sentiment
+      FROM analytics.vw_keyword_engagement
+      ORDER BY article_count DESC, avg_comment_sentiment DESC
+      FETCH FIRST 10 ROWS ONLY;
+    expected_result_shape:
+      columns:
+        - keyword_id
+        - full_keyword
+        - article_count
+        - avg_comment_sentiment
+      row_count: list
+  - natural_language_question: "For a given keyword, how many unique contributors commented on related articles?"
+    expected_view: analytics.vw_keyword_engagement
+    expected_sql: |
+      SELECT keyword_id, full_keyword, contributor_count
+      FROM analytics.vw_keyword_engagement
+      WHERE full_keyword = 'climate change';
+    expected_result_shape:
+      columns:
+        - keyword_id
+        - full_keyword
+        - contributor_count
+      row_count: single

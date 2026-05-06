@@ -1,0 +1,13 @@
+name: ingestion errors
+description: "A category for pipeline failures and data ingestion problems captured during ETL or data import operations."
+related_views:
+  - analytics.vw_ingestion_errors
+business_meaning: |
+  Error tracking is essential for operational reliability and for identifying repeat failure patterns in specific pipeline stages or data sources.
+key_terms:
+  - stage
+  - error_type
+  - error_message
+  - attempted_at
+limitations: |
+  Error records may not include every retry attempt or resolution status, and free-text messages can require manual interpretation."

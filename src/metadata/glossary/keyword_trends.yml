@@ -1,0 +1,13 @@
+name: keyword trends
+description: "A category that captures how keywords are performing across articles, including breadth, comment volume, sentiment, and contributor reach."
+related_views:
+  - analytics.vw_keyword_engagement
+business_meaning: |
+  Keyword trends reveal which topics are most discussed and how audience sentiment differs by topic. This supports content planning, SEO strategy, and trend monitoring.
+key_terms:
+  - article_count
+  - comment_count
+  - avg_comment_sentiment
+  - contributor_count
+limitations: |
+  Keyword metrics depend on the completeness of keyword assignment and may understate topics that are described indirectly rather than tagged explicitly."

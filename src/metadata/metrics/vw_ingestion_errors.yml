@@ -1,0 +1,53 @@
+view_name: analytics.vw_ingestion_errors
+category: ingestion errors
+purpose: "Provides a pipeline-level error log for ingestion operations, exposing stage, data identity, error type, message, and timestamp."
+business_meaning: |
+  This view is critical for operations and engineering teams to monitor ingestion failures,
+  diagnose pipeline issues quickly, and correlate error frequency with specific ingestion stages or data sources.
+columns:
+  - name: error_id
+    description: "Unique identifier for the pipeline error record."
+  - name: stage
+    description: "Pipeline stage where the error occurred."
+  - name: data_id
+    description: "Identifier for the data item or batch that failed ingestion."
+  - name: error_type
+    description: "Categorized type of ingestion error."
+  - name: error_message
+    description: "Detailed error message returned by the pipeline."
+  - name: attempted_at
+    description: "Timestamp when the ingestion attempt was made."
+limitations:
+  - "This view reflects recorded pipeline errors only; it does not include successful ingestions or warnings."
+  - "Error details are stored as free text in error_message and may require additional parsing for structured analysis."
+  - "The view does not directly include downstream retry status or resolution state."
+example_questions:
+  - natural_language_question: "List the most recent ingestion errors by stage and error type."
+    expected_view: analytics.vw_ingestion_errors
+    expected_sql: |
+      SELECT error_id, stage, error_type, error_message, attempted_at
+      FROM analytics.vw_ingestion_errors
+      ORDER BY attempted_at DESC
+      FETCH FIRST 20 ROWS ONLY;
+    expected_result_shape:
+      columns:
+        - error_id
+        - stage
+        - error_type
+        - error_message
+        - attempted_at
+      row_count: list
+  - natural_language_question: "Find ingestion errors for a specific data item ID."
+    expected_view: analytics.vw_ingestion_errors
+    expected_sql: |
+      SELECT error_id, stage, error_type, error_message, attempted_at
+      FROM analytics.vw_ingestion_errors
+      WHERE data_id = 'article-12345';
+    expected_result_shape:
+      columns:
+        - error_id
+        - stage
+        - error_type
+        - error_message
+        - attempted_at
+      row_count: list

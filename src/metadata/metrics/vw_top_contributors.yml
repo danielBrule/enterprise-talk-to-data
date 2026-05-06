@@ -1,0 +1,49 @@
+view_name: analytics.vw_top_contributors
+category: contributors
+purpose: "Ranks contributors by activity and sentiment, summarizing comment volume, average sentiment, replies, and article reach."
+business_meaning: |
+  This view supports community management and contributor analysis by identifying the most active commenters,
+  measuring how their tone is reflected in sentiment, and showing how broadly they engage across different articles.
+columns:
+  - name: contributor_id
+    description: "Unique identifier for the contributor."
+  - name: comment_count
+    description: "Total number of comments posted by the contributor."
+  - name: avg_sentiment
+    description: "Average sentiment score of the contributor's comments."
+  - name: total_replies
+    description: "Aggregate number of replies received by the contributor's comments."
+  - name: distinct_article_count
+    description: "Number of distinct articles the contributor has commented on."
+limitations:
+  - "This view does not distinguish between positive and negative comments beyond average sentiment."
+  - "High comment volume may reflect controversial behavior rather than constructive engagement."
+  - "Contributor identity quality depends on the underlying core_comments contributor_id values."
+example_questions:
+  - natural_language_question: "Who are the top contributors by comment count?"
+    expected_view: analytics.vw_top_contributors
+    expected_sql: |
+      SELECT contributor_id, comment_count, avg_sentiment, distinct_article_count
+      FROM analytics.vw_top_contributors
+      ORDER BY comment_count DESC
+      FETCH FIRST 10 ROWS ONLY;
+    expected_result_shape:
+      columns:
+        - contributor_id
+        - comment_count
+        - avg_sentiment
+        - distinct_article_count
+      row_count: list
+  - natural_language_question: "Which contributors have the highest average sentiment and at least 20 comments?"
+    expected_view: analytics.vw_top_contributors
+    expected_sql: |
+      SELECT contributor_id, comment_count, avg_sentiment
+      FROM analytics.vw_top_contributors
+      WHERE comment_count >= 20
+      ORDER BY avg_sentiment DESC;
+    expected_result_shape:
+      columns:
+        - contributor_id
+        - comment_count
+        - avg_sentiment
+      row_count: list
