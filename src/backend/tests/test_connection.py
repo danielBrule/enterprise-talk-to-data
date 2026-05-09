@@ -29,7 +29,7 @@ async def test_execute_query_logs_success(monkeypatch):
 
     # Execute query and verify it returns correct data
     result = await connection.execute_query(
-        text("SELECT * FROM analytics.vw_article_engagement"), {"limit": 1}
+        text("SELECT * FROM analytics.vw_article_engagement LIMIT 1"), {"limit": 1}
     )
 
     assert result == [{"article_id": 1}]
@@ -43,8 +43,9 @@ async def test_execute_query_logs_failure(monkeypatch):
 
     monkeypatch.setattr(connection, "get_connection", lambda: mock_conn)
 
-    # Verify that exceptions are properly propagated
     with pytest.raises(ValueError, match="boom"):
         await connection.execute_query(
-            text("SELECT * FROM analytics.vw_article_engagement"), {"limit": 1}
+            text("SELECT * FROM analytics.vw_article_engagement LIMIT 1"), {"limit": 1}
         )
+
+
