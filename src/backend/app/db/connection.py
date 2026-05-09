@@ -29,14 +29,14 @@ def get_connection():
 async def execute_query(query: Executable, params: dict | None = None) -> list[dict]:
     start_time = time.perf_counter()
     params = params or {}
-    
+
     # Validate query for safety
     try:
         validate_query(str(query))
     except SQLSafetyError as e:
         logger.warning("sql.query.blocked query=%s reason=%s", str(query), str(e))
         raise
-    
+
     logger.info("sql.query.start sql=%s params=%s", str(query), params)
     try:
 

@@ -47,5 +47,3 @@ async def test_execute_query_logs_failure(monkeypatch):
         await connection.execute_query(
             text("SELECT * FROM analytics.vw_article_engagement LIMIT 1"), {"limit": 1}
         )
-
-

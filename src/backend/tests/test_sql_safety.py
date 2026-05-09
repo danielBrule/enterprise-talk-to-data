@@ -11,7 +11,9 @@ def test_validate_query_simple_select_with_limit():
 
 def test_validate_query_with_where_clause():
     """Valid: SELECT with WHERE and LIMIT"""
-    validate_query("SELECT id, title FROM analytics.vw_article_engagement WHERE article_id = 1 LIMIT 100")
+    validate_query(
+        "SELECT id, title FROM analytics.vw_article_engagement WHERE article_id = 1 LIMIT 100"
+    )
 
 
 def test_validate_query_max_limit():
@@ -67,7 +69,9 @@ def test_validate_query_drop_rejected():
 def test_validate_query_create_rejected():
     """Invalid: CREATE is not allowed"""
     with pytest.raises(SQLSafetyError, match="Only SELECT statements"):
-        validate_query("CREATE VIEW test AS SELECT * FROM analytics.vw_article_engagement")
+        validate_query(
+            "CREATE VIEW test AS SELECT * FROM analytics.vw_article_engagement"
+        )
 
 
 def test_validate_query_execute_rejected():
@@ -110,7 +114,9 @@ def test_validate_query_no_limit_rejected():
 def test_validate_query_limit_exceeds_max():
     """Invalid: LIMIT exceeds maximum"""
     with pytest.raises(SQLSafetyError, match="exceeds maximum"):
-        validate_query(f"SELECT * FROM analytics.vw_article_engagement LIMIT {MAX_LIMIT + 1}")
+        validate_query(
+            f"SELECT * FROM analytics.vw_article_engagement LIMIT {MAX_LIMIT + 1}"
+        )
 
 
 def test_validate_query_limit_zero():
