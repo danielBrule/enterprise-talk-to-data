@@ -3,6 +3,7 @@ pyodbc>=5.0.0
 sqlalchemy>=2.0.0
 fastapi>=0.120.0
 uvicorn[standard]>=0.24.0
+openai>=1.0.0
 
 # Dev dependencies (optional)
 pytest>=8.0.0

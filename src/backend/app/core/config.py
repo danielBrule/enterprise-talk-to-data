@@ -38,7 +38,46 @@ def _build_connection_string() -> str:
 
 
 class Settings:
-    database_url: str = _build_connection_string()
+    def __init__(self) -> None:
+        self.database_url = _build_connection_string()
+
+        self.azure_openai_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "")
+        self.azure_openai_api_key = os.getenv("AZURE_OPENAI_API_KEY", "")
+        self.azure_openai_default_deployment = os.getenv("AZURE_OPENAI_DEPLOYMENT", "")
+        self.azure_openai_api_version = os.getenv(
+            "AZURE_OPENAI_API_VERSION",
+            "2024-02-01",
+        )
+        self.azure_openai_schema_retrieval_deployment = os.getenv(
+            "AZURE_OPENAI_SCHEMA_RETRIEVAL_DEPLOYMENT",
+            "",
+        )
+        self.azure_openai_sql_generation_deployment = os.getenv(
+            "AZURE_OPENAI_SQL_GENERATION_DEPLOYMENT",
+            "",
+        )
+        self.azure_openai_summary_deployment = os.getenv(
+            "AZURE_OPENAI_SUMMARY_DEPLOYMENT",
+            "",
+        )
+
+    def get_azure_openai_deployment(self, task: str | None = None) -> str:
+        if task == "schema_retrieval":
+            return (
+                self.azure_openai_schema_retrieval_deployment
+                or self.azure_openai_default_deployment
+            )
+        if task == "sql_generation":
+            return (
+                self.azure_openai_sql_generation_deployment
+                or self.azure_openai_default_deployment
+            )
+        if task == "summary":
+            return (
+                self.azure_openai_summary_deployment
+                or self.azure_openai_default_deployment
+            )
+        return self.azure_openai_default_deployment
 
 
 settings = Settings()

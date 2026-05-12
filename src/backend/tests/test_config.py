@@ -29,3 +29,21 @@ def test_build_connection_string_missing_env(monkeypatch):
 
 def test_api_version_is_defined():
     assert config.API_VERSION == "0.1.0"
+
+
+def test_azure_openai_task_specific_deployments(monkeypatch):
+    monkeypatch.setenv("AZURE_OPENAI_DEPLOYMENT", "default-deploy")
+    monkeypatch.setenv("AZURE_OPENAI_SCHEMA_RETRIEVAL_DEPLOYMENT", "schema-deploy")
+    monkeypatch.setenv("AZURE_OPENAI_SQL_GENERATION_DEPLOYMENT", "sql-deploy")
+    monkeypatch.setenv("AZURE_OPENAI_SUMMARY_DEPLOYMENT", "summary-deploy")
+
+    settings = config.Settings()
+    print(settings.get_azure_openai_deployment("schema_retrieval"))
+    assert settings.get_azure_openai_deployment("schema_retrieval") == "schema-deploy"
+    assert settings.get_azure_openai_deployment("sql_generation") == "sql-deploy"
+    assert settings.get_azure_openai_deployment("summary") == "summary-deploy"
+    assert settings.get_azure_openai_deployment(None) == "default-deploy"
+
+    monkeypatch.delenv("AZURE_OPENAI_SCHEMA_RETRIEVAL_DEPLOYMENT", raising=False)
+    settings = config.Settings()
+    assert settings.get_azure_openai_deployment("schema_retrieval") == "default-deploy"
