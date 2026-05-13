@@ -107,7 +107,7 @@ def test_validate_query_dbo_join_rejected():
 # Invalid queries - missing or invalid LIMIT
 def test_validate_query_no_limit_rejected():
     """Invalid: Missing LIMIT clause"""
-    with pytest.raises(SQLSafetyError, match="must include a LIMIT clause"):
+    with pytest.raises(SQLSafetyError, match="must include a LIMIT or TOP clause"):
         validate_query("SELECT * FROM analytics.vw_article_engagement")
 
 

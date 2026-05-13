@@ -111,31 +111,40 @@ async def test_view_selection_service(monkeypatch):
             "purpose": "Provides article-level engagement metrics",
             "columns": [
                 {"name": "article_id", "description": "Primary article identifier"},
-                {"name": "comment_count", "description": "Total number of comments"}
+                {"name": "comment_count", "description": "Total number of comments"},
             ],
             "example_questions": [
                 {
                     "natural_language_question": "Which articles have the most comments?",
-                    "expected_view": "analytics.vw_article_engagement"
+                    "expected_view": "analytics.vw_article_engagement",
                 }
-            ]
+            ],
         }
     ]
-    monkeypatch.setattr(view_selection_service, "get_metrics_metadata", AsyncMock(return_value=mock_metrics))
+    monkeypatch.setattr(
+        view_selection_service,
+        "get_metrics_metadata",
+        AsyncMock(return_value=mock_metrics),
+    )
 
     # Mock the LLM service
     mock_llm_response = '{"selected_views": ["analytics.vw_article_engagement"], "reason": "Question refers to articles and comment volume."}'
     mock_llm = MagicMock()
     mock_llm.generate_response = AsyncMock(return_value=mock_llm_response)
-    monkeypatch.setattr(view_selection_service, "LLMService", MagicMock(return_value=mock_llm))
+    monkeypatch.setattr(
+        view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
+    )
 
     service = view_selection_service.ViewSelectionService()
-    result = await service.select_views("Which articles had the most comments last week?")
+    result = await service.select_views(
+        "Which articles had the most comments last week?"
+    )
 
     expected = {
         "question": "Which articles had the most comments last week?",
         "selected_views": ["analytics.vw_article_engagement"],
-        "reason": "Question refers to articles and comment volume."
+        "confidence": 0.0,
+        "reason": "Question refers to articles and comment volume.",
     }
     assert result == expected
 
@@ -148,16 +157,22 @@ async def test_view_selection_fallback_when_llm_not_configured(monkeypatch):
             "view_name": "analytics.vw_article_engagement",
             "category": "article engagement",
             "purpose": "Provides article-level engagement metrics",
-            "columns": []
+            "columns": [],
         }
     ]
-    monkeypatch.setattr(view_selection_service, "get_metrics_metadata", AsyncMock(return_value=mock_metrics))
+    monkeypatch.setattr(
+        view_selection_service,
+        "get_metrics_metadata",
+        AsyncMock(return_value=mock_metrics),
+    )
 
     # Mock LLMService to raise ValueError (simulating missing config)
     def mock_llm_init_error():
         raise ValueError("Azure OpenAI configuration is incomplete")
-    
-    monkeypatch.setattr(view_selection_service, "LLMService", MagicMock(side_effect=mock_llm_init_error))
+
+    monkeypatch.setattr(
+        view_selection_service, "LLMService", MagicMock(side_effect=mock_llm_init_error)
+    )
 
     service = view_selection_service.ViewSelectionService()
     result = await service.select_views("What is the engagement?")
@@ -177,23 +192,29 @@ async def test_view_selection_with_multiple_views(monkeypatch):
             "category": "article engagement",
             "purpose": "Article engagement metrics",
             "columns": [],
-            "example_questions": []
+            "example_questions": [],
         },
         {
             "view_name": "analytics.vw_keyword_engagement",
             "category": "keyword engagement",
             "purpose": "Keyword engagement metrics",
             "columns": [],
-            "example_questions": []
-        }
+            "example_questions": [],
+        },
     ]
-    monkeypatch.setattr(view_selection_service, "get_metrics_metadata", AsyncMock(return_value=mock_metrics))
+    monkeypatch.setattr(
+        view_selection_service,
+        "get_metrics_metadata",
+        AsyncMock(return_value=mock_metrics),
+    )
 
     # Mock LLM to select both views
     mock_llm_response = '{"selected_views": ["analytics.vw_article_engagement", "analytics.vw_keyword_engagement"], "reason": "Question requires both article and keyword data."}'
     mock_llm = MagicMock()
     mock_llm.generate_response = AsyncMock(return_value=mock_llm_response)
-    monkeypatch.setattr(view_selection_service, "LLMService", MagicMock(return_value=mock_llm))
+    monkeypatch.setattr(
+        view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
+    )
 
     service = view_selection_service.ViewSelectionService()
     result = await service.select_views("Show articles and keywords trending together")
@@ -212,15 +233,21 @@ async def test_view_selection_invalid_json_response(monkeypatch):
             "category": "article engagement",
             "purpose": "Article engagement metrics",
             "columns": [],
-            "example_questions": []
+            "example_questions": [],
         }
     ]
-    monkeypatch.setattr(view_selection_service, "get_metrics_metadata", AsyncMock(return_value=mock_metrics))
+    monkeypatch.setattr(
+        view_selection_service,
+        "get_metrics_metadata",
+        AsyncMock(return_value=mock_metrics),
+    )
 
     # Mock LLM to return invalid JSON
     mock_llm = MagicMock()
     mock_llm.generate_response = AsyncMock(return_value="This is not JSON")
-    monkeypatch.setattr(view_selection_service, "LLMService", MagicMock(return_value=mock_llm))
+    monkeypatch.setattr(
+        view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
+    )
 
     service = view_selection_service.ViewSelectionService()
     result = await service.select_views("What is the engagement?")
@@ -233,11 +260,15 @@ async def test_view_selection_invalid_json_response(monkeypatch):
 @pytest.mark.asyncio
 async def test_view_selection_no_metrics_available(monkeypatch):
     """Test that service handles missing metrics gracefully."""
-    monkeypatch.setattr(view_selection_service, "get_metrics_metadata", AsyncMock(return_value=[]))
+    monkeypatch.setattr(
+        view_selection_service, "get_metrics_metadata", AsyncMock(return_value=[])
+    )
 
     # Mock LLMService
     mock_llm = MagicMock()
-    monkeypatch.setattr(view_selection_service, "LLMService", MagicMock(return_value=mock_llm))
+    monkeypatch.setattr(
+        view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
+    )
 
     service = view_selection_service.ViewSelectionService()
     result = await service.select_views("What is the engagement?")

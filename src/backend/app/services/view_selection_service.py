@@ -72,6 +72,7 @@ Please select the most relevant view(s) that would help answer this question. Co
 Return your response as a JSON object with the following structure:
 {{
   "selected_views": ["view_name1", "view_name2"],
+  "confidence": 0.0,
   "reason": "Brief explanation of why these views were selected"
 }}
 
@@ -96,11 +97,13 @@ Select 1-3 views maximum. If no views are relevant, select the closest match.
             # Parse the JSON response
             result = json.loads(response.strip())
             selected_views = result.get("selected_views", [])
+            confidence = result.get("confidence", 0.0)
             reason = result.get("reason", "")
 
             return {
                 "question": question,
                 "selected_views": selected_views,
+                "confidence": confidence,
                 "reason": reason,
             }
         except json.JSONDecodeError:
@@ -108,5 +111,6 @@ Select 1-3 views maximum. If no views are relevant, select the closest match.
             return {
                 "question": question,
                 "selected_views": [],
+                "confidence": 0.0,
                 "reason": "Failed to parse LLM response",
             }

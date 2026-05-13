@@ -64,8 +64,8 @@ def test_get_views_metadata_endpoint(monkeypatch):
                 "view_name": "analytics.vw_article_engagement",
                 "columns": [
                     {"name": "article_id", "description": "Article ID"},
-                    {"name": "comment_count", "description": "Comment count"}
-                ]
+                    {"name": "comment_count", "description": "Comment count"},
+                ],
             }
         ]
 
@@ -86,11 +86,13 @@ def test_select_views_endpoint(monkeypatch):
         return {
             "question": question,
             "selected_views": ["analytics.vw_article_engagement"],
-            "reason": "Question refers to articles and comment volume."
+            "reason": "Question refers to articles and comment volume.",
         }
 
     monkeypatch.setattr(ViewSelectionService, "select_views", mock_select_views)
-    response = client.post("/api/v0/metadata/select-views?question=Which+articles+have+the+most+comments")
+    response = client.post(
+        "/api/v0/metadata/select-views?question=Which+articles+have+the+most+comments"
+    )
 
     assert response.status_code == 200
     data = response.json()
