@@ -12,3 +12,8 @@ output "openai_deployment_names" {
   description = "The Azure OpenAI deployments created by Terraform."
   value       = module.openai.deployment_names
 }
+
+output "openai_endpoint" {
+  description = "Azure OpenAI endpoint."
+  value       = module.openai.endpoint
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Script to automatically test all FastAPI endpoints.
+Integration tests for FastAPI endpoints.
 This script starts the server and tests all endpoints to ensure they work.
+Run with: python backend/tests/integration/test_integration_endpoints.py
 """
 
 import subprocess
@@ -11,8 +12,8 @@ import sys
 import os
 from pathlib import Path
 
-# Add the project root to Python path
-project_root = Path(__file__).parent
+# Get the project root (3 levels up from this file)
+project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
 
@@ -22,7 +23,7 @@ def start_server():
     env["PYTHONPATH"] = str(project_root)
     return subprocess.Popen(
         [
-            ".venv/Scripts/python.exe",
+            str(project_root / ".venv" / "Scripts" / "python.exe"),
             "-m",
             "uvicorn",
             "backend.main:app",
@@ -42,25 +43,37 @@ def test_endpoints():
     """Test all API endpoints."""
     base_url = "http://127.0.0.1:8000"
     endpoints = [
-        "/api/v0/articles",
-        "/api/v0/keywords",
-        "/api/v0/contributors",
-        "/api/v0/errors",
-        "/api/v0/version",
+        ("/health", "GET"),
+        ("/version", "GET"),
+        ("/api/v0/articles", "GET"),
+        ("/api/v0/keywords", "GET"),
+        ("/api/v0/contributors", "GET"),
+        ("/api/v0/errors", "GET"),
+        ("/api/v0/metadata/views", "GET"),
+        ("/api/v0/metadata/metrics", "GET"),
+        ("/api/v0/metadata/glossary", "GET"),
+        (
+            "/api/v0/metadata/select-views?question=Which+articles+have+the+most+comments",
+            "POST",
+        ),
     ]
 
     print("Testing FastAPI endpoints...")
     results = []
 
-    for endpoint in endpoints:
+    for endpoint, method in endpoints:
         try:
-            response = requests.get(f"{base_url}{endpoint}", timeout=10)
+            if method == "GET":
+                response = requests.get(f"{base_url}{endpoint}", timeout=10)
+            else:  # POST
+                response = requests.post(f"{base_url}{endpoint}", timeout=10)
+
             status = (
                 "✓ PASS"
                 if response.status_code == 200
                 else f"✗ FAIL ({response.status_code})"
             )
-            print(f"{status}: {endpoint}")
+            print(f"{status}: {method} {endpoint}")
             results.append(
                 (
                     endpoint,
@@ -69,14 +82,13 @@ def test_endpoints():
                 )
             )
         except requests.exceptions.RequestException as e:
-            print(f"✗ FAIL: {endpoint} - {e}")
+            print(f"✗ FAIL: {method} {endpoint} - {e}")
             results.append((endpoint, "ERROR", str(e)))
-
-    return results
 
 
 def main():
-    print("Starting FastAPI server for testing...")
+    print("Starting FastAPI server for integration testing...")
+    print(f"Project root: {project_root}\n")
 
     # Start the server
     server_process = start_server()
@@ -89,9 +101,9 @@ def main():
         results = test_endpoints()
 
         # Summary
-        print("\n" + "=" * 50)
-        print("TEST SUMMARY")
-        print("=" * 50)
+        print("\n" + "=" * 60)
+        print("INTEGRATION TEST SUMMARY")
+        print("=" * 60)
 
         passed = sum(1 for _, status, _ in results if status == 200)
         total = len(results)

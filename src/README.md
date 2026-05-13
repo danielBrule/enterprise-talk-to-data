@@ -40,7 +40,72 @@ pip install -r requirements.txt
 - `infra/` - infrastructure definitions, including Terraform
 - `docs/` - documentation
 
-## Terraform Infrastructure
+## Core Services
+
+### View Selection Service
+
+Intelligently selects the most relevant database views for natural language questions using Azure OpenAI LLM.
+
+**Flow:**
+```
+Question → Metadata Context → LLM View Selection → Selected Views + Reasoning
+```
+
+**API Endpoint:** `POST /api/v0/metadata/select-views`
+
+**Example:**
+```bash
+curl -X POST "http://localhost:8000/api/v0/metadata/select-views?question=Which+articles+had+the+most+comments"
+```
+
+**Response:**
+```json
+{
+  "question": "Which articles had the most comments?",
+  "selected_views": ["analytics.vw_article_engagement"],
+  "reason": "Question refers to articles and comment volume."
+}
+```
+
+For more details, see [View Selection Service Documentation](docs/VIEW_SELECTION_SERVICE.md).
+
+## Testing
+
+### Unit Tests
+
+Run all unit tests in the `backend/tests/` directory:
+
+```powershell
+pytest backend/tests/ -v
+```
+
+Run specific test:
+```powershell
+pytest backend/tests/test_services.py::test_view_selection_service -v
+```
+
+**Test Coverage:**
+- Article, keyword, contributor, ingestion error services
+- View selection service with LLM integration
+- Fallback behavior when LLM is not configured
+- Error handling for invalid responses
+
+### Integration Tests
+
+Test all API endpoints with a running server:
+
+```powershell
+python backend/tests/integration/test_integration_endpoints.py
+```
+
+This script:
+1. Starts the backend server
+2. Tests all endpoints including the new view selection endpoint
+3. Reports results
+
+**Note:** Integration tests require the server to be available and are run separately from unit tests.
+
+## Configuration
 
 This repo includes a reusable Terraform module structure for Azure deployment.
 The Terraform configuration supports environment-specific deployments for `dev` and `prod`.
@@ -118,10 +183,12 @@ Then open FastAPI docs in your browser:
 
 Example endpoints to test in the browser:
 
-- `http://localhost:8000/api/articles`
-- `http://localhost:8000/api/keywords`
-- `http://localhost:8000/api/contributors`
-- `http://localhost:8000/api/errors`
+- `http://localhost:8000/api/v0/articles`
+- `http://localhost:8000/api/v0/keywords`
+- `http://localhost:8000/api/v0/contributors`
+- `http://localhost:8000/api/v0/errors`
+- `http://localhost:8000/api/v0/metadata/views` — view metadata
+- `http://localhost:8000/api/v0/metadata/select-views?question=<your-question>` — view selection (POST)
 
 ### GitHub Actions / CI-CD
 

@@ -14,7 +14,7 @@ async def list_contributors(limit: int = 50) -> list[dict]:
 
 async def get_contributor(contributor_id: str) -> dict | None:
     query = text(
-        "SELECT * FROM analytics.vw_top_contributors "
+        "SELECT TOP (1) * FROM analytics.vw_top_contributors "
         "WHERE contributor_id = :contributor_id"
     )
     result = await execute_query(query, {"contributor_id": contributor_id})

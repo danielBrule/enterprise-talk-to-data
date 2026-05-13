@@ -14,7 +14,7 @@ async def list_keywords(limit: int = 50) -> list[dict]:
 
 async def get_keyword(keyword_id: str) -> dict | None:
     query = text(
-        "SELECT * FROM analytics.vw_keyword_engagement "
+        "SELECT TOP (1) * FROM analytics.vw_keyword_engagement "
         "WHERE keyword_id = :keyword_id"
     )
     result = await execute_query(query, {"keyword_id": keyword_id})

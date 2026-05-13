@@ -14,7 +14,7 @@ async def list_articles(limit: int = 50) -> list[dict]:
 
 async def get_article(article_id: str) -> dict | None:
     query = text(
-        "SELECT * FROM analytics.vw_article_engagement "
+        "SELECT TOP (1) * FROM analytics.vw_article_engagement "
         "WHERE article_id = :article_id"
     )
     result = await execute_query(query, {"article_id": article_id})

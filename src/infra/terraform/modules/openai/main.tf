@@ -20,6 +20,7 @@ resource "azapi_resource" "openai_account" {
       name = "S0"
     }
     properties = {
+      customSubDomainName = var.openai_account_name
       publicNetworkAccess = "Enabled"
     }
   }

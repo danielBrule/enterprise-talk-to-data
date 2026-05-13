@@ -32,7 +32,7 @@ async def execute_query(query: Executable, params: dict | None = None) -> list[d
 
     # Validate query for safety
     try:
-        validate_query(str(query))
+        validate_query(str(query), params)
     except SQLSafetyError as e:
         logger.warning("sql.query.blocked query=%s reason=%s", str(query), str(e))
         raise

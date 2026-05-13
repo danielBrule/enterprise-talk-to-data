@@ -10,6 +10,7 @@ from ..services.metadata_service import (
     get_metrics_metadata,
     get_glossary_metadata,
 )
+from ..services.view_selection_service import ViewSelectionService
 from ..validators import (
     ArticleResponse,
     ContributorResponse,
@@ -82,6 +83,13 @@ async def get_metrics():
 async def get_glossary():
     """Get metadata for all glossary terms."""
     return await get_glossary_metadata()
+
+
+@metadata_router.post("/select-views")
+async def select_views(question: str = Query(...)):
+    """Select relevant views for a given question."""
+    service = ViewSelectionService()
+    return await service.select_views(question)
 
 
 @router.get("/version", tags=["analytics"])

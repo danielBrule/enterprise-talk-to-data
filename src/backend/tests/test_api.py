@@ -55,3 +55,45 @@ def test_read_article_not_found(monkeypatch):
     assert response.status_code == 404
     # The actual error message from FastAPI's default 404 handler
     assert "not found" in response.text
+
+
+def test_get_views_metadata_endpoint(monkeypatch):
+    async def mock_get_views_metadata():
+        return [
+            {
+                "view_name": "analytics.vw_article_engagement",
+                "columns": [
+                    {"name": "article_id", "description": "Article ID"},
+                    {"name": "comment_count", "description": "Comment count"}
+                ]
+            }
+        ]
+
+    monkeypatch.setattr(routes, "get_views_metadata", mock_get_views_metadata)
+    response = client.get("/api/v0/metadata/views")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 1
+    assert data[0]["view_name"] == "analytics.vw_article_engagement"
+
+
+def test_select_views_endpoint(monkeypatch):
+    """Test the view selection endpoint."""
+    from backend.app.services.view_selection_service import ViewSelectionService
+
+    async def mock_select_views(self, question):
+        return {
+            "question": question,
+            "selected_views": ["analytics.vw_article_engagement"],
+            "reason": "Question refers to articles and comment volume."
+        }
+
+    monkeypatch.setattr(ViewSelectionService, "select_views", mock_select_views)
+    response = client.post("/api/v0/metadata/select-views?question=Which+articles+have+the+most+comments")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["question"] == "Which articles have the most comments"
+    assert "analytics.vw_article_engagement" in data["selected_views"]
+    assert len(data["reason"]) > 0

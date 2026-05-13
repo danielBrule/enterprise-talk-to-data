@@ -31,7 +31,7 @@ MAX_LIMIT = 500
 QUERY_TIMEOUT_SECONDS = 30
 
 
-def validate_query(query: str) -> None:
+def validate_query(query: str, params: dict | None = None) -> None:
     """
     Validate that a SQL query is safe to execute.
 
@@ -44,7 +44,7 @@ def validate_query(query: str) -> None:
 
     Args:
         query: SQL query string to validate
-
+        params: Dictionary of parameters for the query
     Raises:
         SQLSafetyError: If query violates any safety rules
     """
@@ -72,19 +72,61 @@ def validate_query(query: str) -> None:
             "Direct table access (dbo.*) is not allowed. Only analytics.* views are permitted."
         )
 
-    # Rule 4 & 5: Check for LIMIT clause and validate value
-    # Allow negative numbers to catch them with proper error message
-    limit_match = re.search(r"\bLIMIT\s+(-?\d+)\b", normalized, re.IGNORECASE)
-    if not limit_match:
-        raise SQLSafetyError(f"Query must include a LIMIT clause (max {MAX_LIMIT})")
+    # Rule 4 & 5: Check for LIMIT or TOP clause and validate value
+    # Supports:
+    # - LIMIT 100
+    # - LIMIT :limit
+    # - TOP 100
+    # - TOP (100)
+    # - TOP (:limit)
 
-    limit_value = int(limit_match.group(1))
-    if limit_value <= 0:
-        raise SQLSafetyError(f"LIMIT value must be greater than 0")
+    limit_match = re.search(
+        r"\bLIMIT\s+\(?\s*(:[A-Z_][A-Z0-9_]*|-?\d+)\s*\)?",
+        normalized,
+        re.IGNORECASE,
+    )
 
-    if limit_value > MAX_LIMIT:
+    top_match = re.search(
+        r"\bSELECT\s+TOP\s*\(?\s*(:[A-Z_][A-Z0-9_]*|-?\d+)\s*\)?",
+        normalized,
+        re.IGNORECASE,
+    )
+
+    row_limit_match = limit_match or top_match
+
+    if not row_limit_match:
         raise SQLSafetyError(
-            f"LIMIT value {limit_value} exceeds maximum of {MAX_LIMIT}"
+            f"Query must include a LIMIT or TOP clause (max {MAX_LIMIT}: {query})"
+        )
+
+    row_limit_clause = "LIMIT" if limit_match else "TOP"
+    raw_limit_value = row_limit_match.group(1)
+
+    if raw_limit_value.startswith(":"):
+
+        param_name = raw_limit_value[1:].lower()
+        print(f"Parameter name: {raw_limit_value}")
+        print(f"Params: {params}")
+        if not params or param_name not in params:
+            raise SQLSafetyError(
+                f"Missing parameter for {row_limit_clause}: {raw_limit_value}"
+            )
+
+        try:
+            row_limit_value = int(params[param_name])
+        except (TypeError, ValueError):
+            raise SQLSafetyError(
+                f"{row_limit_clause} parameter {raw_limit_value} must be an integer"
+            )
+    else:
+        row_limit_value = int(raw_limit_value)
+
+    if row_limit_value <= 0:
+        raise SQLSafetyError(f"{row_limit_clause} value must be greater than 0")
+
+    if row_limit_value > MAX_LIMIT:
+        raise SQLSafetyError(
+            f"{row_limit_clause} value {row_limit_value} exceeds maximum of {MAX_LIMIT}"
         )
 
 
