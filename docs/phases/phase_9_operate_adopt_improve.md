@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 9: Operate, Adopt & Improve
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -41,7 +47,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 9 operates the controlled production release after go-live and determines whether the Talk-to-Data capability remains useful, trusted, affordable and governed in real use.
 
@@ -55,7 +61,7 @@ A narrow stable release is a valid success. Phase 9 should track whether the cap
 
 The main output is operating evidence: monitoring and support findings, feedback-to-trace analysis, governance and change records, regression evidence, backlog and capacity view, adoption findings, cost and risk reviews, and lifecycle records.
 
-# 2 Phase overview
+## 2 Phase overview
 
 Phase 9 operates the controlled production release after go-live. It starts from the Phase 8 release decision, approved production boundary, known limitations, residual-risk acceptance, support model, monitoring setup, runbooks, onboarding material, backlog and Phase 9 handover pack.
 
@@ -63,7 +69,7 @@ The purpose of this phase is not to approve go-live again. It is to run the rele
 
 Phase 9 should also recognise that Talk-to-Data sits at the end of a wider analytical flow. Changes in ingestion, data modelling, semantic definitions, metadata, access rules, reporting logic or upstream platforms can affect answers even when the T2D application itself has not changed. Operation therefore requires regular interaction with upstream owners so material changes are detected early, assessed, tested and deployed safely where needed.
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 9 is to operate, support and improve the controlled production release while keeping it useful, trusted, affordable and governed.
 
@@ -73,7 +79,7 @@ Where the service needs to change, Phase 9 should separate run, fix, improve and
 
 Phase 9 also keeps lifecycle options visible. A T2D service may continue, improve, expand, narrow, pause, be absorbed into another product, retire or eventually decommission. This is not expected immediately, but a service that cannot be stopped cleanly is not fully controlled..
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 9 covers the live operation of the released T2D capability within the boundary approved in Phase 8. It keeps the service usable, trusted and controlled in real conditions: support, monitoring, incidents, access lifecycle, documentation, governance, change control, adoption and improvement.
 
@@ -81,7 +87,7 @@ The phase should also protect the service from uncontrolled expansion. Adjacent 
 
 The scope should remain proportionate to release exposure. A narrow internal release may use a lightweight but explicit operating cadence. A broader, decision-critical or regulated release requires stronger evidence, more formal governance, tighter change control and more frequent review.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Phase 9 is not broad rollout by default. More users, domains, question types or integrations should not be added simply because the first production release is live.
 
@@ -93,13 +99,13 @@ It is not a replacement for upstream governance. Phase 9 should detect and manag
 
 It is also not indefinite operation at any cost. If the service no longer delivers enough value, cannot be supported sustainably, becomes too costly, depends on obsolete foundations or is replaced by a better route, Phase 9 should support controlled retirement or decommissioning.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 Phase 9 begins immediately after controlled production release. It usually starts with early-life support, then moves into stable operation once usage, incidents, cost, access, support load and trust signals are understood.
 
 Unlike earlier phases, Phase 9 does not have a fixed end date. It is the operating lifecycle of the capability. Its effort should be reviewed regularly and adjusted based on usage, risk, cost, support burden, adoption, roadmap demand and upstream change activity.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 Phase 9 requires business, product, operating, support, data, semantic, metadata, platform, AI, security, risk and adoption ownership.
 
@@ -108,13 +114,13 @@ The important point is that T2D operation should not sit only with the applicati
 **  
 **
 
-# 3 Operating lifecycle and scaling implications
+## 3 Operating lifecycle and scaling implications
 
 Phase 9 does not end with a single approval decision. It creates the operating evidence and governance rhythm needed to keep the released T2D capability controlled over time. The service may continue as-is, need fixes, improve incrementally, expand selectively, narrow its scope, return to an earlier phase, pause, retire part of the capability or eventually be decommissioned.
 
 The key discipline is to avoid treating production usage as proof of readiness for scale. Live operation creates evidence, but that evidence must be interpreted carefully. High usage may show value, but it may also reveal over-reliance, unsupported demand, rising cost or support fragility. Low usage may show weak adoption, but it may also reflect poor onboarding, limited workflow fit, low trust or unclear ownership.
 
-## 3.1 Possible Phase 9 operating routes
+### 3.1 Possible Phase 9 operating routes
 
 Phase 9 should maintain a live view of the appropriate operating route for the capability. These routes are not failure labels; they are operating controls.
 
@@ -129,7 +135,7 @@ Phase 9 should maintain a live view of the appropriate operating route for the c
 | Pause                   | Temporarily stop affected scope while risk, quality or control issues are resolved.                |
 | Retire / decommission   | Remove part or all of the service when continued operation is no longer justified.                 |
 
-## 3.2 Minimum conditions for stable operation
+### 3.2 Minimum conditions for stable operation
 
 A controlled release becomes stable operation only when the service can be run without exceptional project-team effort. The minimum conditions are:
 
@@ -146,7 +152,7 @@ A controlled release becomes stable operation only when the service can be run w
 
 Stable operation does not mean the service is perfect. It means the team can see problems, diagnose them, decide who owns them and act before trust, cost or risk become uncontrolled.
 
-## 3.3 Run / fix / improve / expand model
+### 3.3 Run / fix / improve / expand model
 
 Phase 9 should separate four types of work.
 
@@ -159,7 +165,7 @@ Phase 9 should separate four types of work.
 
 This distinction matters because each type of work needs different evidence and decision rights. A defect should not become a roadmap debate. An expansion request should not be hidden inside a minor change. A support workaround should not become the permanent operating model.
 
-## 3.4 Scaling implications
+### 3.4 Scaling implications
 
 Scaling should be earned through production evidence. Before expanding users, domains, questions or integrations, Phase 9 should show that the current release is valuable, trusted, supportable, affordable and controlled.
 
@@ -167,7 +173,7 @@ Expansion should be considered only when the data foundation, semantic definitio
 
 Where live usage reveals adjacent needs, the Phase 9 team should capture and route them. Some may belong inside the current T2D capability. Others may require a separate T2D use case, dashboard, data-quality fix, semantic-model change, analyst workflow, process redesign or different product capability. The team may be well placed to evidence the need, but it should not automatically absorb it into the live service.
 
-## 3.5 How Phase 9 shapes longer-term maturity
+### 3.5 How Phase 9 shapes longer-term maturity
 
 Phase 9 is where T2D becomes a managed capability rather than a delivered project. It shapes maturity in five areas:
 
@@ -181,13 +187,13 @@ Phase 9 is where T2D becomes a managed capability rather than a delivered projec
 
 The aim is not to scale by default. The aim is to operate well, learn from evidence and evolve deliberately.
 
-# 4 Operation, adoption and improvement activities overview
+## 4 Operation, adoption and improvement activities overview
 
 Phase 9 should be run as an operating loop, not as a one-off post-launch review. The activities below create the rhythm needed to support users, monitor behaviour, govern change, improve safely and keep the service within its approved boundary.
 
 The sequence is directional. In practice, several activities run in parallel: support, monitoring, access control, governance, upstream change review and backlog management should operate continuously once the service is live.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 | \#  | Activity                                                                  | Purpose                                                                                                              |
 |-----|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
@@ -202,13 +208,13 @@ The sequence is directional. In practice, several activities run in parallel: su
 | 9   | Drive controlled adoption and responsible use within approved scope       | Encourage appropriate usage without creating uncontrolled demand.                                                    |
 | 10  | Manage lifecycle, retirement and decommissioning readiness                | Ensure the service can be narrowed, paused, retired or eventually decommissioned cleanly.                            |
 
-## 4.2 Operating cadence
+### 4.2 Operating cadence
 
 Phase 9 should start with early-life support and then move into stable operation once the service is predictable enough to run without exceptional project-team effort.
 
 A typical cadence may include daily checks during the first days after release, weekly operating reviews during early-life support, and regular governance reviews once the service stabilises. The cadence should cover usage, incidents, unsupported questions, access changes, cost, latency, feedback, upstream changes, regression results, backlog pressure and adoption signals. The cadence should remain proportionate. A narrow internal release may need a lightweight rhythm. A decision-critical, regulated or broad-user release requires stronger monitoring, clearer escalation and more formal governance.
 
-## 4.3 Activity logic
+### 4.3 Activity logic
 
 The activities follow a simple operating logic:
 
@@ -234,15 +240,15 @@ The activities follow a simple operating logic:
 
 The aim is not to make the service static but to let it evolve without losing control.
 
-## 4.4 Practitioner note
+### 4.4 Practitioner note
 
 The main danger in Phase 9 is silent expansion. A live T2D service will attract new users, new questions and new expectations. It will also reveal unmet needs that may belong in dashboards, semantic models, data-quality remediation, analyst workflows, another T2D use case or a different product. The Phase 9 team should capture and evidence that demand, but not automatically absorb it into the live service.
 
 A stable narrow release is a valid success. The service should grow only when production evidence shows that value, trust, cost, support, data readiness, semantic maturity and governance can grow with it.
 
-# 5 Core operating activities
+## 5 Core operating activities
 
-## 5.1 Activate early-life support and operating cadence
+### 5.1 Activate early-life support and operating cadence
 
 **Purpose:** Move from controlled release handover into live operation with clear support, monitoring, escalation, ownership and review cadence.
 
@@ -290,7 +296,7 @@ A stable narrow release is a valid success. The service should grow only when pr
 
 A controlled release is not operated because it has gone live. It is operated when the team can see what is happening, understand who owns each signal, respond before trust is damaged and stop or narrow usage if the service behaves outside its approved boundary.
 
-## 5.2 Monitor production usage, quality, trust, reliability and cost
+### 5.2 Monitor production usage, quality, trust, reliability and cost
 
 **Purpose:** Monitor how the live T2D service behaves in real production use, so issues, risks, demand patterns and improvement opportunities are detected early.
 
@@ -342,7 +348,7 @@ A controlled release is not operated because it has gone live. It is operated wh
 
 For T2D, production monitoring is not just technical observability. Some signals can be captured automatically, such as usage, latency, errors, refusals, cost and failed tool calls. Others require active review through user feedback, support conversations, answer-quality checks or interviews. Over-trust, caveat misunderstanding, inappropriate reliance and workflow misuse will rarely be visible from logs alone.
 
-## 5.3 Manage incidents, support requests and feedback-to-trace diagnosis
+### 5.3 Manage incidents, support requests and feedback-to-trace diagnosis
 
 **Purpose**: Convert incidents, support requests and user feedback into traceable evidence so issues can be diagnosed, owned and acted on.
 
@@ -394,7 +400,7 @@ A user saying “the answer is wrong” is rarely enough to diagnose the issue. 
 
 Some issues can be fixed directly in the T2D layer, such as answer wording, prompt behaviour, clarification logic or UI. Others depend on upstream data, modelling, semantic, metadata or access changes. Especially in early production, fixes may take longer because the correct owner sits outside the T2D team. The operating discipline is to balance speed with correctness.
 
-## 5.4 Maintain access lifecycle and protect the release boundary
+### 5.4 Maintain access lifecycle and protect the release boundary
 
 **Purpose**: Ensure users, permissions, data exposure and usage remain inside the approved production boundary.
 
@@ -446,7 +452,7 @@ The release boundary is not a document produced in Phase 8 and forgotten. It mus
 
 During early adoption, especially with small cohorts, temporary shortcuts may help users get started. That can be acceptable if they are visible, time-bound and owned. The risk is when shortcuts become the operating model. Any manual access workaround, support workaround or boundary exception should be logged, reviewed and either formalised, fixed or removed once adoption stabilises.
 
-## 5.5 Run live governance, residual-risk and decision-rights cadence
+### 5.5 Run live governance, residual-risk and decision-rights cadence
 
 **Purpose**: Keep the live T2D service accountable after release by reviewing risk, cost, change, adoption, boundary and lifecycle decisions with the right owners.
 
@@ -496,7 +502,7 @@ During early adoption, especially with small cohorts, temporary shortcuts may he
 
 Governance after go-live should not become theatre. Its role is to keep the live service within the release boundary, make risk and change decisions explicit, and ensure upstream changes are understood before they affect users. A T2D service is downstream of data, semantic, metadata, access and platform flows; governance must include the people who can change its behaviour, with more frequent reviews during early adoption when usage patterns, risks and support needs are still stabilising.
 
-## 5.6 Maintain BAU service, data, semantic, metadata and documentation
+### 5.6 Maintain BAU service, data, semantic, metadata and documentation
 
 **Purpose**: Keep the live T2D service and its upstream data, semantic, metadata and documentation foundations current, tested and aligned with production behaviour as part of business-as-usual operation.
 
@@ -544,7 +550,7 @@ Governance after go-live should not become theatre. Its role is to keep the live
 
 Automation should do as much routine control work as possible: freshness, schema, quality, reconciliation, access, metadata and basic service checks. But automation will not reliably detect whether a definition is still business-appropriate, whether a caveat is understandable, or whether users are interpreting answers correctly. Those signals come from regular interaction with users: structured reviews such as focus groups are useful, but informal check-ins with representatives of the main user groups are often just as effective.
 
-## 5.7 Manage the run / fix / improve / expand backlog and capacity
+### 5.7 Manage the run / fix / improve / expand backlog and capacity
 
 **Purpose**: Convert operating signals, incidents, BAU checks and user demand into a prioritised backlog, without mixing support work, defects, optimisation, improvement and expansion.
 
@@ -594,7 +600,7 @@ Automation should do as much routine control work as possible: freshness, schema
 
 A live T2D service will generate more demand than the team should absorb. Some items are defects, some are BAU work, some are useful improvements, and some are evidence of a different need altogether. The discipline is to classify before committing. Otherwise the service becomes a feature factory, a helpdesk, or a workaround layer for upstream issues that should be fixed elsewhere.
 
-## 5.8 Control service development, regression testing and version deployment
+### 5.8 Control service development, regression testing and version deployment
 
 **Purpose**: Build, test and release fixes, optimisations and current-boundary improvements safely, with clear versioning, regression evidence, communication and rollback routes.
 
@@ -652,7 +658,7 @@ A live T2D service will generate more demand than the team should absorb. Some i
 
 In T2D, a small technical change can alter user trust. A prompt edit, model substitution, routing change, retrieval tweak, validation rule or UI wording change can affect what users ask, what the system retrieves, what it refuses and what users believe. Treat behavioural change as a release, not housekeeping.
 
-## 5.9 Drive controlled adoption and responsible use within approved scope
+### 5.9 Drive controlled adoption and responsible use within approved scope
 
 **Purpose:** Encourage appropriate use of the live T2D service without creating uncontrolled demand, over-reliance or support burden.
 
@@ -702,7 +708,7 @@ In T2D, a small technical change can alter user trust. A prompt edit, model subs
 
 Adoption is not the same as consumption. More usage is valuable only when the right users rely on the service in the right workflow, within the approved boundary and with the right level of trust. Strong demand from representative users is a positive signal, but it should create evidence for controlled improvement or expansion, not automatic scope growth.
 
-## 5.10 Manage lifecycle, retirement and decommissioning readiness
+### 5.10 Manage lifecycle, retirement and decommissioning readiness
 
 **Purpose:** Ensure the live T2D service can be constrained, paused, retired or eventually decommissioned cleanly when continued operation is no longer justified.
 
@@ -752,11 +758,11 @@ Every production service has a lifecycle. Decommissioning is not expected immedi
 
 Lifecycle decisions should not rely on usage volume alone. Low usage may indicate weak value, poor adoption or an obsolete service, but it may also reflect a critical capability used only during specific planning, reporting, incident or decision cycles. The question is not only “how often is it used?”, but whether the value, risk, cost, ownership and support model still justify keeping it live.
 
-# 6 Operating evidence decision pack
+## 6 Operating evidence decision pack
 
 Phase 9 should produce evidence that the live T2D service is being operated, monitored, governed and improved in a controlled way. The outputs should not become a heavy reporting pack. They should help the team run the service, diagnose issues, control change, manage adoption and prepare for longer-term lifecycle decisions.
 
-## 6.1 Operating evidence pack
+### 6.1 Operating evidence pack
 
 The main Phase 9 output is an operating evidence pack. It should consolidate the evidence needed to understand how the live service is performing and whether it remains within the approved release boundary.
 
@@ -784,7 +790,7 @@ The pack should include:
 
 The evidence pack should remain proportionate. A narrow release may only need a concise operating summary, issue log and change record. A broader, decision-critical or regulated release will need stronger traceability, more formal governance records and clearer evidence of risk, cost and change control.
 
-## 6.2 Operating pack quality test
+### 6.2 Operating pack quality test
 
 | Test                 | Question                                                                             |
 |----------------------|--------------------------------------------------------------------------------------|
@@ -797,7 +803,7 @@ The evidence pack should remain proportionate. A narrow release may only need a 
 | Adoption control     | Is usage growing responsibly rather than silently expanding scope?                   |
 | Lifecycle discipline | Can the service be constrained, paused, retired or decommissioned cleanly if needed? |
 
-## 6.3 Output depth by operating maturity
+### 6.3 Output depth by operating maturity
 
 | Output             | Narrow release                             | Production / higher-risk release                             |
 |--------------------|--------------------------------------------|--------------------------------------------------------------|
@@ -811,19 +817,19 @@ The evidence pack should remain proportionate. A narrow release may only need a 
 | Adoption           | User feedback notes                        | Responsible-use and representative-user evidence             |
 | Lifecycle          | Basic pause route                          | Retirement and decommissioning decision records              |
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 9 does not have a fixed end point in the same way as earlier delivery phases. It is the operating lifecycle of the live T2D capability. However, it should still have clear transition points: from early-life support to stable operation, from stable operation to controlled improvement, from current release to expansion, or from continued operation to pause, retirement or decommissioning.
 
 The key question is not whether Phase 9 is “complete”. The question is whether the service is being operated under control, with enough evidence, ownership and governance to decide what should happen next.
 
-## 7.1 Required transition outputs
+### 7.1 Required transition outputs
 
 Before reducing early-life support, approving a new release cycle, expanding the service or moving towards retirement, the team should have the operating evidence decision pack described in Section 6, completed to the standard required by release exposure, operating maturity and risk.
 
 The transition decision should confirm the relevant route: stable operation, controlled improvement, expansion assessment, earlier-phase remediation, constraint, pause, retirement or decommissioning. It should also identify the live boundary, operating evidence, unresolved risks, owners, capacity, next actions and communication needs..
 
-## 7.2 Handover to stable operation, improvement or lifecycle action
+### 7.2 Handover to stable operation, improvement or lifecycle action
 
 Phase 9 can hand over into several routes.
 
@@ -838,7 +844,7 @@ Phase 9 can hand over into several routes.
 
 The handover should make clear what remains live, what changes, what is constrained, who owns the next actions and what users or support teams need to know.
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 Phase 9 fails when the released service remains live but stops being actively controlled. The most common risks are not only technical outages. They are gradual loss of trust, silent scope expansion, unmanaged cost growth, stale data or semantic foundations, weak ownership and uncontrolled change.
 
@@ -857,6 +863,11 @@ Phase 9 fails when the released service remains live but stops being actively co
 | Misread adoption signals  | High usage is treated as success, or low usage as failure, without context.          | Review usage with value, workflow fit, risk, cost and support evidence.       |
 | No clean stop route       | The service continues because nobody can pause, retire or decommission it.           | Maintain lifecycle decision rights and decommissioning readiness.             |
 
-## 8.1 Practitioner note
+### 8.1 Practitioner note
 
 The main Phase 9 risk is gradual normalisation of exceptions. A manual access workaround, an unsupported question, an untested prompt change, a stale caveat or an informal support route may be acceptable once, under control. It becomes dangerous when it becomes the way the service is operated.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

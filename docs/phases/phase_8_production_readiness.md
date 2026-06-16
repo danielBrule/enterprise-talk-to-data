@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 8: Production Readiness & Controlled Release
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -39,7 +45,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 8 determines whether the controlled pilot can become a controlled production release, and how that release should be fixed, scoped, governed, funded, supported and handed over.
 
@@ -54,9 +60,9 @@ By the end of Phase 8, stakeholders should be able to decide whether to release,
 **  
 **
 
-# 2 Phase overview
+## 2 Phase overview
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 8 is to convert the Phase 7 production-readiness recommendation into a controlled production release outcome.
 
@@ -66,7 +72,7 @@ Phase 8 confirms what can go live, what must be fixed before release, what can o
 
 The phase should include a focused hardening window. Release-critical defects, control gaps, documentation gaps or support-readiness issues should be fixed before go-live, with targeted regression checks. Phase 9 should not absorb unfinished production-readiness work unless the risk is explicitly accepted and controlled.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 8 covers the final readiness work required to move from controlled pilot to controlled production release. The minimum scope should include:
 
@@ -88,7 +94,7 @@ Phase 8 covers the final readiness work required to move from controlled pilot t
 
 Phase 8 should be proportionate to the release exposure. A small controlled release may require a lightweight but explicit release package. A broader or higher-risk release requires stronger evidence, clearer sign-off, more formal support arrangements and more mature monitoring.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Phase 8 is not a second pilot. If more user evidence is needed, the appropriate decision may be to extend or redesign the pilot, not to disguise further testing as production readiness.
 
@@ -98,7 +104,7 @@ Phase 8 is not feature expansion. Additional user groups, domains, question type
 
 Phase 8 is not a full rebuild or a repeat of Phase 6 validation. If Phase 7 reveals structural blockers in the data foundation, semantic layer, architecture, controls or operating model, the correct response is to return to the relevant earlier phase, narrow the release or stop. Phase 8 may fix release-critical issues, but it should not silently absorb redesign work.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 Phase 8 typically takes two to four weeks for a narrow controlled release, depending on the number of release-critical issues, the maturity of the support model, the governance route and the complexity of the production environment.
 
@@ -106,7 +112,7 @@ A lightweight release may focus on final fixes, regression checks, release sign-
 
 The phase should have a clear cut-off. Without one, production readiness can become an endless improvement loop. The goal is to fix what must be fixed before release, constrain what cannot yet be supported, and defer only what the live service can genuinely operate with.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 Phase 8 requires both delivery and operating stakeholders. Core participants typically include the business sponsor, product owner, delivery lead, data and semantic owners, engineering or platform owner, security / risk / compliance representatives, support owner, finance owner, onboarding lead and representative users.
 
@@ -114,9 +120,9 @@ Before release, decision rights should be explicit. The product or business owne
 
 If these ownership roles cannot be named, Phase 8 should not approve a production release.
 
-# 3 Production-readiness decision and release implications
+## 3 Production-readiness decision and release implications
 
-## 3.1 Possible Phase 8 outcomes
+### 3.1 Possible Phase 8 outcomes
 
 Phase 8 should end with an explicit release outcome. The decision should not be reduced to simple go / no-go, because controlled production release may be approved under constraints.
 
@@ -131,7 +137,7 @@ Phase 8 should end with an explicit release outcome. The decision should not be 
 
 The decision should record the rationale, release boundary, constraints, owners, accepted risks and Phase 9 handover conditions.
 
-## 3.2 Minimum conditions for controlled production release
+### 3.2 Minimum conditions for controlled production release
 
 A controlled production release should only be approved when users can rely on the system within a defined boundary.
 
@@ -139,7 +145,7 @@ At minimum, Phase 8 should confirm that release-critical issues are fixed and re
 
 These conditions do not require perfection. They require enough evidence, control and ownership for production reliance.
 
-## 3.3 Issue disposition and release constraint model
+### 3.3 Issue disposition and release constraint model
 
 Phase 8 should classify every material Phase 7 finding before release. Issues should not remain in a generic backlog.
 
@@ -155,7 +161,7 @@ Phase 8 should classify every material Phase 7 finding before release. Issues sh
 
 Production readiness is a balance, not a search for perfection. The standard is not “no issues”; it is whether the remaining issues are understood, owned, constrained, monitored or accepted well enough for users to rely on the system within the approved boundary.
 
-## 3.4 Common reasons to release, constrain, harden or stop
+### 3.4 Common reasons to release, constrain, harden or stop
 
 Release is appropriate when pilot value is clear, the production scope is evidenced, critical fixes are complete, controls are enforceable, support is ready, cost is approved and ownership is explicit.
 
@@ -165,7 +171,7 @@ Further hardening is required when the release case is strong but specific gaps 
 
 Return, redesign, pause or stop is required when Phase 8 exposes a structural issue that hardening cannot fix, such as untrusted data, contested metrics, unsafe access enforcement, unsuitable architecture, weak validation evidence, unaffordable run cost or no accountable production owner.
 
-## 3.5 How Phase 8 shapes Phase 9 operations and scaling
+### 3.5 How Phase 8 shapes Phase 9 operations and scaling
 
 Phase 8 should hand over more than release approval. It should define what has been released, what remains out of scope, which risks and constraints must be monitored, who owns support and change, and what must happen before the capability expands.
 
@@ -173,9 +179,9 @@ The Phase 9 roadmap should be capacity-aware and evidence-led. It should separat
 
 The main output of Phase 8 is therefore a controlled release contract: the approved boundary, completed fixes, remaining constraints, accepted risks, operating commitments and roadmap conditions for safe evolution.
 
-# 4 Production-readiness activities overview
+## 4 Production-readiness activities overview
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 Phase 8 should follow a controlled release sequence. The aim is not to re-test everything from previous phases, but to turn pilot evidence into a release outcome that can be operated safely.
 
@@ -192,7 +198,7 @@ Phase 8 should follow a controlled release sequence. The aim is not to re-test e
 
 The sequence can be iterative. For example, issue triage may change the release boundary, hardening may reveal new regression risks, and operating-model sizing may force a narrower release. The important point is that Phase 8 should end with one coherent release position, not separate technical, business and support opinions.
 
-## 4.2 Release control model
+### 4.2 Release control model
 
 A controlled production release should be defined by explicit release controls. These controls prevent a pilot from expanding silently into unsupported production use.
 
@@ -209,7 +215,7 @@ A controlled production release should be defined by explicit release controls. 
 
 These boundaries should be visible in the release decision, user guidance, support material and Phase 9 handover. If users, support teams or owners cannot explain the release boundary, the release is not controlled.
 
-## 4.3 Activity logic
+### 4.3 Activity logic
 
 The activity logic is deliberately practical:
 
@@ -227,7 +233,7 @@ The activity logic is deliberately practical:
 
 - **Approve with conditions.** A release decision should state what is approved, what is constrained, what is accepted and what would trigger pause, rollback or return to an earlier phase.
 
-## 4.4 Release-depth expectations
+### 4.4 Release-depth expectations
 
 Not every release needs the same level of documentation or formality. The level of evidence should match the exposure, risk and organisational maturity.
 
@@ -239,9 +245,9 @@ Not every release needs the same level of documentation or formality. The level 
 
 The output level should be agreed early in Phase 8. Over-documenting a narrow release slows delivery; under-documenting a material release creates operational and governance risk.
 
-# 5 Core production-readiness activities
+## 5 Core production-readiness activities
 
-## 5.1 Confirm production scope and release boundary
+### 5.1 Confirm production scope and release boundary
 
 **Purpose:** Define exactly what can be considered for controlled production release.
 
@@ -286,7 +292,7 @@ The output level should be agreed early in Phase 8. Over-documenting a narrow re
 **Practitioner note:**  
 Production scope should be earned, not inherited. A narrow release backed by evidence is stronger than a broad release held together by caveats, goodwill and manual support.
 
-## 5.2 Triage pilot findings and production-readiness backlog
+### 5.2 Triage pilot findings and production-readiness backlog
 
 **Purpose:** Convert Phase 7 findings into explicit release decisions.
 
@@ -331,7 +337,7 @@ Production scope should be earned, not inherited. A narrow release backed by evi
 **Practitioner note:**  
 The point of triage is not to make the backlog look manageable. It is to decide what the release can genuinely live with. Not all issues are equal: a minor defect in an executive workflow may matter more than a new feature for a low-risk analyst use case
 
-## 5.3 Complete pre-release hardening and regression checks
+### 5.3 Complete pre-release hardening and regression checks
 
 **Purpose:** Fix release-critical issues and confirm that fixes do not weaken production readiness.
 
@@ -376,7 +382,7 @@ The point of triage is not to make the backlog look manageable. It is to decide 
 **Practitioner note:**  
 Phase 8 needs a hardening window, not an endless improvement loop. Reserve the people needed for critical fixes, regression checks and early-life support before the delivery team is reassigned. Non-regression is critical: a small fix can change prompts, retrieval behaviour, SQL generation, answer wording, access enforcement, cost or latency.
 
-## 5.4 Confirm production control readiness
+### 5.4 Confirm production control readiness
 
 **Purpose:** Confirm that the release boundary is governed, enforceable and safe to expose in production.
 
@@ -421,7 +427,7 @@ Phase 8 needs a hardening window, not an endless improvement loop. Reserve the p
 **Practitioner note:**  
 Production control readiness is not a governance meeting. It is evidence that the approved rules are enforceable in the live release boundary. If a control depends on someone remembering to check a spreadsheet, it is not a production control unless that manual process is owned, funded and time-bound.
 
-## 5.5 Confirm operational reliability and observability
+### 5.5 Confirm operational reliability and observability
 
 **Purpose:** Confirm that the released system can be monitored, supported and controlled when users rely on it.
 
@@ -466,7 +472,7 @@ Production control readiness is not a governance meeting. It is evidence that th
 **Practitioner note:**  
 A T2D system is not production-ready because it usually works. It is production-ready when the team can see when it stops working, understand why, know who owns the response, and communicate clearly before trust is damaged.
 
-## 5.6 Prepare support, documentation, onboarding and controlled adoption readiness
+### 5.6 Prepare support, documentation, onboarding and controlled adoption readiness
 
 **Purpose:** Confirm that users, support teams and owners are ready for the first controlled production release.
 
@@ -511,7 +517,7 @@ A T2D system is not production-ready because it usually works. It is production-
 **Practitioner note:**  
 Phase 8 documentation is not a writing exercise. It is a readiness check. Users need to know what they can rely on, support teams need to know what to do, and owners need to know what they are accountable for after release.
 
-## 5.7 Consolidate operating model, budget and roadmap capacity
+### 5.7 Consolidate operating model, budget and roadmap capacity
 
 **Purpose:** Confirm that the release has enough funded capacity to run, fix, improve and evolve after go-live.
 
@@ -556,7 +562,7 @@ Phase 8 documentation is not a writing exercise. It is a readiness check. Users 
 **Practitioner note:**  
 Cost and capacity should not appear for the first time in Activity 7. Every Phase 8 activity creates run, fix, support or roadmap implications. Activity 7 consolidates those signals into a funded operating model and a realistic Phase 9 roadmap.
 
-## 5.8 Approve and execute controlled release, residual-risk acceptance and Phase 9 handover
+### 5.8 Approve and execute controlled release, residual-risk acceptance and Phase 9 handover
 
 **Purpose:** Make the final controlled release decision and hand over the live capability with explicit conditions.
 
@@ -601,13 +607,13 @@ Cost and capacity should not appear for the first time in Activity 7. Every Phas
 **Practitioner note:**  
 A controlled release is not a launch announcement. It is an accountable decision to let users rely on the system within a defined boundary. If the organisation cannot name who owns the release, accepts the risk, pays for the run model and can stop the service when needed, the release is not ready.
 
-# 6 Controlled release decision pack
+## 6 Controlled release decision pack
 
 Phase 8 should produce a clear release package, not a loose collection of documents. The outputs should allow stakeholders to understand what is being released, what has been fixed, what remains constrained, who owns the live capability, what it will cost, and how Phase 9 will operate, improve and selectively scale it.
 
 The main output is the **controlled production release pack**. It should be proportionate to the release exposure. A narrow controlled release does not need heavy governance theatre, but it does need enough evidence to show that users can rely on the system within the approved boundary.
 
-## 6.1 Controlled production release pack
+### 6.1 Controlled production release pack
 
 The controlled production release pack should include:
 
@@ -626,7 +632,7 @@ The controlled production release pack should include:
 
 The release pack should be usable by both delivery and operating stakeholders. If it can only be understood by the project team, it is not ready for handover.
 
-## 6.2 Release pack quality test
+### 6.2 Release pack quality test
 
 Before Phase 8 closes, the outputs should be tested against a simple quality standard.
 
@@ -644,13 +650,13 @@ Before Phase 8 closes, the outputs should be tested against a simple quality sta
 
 A Phase 8 output should not be considered complete because a template has been filled. It is complete when it can support a release decision, survive handover, and guide the first weeks of production operation.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 8 should close with an explicit release decision and a usable handover. Exit does not always mean go-live. It may mean controlled release, release with constraints, further hardening, narrowed scope, return to an earlier phase, redesign, pause or stop.
 
 The key test is whether the organisation has enough evidence, ownership and operating capacity to act on the decision.
 
-## 7.1 Required exit outputs
+### 7.1 Required exit outputs
 
 The required exit output is the controlled release decision pack described in Section 6, completed to the standard required by release exposure and risk.
 
@@ -658,7 +664,7 @@ The exit decision should confirm whether the capability is approved for release,
 
 If the release is not approved, the exit pack should still record what happens next: harden further, narrow scope, return to a previous phase, redesign, pause or stop.
 
-## 7.2 Handover to Phase 9
+### 7.2 Handover to Phase 9
 
 Where controlled release is approved, Phase 8 hands over to Phase 9 operation, adoption, monitoring and selective scaling. It should confirm:
 
@@ -678,7 +684,7 @@ Where controlled release is approved, Phase 8 hands over to Phase 9 operation, a
 
 Phase 9 should not start by rediscovering the release. It should inherit a clear operating position: live scope, known risks, support model, cost model, backlog, owners and decision rights.
 
-## 7.3 Exit decision wording
+### 7.3 Exit decision wording
 
 The Phase 8 decision should be written clearly enough for business, technical, support and governance stakeholders to understand.
 
@@ -696,13 +702,13 @@ Suggested wording:
 
 Every decision should include the reason, owner, next action, target date and review route.
 
-## 7.4 Practitioner note
+### 7.4 Practitioner note
 
 A weak Phase 8 handover creates a fragile Phase 9. The common failure is to celebrate release while leaving support, ownership, monitoring, cost and backlog management vague.
 
 The handover should make the next phase boring in the right way: users know the boundary, support knows what to do, owners know what they own, and governance knows which risks have been accepted. If Phase 9 depends on informal project knowledge or goodwill from a reassigned delivery team, Phase 8 has not really finished.
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 Phase 8 often fails when a successful pilot creates pressure to release before the organisation is ready to operate the capability. The main risk is not that the system has defects. The main risk is that defects, constraints, ownership gaps, cost pressure and support needs are not made explicit before users start relying on the system.
 
@@ -720,3 +726,8 @@ Phase 8 often fails when a successful pilot creates pressure to release before t
 | **The delivery team disappears too early**            | Critical fixes, regression checks and early-life support depend on people already reassigned.                    | Reserve capacity for hardening, release support and early defects.         |
 | **Manual controls become permanent by accident**      | Manual reviews may work for a narrow release but collapse under volume or staff changes.                         | Time-bound manual controls and add automation conditions to roadmap.       |
 | **Roadmap becomes a wish list**                       | Expansion is driven by demand rather than readiness, capacity and risk.                                          | Split roadmap into run, fix, improve and expand lanes.                     |
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 2 Annexes: Data & Semantic Readiness Assessment
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 How to use this annex pack](#1-how-to-use-this-annex-pack)
@@ -39,13 +45,13 @@
 
 ---
 
-# 1 How to use this annex pack
+## 1 How to use this annex pack
 
 This annex pack contains detailed tools and templates supporting the Phase 1 Framing Guide. It is intended for facilitation, documentation and project delivery. The main guide explains the framing logic; this annex provides the reusable working material.
 
-# 2 Activity question banks
+## 2 Activity question banks
 
-## 2.1 Validated source inventory
+### 2.1 Validated source inventory
 
 | Area                  | Questions                                                                                                                                           |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -60,7 +66,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 
  
 
-## 2.2 Question-to-data mapping
+### 2.2 Question-to-data mapping
 
 | Area                  | Questions                                                             |
 |-----------------------|-----------------------------------------------------------------------|
@@ -72,7 +78,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Validation need       | What must be validated before confirming answerability?               |
 | MVP decision          | Should the question be included, restricted, deferred or excluded?    |
 
-## 2.3 Data model review
+### 2.3 Data model review
 
 | Area        | Questions                                                                                    |
 |-------------|----------------------------------------------------------------------------------------------|
@@ -85,7 +91,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Aggregation | At what level can data be safely aggregated?                                                 |
 | Reusability | Can the model support multiple priority questions or only narrow cases?                      |
 
-## 2.4 Metric discovery
+### 2.4 Metric discovery
 
 | Area              | Questions                                                                   |
 |-------------------|-----------------------------------------------------------------------------|
@@ -98,7 +104,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Source of truth   | Which dashboard, mart, finance pack or semantic model is certified?         |
 | Ambiguity         | Which business terms require clarification before answering?                |
 
-## 2.5 Data quality assessment
+### 2.5 Data quality assessment
 
 | Area           | Questions                                                      |
 |----------------|----------------------------------------------------------------|
@@ -111,7 +117,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Known issues   | What issues are already known by data owners or analysts?      |
 | Impact         | Which priority questions are affected by quality issues?       |
 
-## 2.6 Metadata assessment
+### 2.6 Metadata assessment
 
 | Area               | Questions                                                         |
 |--------------------|-------------------------------------------------------------------|
@@ -124,7 +130,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Certification      | Can users distinguish trusted from non-trusted assets?            |
 | T2D usability      | Is metadata structured enough for retrieval by the T2D system?    |
 
-## 2.7 Access review
+### 2.7 Access review
 
 | Area                  | Questions                                                                           |
 |-----------------------|-------------------------------------------------------------------------------------|
@@ -138,7 +144,7 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Output controls       | Can users see SQL, export results or access row-level detail?                       |
 | Logging               | What must be logged for audit and compliance?                                       |
 
-## 2.8 Gap analysis
+### 2.8 Gap analysis
 
 | Area          | Questions                                                                            |
 |---------------|--------------------------------------------------------------------------------------|
@@ -151,11 +157,11 @@ This annex pack contains detailed tools and templates supporting the Phase 1 Fra
 | Remediation   | What must be fixed, accepted, restricted or deferred?                                |
 | MVP decision  | Which questions should be included, restricted or excluded from MVP?                 |
 
-# 3 Output templates
+## 3 Output templates
 
 These columns are illustrative examples only. They are intended to show the expected structure and level of detail.
 
-## 3.1 Validated source inventory
+### 3.1 Validated source inventory
 
 | Asset                    | Type         | System             | Owner             | Source of truth status    | Trusted status | Refresh        | Access status | MVP relevance | Supported question                    | Known caveats / comments                          |
 |--------------------------|--------------|--------------------|-------------------|---------------------------|----------------|----------------|---------------|---------------|---------------------------------------|---------------------------------------------------|
@@ -165,7 +171,7 @@ These columns are illustrative examples only. They are intended to show the expe
 
  
 
-## 3.2 Question-to-data mapping
+### 3.2 Question-to-data mapping
 
 | Priority question                      | Metric(s)        | Dimensions      | Candidate source               | Initial status       | What needs validation                           | MVP decision         |
 |----------------------------------------|------------------|-----------------|--------------------------------|----------------------|-------------------------------------------------|----------------------|
@@ -183,7 +189,7 @@ Suggested status values:
 | Not answerable       | Missing data, definition, access or quality          |
 | Out of scope         | Not suitable for MVP                                 |
 
-## 3.3 Data model review
+### 3.3 Data model review
 
 | Entity / table       | Grain        | Primary key     | Approved joins            | Risky joins      | Date logic       | Known issues           | Decision        |
 |----------------------|--------------|-----------------|---------------------------|------------------|------------------|------------------------|-----------------|
@@ -191,7 +197,7 @@ Suggested status values:
 | customer_master      | Customer     | customer_id     | Revenue, account owner    | CRM account ID   | Current snapshot | Duplicate legacy IDs   | Use with caveat |
 | crm_opportunity      | Opportunity  | opportunity_id  | Account, owner            | Revenue mart     | Close date       | Stage definitions vary | Reference only  |
 
-## 3.4 Metric discovery
+### 3.4 Metric discovery
 
 | Metric          | Business definition                          | Calculation logic          | Grain          | Standard filters                          | Approved dimensions                      | Source of truth      | Owner     |
 |-----------------|----------------------------------------------|----------------------------|----------------|-------------------------------------------|------------------------------------------|----------------------|-----------|
@@ -207,7 +213,7 @@ Suggested status values:
 | Customer | CRM account, billing customer, legal entity | Billing customer         | Yes for sales analysis      | Sales Ops        | Align customer hierarchy   |
 | Churn    | No spend, cancelled contract, lost account  | No spend in last 90 days | Yes                         | Customer Success | Not MVP until agreed       |
 
-## 3.5 Data quality assessment
+### 3.5 Data quality assessment
 
 | Dataset / field             | Issue                          | Affected question(s)   | Severity | Business impact             | Remediation                   | Owner             | MVP decision        |
 |-----------------------------|--------------------------------|------------------------|----------|-----------------------------|-------------------------------|-------------------|---------------------|
@@ -224,7 +230,7 @@ Severity scale:
 | High     | Blocks answer or requires remediation   |
 | Critical | Should exclude from MVP until resolved  |
 
-## 3.6 Metadata assessment
+### 3.6 Metadata assessment
 
 | Asset / metric   | Catalogue entry | Owner     | Lineage             | Glossary terms | Documentation quality | Certification status | T2D usability | Gap                             |
 |------------------|-----------------|-----------|---------------------|----------------|-----------------------|----------------------|---------------|---------------------------------|
@@ -232,7 +238,7 @@ Severity scale:
 | Customer segment | Partial         | Sales Ops | Partial             | Partial        | Medium                | Trusted              | Medium        | Segment definitions need update |
 | Churn rate       | No              | Unclear   | No                  | No             | Poor                  | Not certified        | Low           | Owner and definition required   |
 
-## 3.7 Access review
+### 3.7 Access review
 
 | User group        | Dataset       | Allowed rows     | Restricted columns           | Sensitive fields      | Output restrictions     | Export allowed? | Approval needed  |
 |-------------------|---------------|------------------|------------------------------|-----------------------|-------------------------|-----------------|------------------|
@@ -250,9 +256,9 @@ Additional exposure control template:
 | Raw SQL          | —       | Yes        | —       | Visible to analysts only               |
 | Export           | —       | Yes        | —       | Restricted by role and dataset         |
 
-## 3.8 Gap analysis
+### 3.8 Gap analysis
 
-### 3.8.1 Output: confirmed answerability matrix
+#### 3.8.1 Output: confirmed answerability matrix
 
 | Priority question                      | Final status         | Evidence                                            | Blocking issue          | Required action               | Owner             | MVP decision        |
 |----------------------------------------|----------------------|-----------------------------------------------------|-------------------------|-------------------------------|-------------------|---------------------|
@@ -260,7 +266,7 @@ Additional exposure control template:
 | Which customers have declining spend?  | Partially answerable | Revenue data exists, customer master has duplicates | Customer identity issue | Apply master customer mapping | Data Engineering  | Include if resolved |
 | What is churn by segment?              | Not yet answerable   | No agreed churn definition                          | Semantic disagreement   | Agree definition and owner    | Sales Ops         | Defer               |
 
-### 3.8.2 Output: remediation plan
+#### 3.8.2 Output: remediation plan
 
 | Gap                                | Category     | Impact                                          | Priority | Remediation action                  | Owner              | Dependency    | Decision required       |
 |------------------------------------|--------------|-------------------------------------------------|----------|-------------------------------------|--------------------|---------------|-------------------------|
@@ -268,9 +274,9 @@ Additional exposure control template:
 | Margin access unclear              | Access       | Risk of exposing sensitive commercial data      | High     | Define role-based margin policy     | Finance / Security | CISO approval | Restrict margin answers |
 | Customer duplicates                | Data quality | Customer-level trends may be wrong              | Medium   | Use master customer mapping table   | Data Engineering   | MDM rules     | Include with caveat     |
 
-# 4 Activity scorecards
+## 4 Activity scorecards
 
-## 4.1 Validated source inventory
+### 4.1 Validated source inventory
 
 | Criterion                      | Green                                                                              | Amber                                                  | Red                                                         |
 |--------------------------------|------------------------------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------------------|
@@ -282,7 +288,7 @@ Additional exposure control template:
 
  
 
-## 4.2 Question-to-data mapping
+### 4.2 Question-to-data mapping
 
 | Criterion                    | Green                            | Amber                     | Red                           |
 |------------------------------|----------------------------------|---------------------------|-------------------------------|
@@ -291,7 +297,7 @@ Additional exposure control template:
 | Validation needs clear       | Open questions documented        | Some gaps unclear         | Validation not defined        |
 | MVP decision support         | Supports include/defer decisions | Some uncertainty          | Cannot support scope decision |
 
-## 4.3 Data model review
+### 4.3 Data model review
 
 | Criterion          | Green                        | Amber                 | Red                            |
 |--------------------|------------------------------|-----------------------|--------------------------------|
@@ -301,7 +307,7 @@ Additional exposure control template:
 | Date logic         | Standard date logic agreed   | Multiple date options | No agreed date logic           |
 | Aggregation safety | Safe aggregation rules clear | Some caveats          | High risk of wrong aggregation |
 
-## 4.4 Metric discovery
+### 4.4 Metric discovery
 
 | Criterion          | Green                         | Amber                              | Red                     |
 |--------------------|-------------------------------|------------------------------------|-------------------------|
@@ -311,7 +317,7 @@ Additional exposure control template:
 | Dimensions         | Approved dimensions known     | Some dimension risk                | Dimensions uncontrolled |
 | Ownership          | Metric owners confirmed       | Partial ownership                  | No owner                |
 
-## 4.5 Data quality assessment
+### 4.5 Data quality assessment
 
 | Criterion          | Green                   | Amber              | Red                   |
 |--------------------|-------------------------|--------------------|-----------------------|
@@ -321,7 +327,7 @@ Additional exposure control template:
 | Key reliability    | Keys reliable           | Some issues        | Joins unsafe          |
 | Issue transparency | Known issues documented | Partial visibility | Unknown quality state |
 
-## 4.6 Metadata assessment
+### 4.6 Metadata assessment
 
 | Criterion           | Green                   | Amber               | Red                |
 |---------------------|-------------------------|---------------------|--------------------|
@@ -331,7 +337,7 @@ Additional exposure control template:
 | Glossary            | Terms documented        | Some terms missing  | No glossary        |
 | Retrieval readiness | Metadata machine-usable | Some manual work    | Not usable for T2D |
 
-## 4.7 Access review
+### 4.7 Access review
 
 | Criterion           | Green                 | Amber                | Red                   |
 |---------------------|-----------------------|----------------------|-----------------------|
@@ -341,7 +347,7 @@ Additional exposure control template:
 | Row/column controls | Controls defined      | Some gaps            | Controls missing      |
 | Auditability        | Logging needs clear   | Partial logging      | Audit unclear         |
 
-## 4.8 Gap analysis
+### 4.8 Gap analysis
 
 | Criterion           | Green                                   | Amber                | Red                       |
 |---------------------|-----------------------------------------|----------------------|---------------------------|
@@ -351,7 +357,7 @@ Additional exposure control template:
 | Remediation defined | Clear actions and dates                 | Some actions vague   | No plan                   |
 | MVP scope decision  | Include/defer decisions clear           | Some open decisions  | MVP scope blocked         |
 
-# 5 Overall phase readiness scorecard
+## 5 Overall phase readiness scorecard
 
 Use this at the end of the phase.
 
@@ -375,9 +381,9 @@ Suggested rating logic:
 | Red    | Not ready; material blocker exists                       |
 | Grey   | Not assessed yet                                         |
 
-# 6 Risk, decision, assumption and dependency logs
+## 6 Risk, decision, assumption and dependency logs
 
-## 6.1 Risks
+### 6.1 Risks
 
 | Risk                                           | Impact                                                   | Likelihood | Mitigation                                                    | Owner                        | Status      |
 |------------------------------------------------|----------------------------------------------------------|------------|---------------------------------------------------------------|------------------------------|-------------|
@@ -387,7 +393,7 @@ Suggested rating logic:
 | Data quality issues are discovered late        | MVP scope may need to be reduced                         | Medium     | Run early profiling on high-priority datasets                 | Data Engineer                | Open        |
 | Sensitive data exposure is underestimated      | Security or compliance approval may be blocked           | Medium     | Complete access and sensitivity review before prototype build | Security Architect           | Open        |
 
-## 6.2 Decisions
+### 6.2 Decisions
 
 | Decision                                    | Options                                                                | Recommended option                                             | Decision owner               | Due date | Status |
 |---------------------------------------------|------------------------------------------------------------------------|----------------------------------------------------------------|------------------------------|----------|--------|
@@ -397,7 +403,7 @@ Suggested rating logic:
 | Which questions are included in MVP?        | All priority questions / only answerable questions / restricted subset | Include answerable and low-risk partially answerable questions | Product Owner                |          | Open   |
 | How are unresolved semantic gaps handled?   | Block / caveat / ask clarification / defer                             | Defer high-risk gaps; caveat low-risk gaps                     | Product Owner / Business SME |          | Open   |
 
-## 6.3 Assumptions
+### 6.3 Assumptions
 
 | Assumption                                            | Impact if wrong                                         | Validation method                                         | Owner              | Status      |
 |-------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------------------|--------------------|-------------|
@@ -407,7 +413,7 @@ Suggested rating logic:
 | Priority questions are representative of MVP usage    | Evaluation set and governed layer may be incomplete     | Validate questions with business SMEs and user interviews | Business Analyst   | To validate |
 | Data refresh is sufficient for user expectations      | Users may reject answers as outdated                    | Compare refresh cadence with workflow needs               | Data Engineer      | To validate |
 
-## 6.4 Dependencies
+### 6.4 Dependencies
 
 | Dependency                              | Needed by                                               | Owner                            | Due date | Status | Impact if delayed                              |
 |-----------------------------------------|---------------------------------------------------------|----------------------------------|----------|--------|------------------------------------------------|
@@ -417,3 +423,8 @@ Suggested rating logic:
 | Data owner input                        | Source trust status, ownership and quality issues       | Data Owners                      |          | Open   | Source readiness cannot be confirmed           |
 | Security / governance input             | Access review and exposure model                        | Security / Governance Lead       |          | Open   | Safe MVP scope cannot be agreed                |
 | Existing documentation and SQL examples | Metric contract and semantic grounding                  | BI Team / Analytics Engineering  |          | Open   | More reverse engineering require               |
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

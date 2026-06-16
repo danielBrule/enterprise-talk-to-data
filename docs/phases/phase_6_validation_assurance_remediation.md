@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 6: Validation, Assurance & Remediation
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -43,7 +49,7 @@
 
 7
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 6 validates whether the bounded Talk-to-Data MVP is safe, reliable and evidenced enough for controlled pilot use.
 
@@ -59,7 +65,7 @@ Phase 7 preparation may run in parallel with Phase 6, especially user selection,
 
 By the end of Phase 6, stakeholders should be able to decide whether to proceed to controlled pilot, proceed with constraints, remediate further, narrow scope or pause. The main output is a validation evidence pack covering evaluation results, access and security assurance, failure classification, remediation and retest evidence, residual-risk decisions and the approved Phase 7 pilot boundary.
 
-# 2 Phase overview
+## 2 Phase overview
 
 Phase 6 validates, assures and, where appropriate, remediates the bounded T2D MVP before controlled pilot use. It tests whether the implemented system is safe and reliable enough for the intended exposure level: users, questions, data, access, answer quality, auditability, cost and operational control.
 
@@ -67,7 +73,7 @@ The phase should start from evidence already produced in earlier phases, not res
 
 It should not be treated as a guarantee of correctness. No validation set can cover every user question, data state, model output, business ambiguity or future change. The purpose is to provide proportionate assurance, make residual risk explicit and decide whether controlled pilot exposure is justified.
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 6 is to determine whether the bounded MVP is safe, reliable and evidenced enough to proceed to controlled pilot use.
 
@@ -89,19 +95,19 @@ It should confirm:
 
 The output is a validation and remediation evidence pack supporting a clear decision: proceed to controlled pilot, proceed with constraints, remediate further, narrow scope or pause.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 6 should remain bounded to the MVP scope and intended pilot boundary. In scope are final validation, assurance review, failure classification, targeted remediation, retesting, residual-risk decisioning and pilot-boundary approval.
 
 Phase 6 should not become an open-ended rebuild. Structural gaps in data, semantics, architecture or implementation should be remediated through the relevant artefact owners while remaining controlled through the Phase 6 remediation process.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Phase 6 does not approve the system for production. It validates readiness for controlled pilot use. Production-readiness validation, go-live approval, resilience testing, final support model, monitoring thresholds, rollback route and release approval belong in Phase 8.
 
 It also does not provide exhaustive proof that the system will always answer correctly. The purpose is proportionate assurance for the next exposure level, not absolute certainty.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 The effort required depends on risk, maturity and intended exposure.
 
@@ -111,7 +117,7 @@ For a higher-risk MVP, Phase 6 should be more formal, with stronger evaluation c
 
 The phase should be measured by whether the evidence justifies the intended pilot exposure, not by the number of tests run. Where the MVP may progress towards production, validation should be automated as much as practical so that access checks, regression tests, query controls, answer-quality checks, cost checks and audit evidence can be repeated after changes to data, prompts, models, metadata, permissions or orchestration logic.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 Phase 6 requires product, business, data, AI, security, evaluation and operating participation. It should not be run as a purely technical test phase because the key decisions concern user exposure, residual risk, business trust and pilot readiness.
 
@@ -119,7 +125,7 @@ At minimum, named owners should cover pilot scope, business usefulness, data and
 
 Every blocking or material issue should have an owner, severity, remediation decision, retest route and implication for the Phase 7 pilot boundary.
 
-# 3 Validation decision and delivery implications
+## 3 Validation decision and delivery implications
 
 Phase 6 should end with a clear decision on whether the MVP is safe enough for controlled pilot use. The decision should be based on validation evidence, remediation status, documentation quality, residual risk and the proposed Phase 7 pilot boundary.
 
@@ -127,7 +133,7 @@ A proceed decision does not mean the system is production-ready. It means the MV
 
 The decision should not be a generic pass/fail judgement. A T2D MVP may be suitable for a narrow expert-user pilot while still being unsuitable for broad business release. Phase 6 should therefore define the conditions of use: who can use the system, which questions are supported, which data is accessible, what caveats must be shown, which issues remain open, what documentation is available and what monitoring is required during pilot.
 
-## 3.1 Possible Phase 6 outcomes
+### 3.1 Possible Phase 6 outcomes
 
 | Outcome                  | Meaning                                                               | Typical trigger                                                                                                                                    |
 |--------------------------|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -137,7 +143,7 @@ The decision should not be a generic pass/fail judgement. A T2D MVP may be suita
 | Narrow scope             | The pilot boundary must be reduced before proceeding.                 | Part of the MVP is valid, but some domains, questions, users or answer types are not safe or reliable enough.                                      |
 | Pause                    | Pilot should not start until material uncertainty is resolved.        | Evidence is too weak, residual risk is not accepted, ownership is unclear or the system cannot be made safe within the current scope.              |
 
-## 3.2 Minimum conditions to proceed
+### 3.2 Minimum conditions to proceed
 
 Phase 6 should proceed to controlled pilot only when the team can answer yes to the following confidence tests:
 
@@ -159,7 +165,7 @@ Phase 6 should proceed to controlled pilot only when the team can answer yes to 
 
 - **Formal approval route is complete:** the required validation document, evidence pack, committee submission or sign-off record has been reviewed by the appropriate decision owners for the intended pilot exposure.
 
-## 3.3 Common reasons to remediate, constrain, narrow or pause
+### 3.3 Common reasons to remediate, constrain, narrow or pause
 
 The team should avoid starting live pilot use where any of the following conditions apply without a clear mitigation:
 
@@ -179,12 +185,12 @@ The team should avoid starting live pilot use where any of the following conditi
 
 - **Ownership is unclear:** issues, residual risks, user support, monitoring and remediation do not have named owners.
 
-## 3.4 How Phase 6 shapes later phases
+### 3.4 How Phase 6 shapes later phases
 
 Phase 6 defines the safe starting conditions for Phase 7. It should not only state whether pilot testing can begin; it should define how pilot testing must be run.  
 For Phase 7, it should provide the approved pilot boundary, user groups, supported questions, known limitations, user guidance, feedback process, monitoring needs, residual risks and open issue backlog.
 
-# 4 Validation and assurance activities overview
+## 4 Validation and assurance activities overview
 
 Phase 6 is organised around ten activities. They provide a structured way to validate the MVP, classify issues, remediate blockers and approve the controlled Phase 7 pilot boundary.
 
@@ -192,7 +198,7 @@ The activities should not be treated as a rigid waterfall. Some can run in paral
 
 The depth of each activity should reflect the risk of the use case. A narrow internal MVP may require a short validation cycle. A sensitive, regulated, broad-user or decision-critical MVP requires stronger evidence, more formal approval and more repeatable testing.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 | Activity                                                                       | Main question                                                                                | Main output                                                                                     |
 |--------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
@@ -207,7 +213,7 @@ The depth of each activity should reflect the risk of the use case. A narrow int
 | 9\. Validate performance, cost and operational limits                          | Is the MVP viable for controlled pilot use?                                                  | Latency, cost, usage-limit and supportability findings.                                         |
 | 10\. Classify failures, remediate blockers and approve pilot constraints       | What must be fixed, constrained, accepted or deferred before Phase 7?                        | Failure taxonomy, remediation log, retest evidence, approval record and approved pilot boundary |
 
-## 4.2 Activity logic
+### 4.2 Activity logic
 
 The activities follow a simple assurance logic:
 
@@ -225,7 +231,7 @@ The activities follow a simple assurance logic:
 
 This logic is more important than the exact order. In practice, evaluation, security testing, documentation review and remediation may run in parallel. What matters is that the final pilot decision is evidence-based and that material changes are retested before exposure.
 
-## 4.3 Assurance-depth expectations
+### 4.3 Assurance-depth expectations
 
 The expected output should match the use case, risk and organisational maturity.
 
@@ -235,7 +241,7 @@ The expected output should match the use case, risk and organisational maturity.
 | Standard MVP   | Controlled business pilot, limited users, governed data.                   | Evaluation results, access/security checks, issue log, remediation evidence, user guidance and pilot boundary.                                     |
 | High-assurance | Sensitive data, regulated context, broad users, decision-critical outputs. | Formal validation pack, stronger test coverage, adversarial tests, approval record, retest evidence, residual-risk acceptance and monitoring plan. |
 
-## 4.4 Practitioner note
+### 4.4 Practitioner note
 
 The hard part of Phase 6 is not only finding defects. It is deciding what level of evidence is enough for the next exposure level.
 
@@ -243,9 +249,9 @@ Legal, security and compliance stakeholders may push for stronger controls and l
 
 The practical discipline is to separate blockers from constraints. Issues that could expose restricted data, bypass permissions, produce materially misleading answers or prevent auditability should be fixed before live use. Other issues may be acceptable if the pilot scope is narrowed, users are briefed, outputs are caveated, monitoring is active and ownership is clear.
 
-# 5 Core validation, assurance and remediation activities
+## 5 Core validation, assurance and remediation activities
 
-## 5.1 Reconfirm validation scope, stakeholders and assurance route
+### 5.1 Reconfirm validation scope, stakeholders and assurance route
 
 **Purpose:** Confirm what is being validated, who can approve pilot exposure and what evidence is required for the Phase 6 decision.
 
@@ -294,7 +300,7 @@ The practical discipline is to separate blockers from constraints. Issues that c
 **Practitioner note**  
 This activity is not only procedural. It mixes legal requirements, governance expectations and organisational politics. In some organisations, T2D or GenAI validation will be new, and stakeholders may need education before they can make a responsible decision. The team should explain what validation can prove, what it cannot prove, and which residual risks remain. It should also make ownership explicit. A validation process where everyone reviews the evidence but no one accepts the risk is not a decision process.
 
-## 5.2 Finalise evaluation set, protocol and acceptance thresholds
+### 5.2 Finalise evaluation set, protocol and acceptance thresholds
 
 **Purpose:** Confirm that the evaluation set, scoring method and acceptance thresholds are fit to support the Phase 6 pilot-readiness decision.
 
@@ -343,7 +349,7 @@ Not all validation checks should be scored the same way. Rule-based controls sho
 
 Other outputs require judgement-based scoring. The exact wording of an answer, the clarity of a caveat, the usefulness of a clarification question or the quality of an explanation may be acceptable even when not identical to an expected answer. The evaluation protocol should separate hard control failures from quality judgement. Otherwise, the team may either over-tolerate serious control failures or over-police harmless wording differences.
 
-## 5.3 Validate identity, access and authorisation enforcement
+### 5.3 Validate identity, access and authorisation enforcement
 
 **Purpose:** Confirm that the MVP enforces the right user identity, permissions and access boundaries at runtime.
 
@@ -382,7 +388,7 @@ Other outputs require judgement-based scoring. The exact wording of an answer, t
 **Practitioner note**  
 Access validation is a hard control, not a quality preference. A slightly awkward answer may be acceptable in a pilot; unauthorised data exposure is not. The team should validate both sides of access: users must not see data they are not allowed to see, but they must also have enough access to test the intended workflow. Access is not static during pilot; joiners, leavers, role changes and revocation should be owned, traceable and retested where material.
 
-## 5.4 Validate sensitive-data, leakage and inference controls
+### 5.4 Validate sensitive-data, leakage and inference controls
 
 **Purpose:** Confirm that the MVP does not expose restricted data directly, indirectly or through repeated interaction.
 
@@ -421,7 +427,7 @@ Access validation is a hard control, not a quality preference. A slightly awkwar
 **Practitioner note**  
 Sensitive-data validation should look beyond obvious PII. In T2D, leakage can happen through metadata, generated SQL, aggregates, cached context, logs, explanations and repeated questions. A user may not access restricted data directly, but may still infer it by asking several permitted questions, combining filters, narrowing cohorts or comparing totals. This is especially difficult to test manually because each question may look harmless in isolation. GenAI can help by generating adversarial question sequences and inference scenarios, but those tests should still be reviewed against business rules, access policy and real data sensitivity.
 
-## 5.5 Validate SQL generation, query constraints and execution safety
+### 5.5 Validate SQL generation, query constraints and execution safety
 
 **Purpose:** Confirm that generated queries are valid, bounded, authorised and safe to execute against the approved data layer.
 
@@ -460,7 +466,7 @@ Sensitive-data validation should look beyond obvious PII. In T2D, leakage can ha
 **Practitioner note**  
 Query safety should be hard-tested with mostly boolean pass/fail checks. A generated query either uses approved assets, applies mandatory filters, respects permissions and stays within limits, or it does not. The team should deliberately test blocked commands, unsupported tables, unsafe joins, missing filters, excessive scans, small cohorts and access-bypass attempts. For pilot use, the default should be simple: if the query cannot be validated against approved assets, joins, filters, limits and permissions, it should not run.
 
-## 5.6 Validate input data quality, answer quality, grounding and caveat handling
+### 5.6 Validate input data quality, answer quality, grounding and caveat handling
 
 **Purpose:** Confirm that the data used is fit for the answer, and that generated answers are correct, grounded, caveated and not overstated.
 
@@ -499,7 +505,7 @@ Query safety should be hard-tested with mostly boolean pass/fail checks. A gener
 **Practitioner note**  
 GenAI can help evaluate answers, especially by flagging missing caveats, overclaiming, unsupported explanations, weak wording or inconsistencies with the provided evidence. This can speed up review and help generate additional edge cases. However, it should not be the sole judge of answer correctness or safety. Numeric correctness, access controls, mandatory caveats and policy boundaries should be checked against trusted sources, deterministic rules or human review where required
 
-## 5.7 Validate safe failure, clarification and escalation behaviour
+### 5.7 Validate safe failure, clarification and escalation behaviour
 
 **Purpose:** Confirm that refusal, clarification, constraint and escalation behaviours are consistent, understandable and usable for pilot users.
 
@@ -540,7 +546,7 @@ GenAI can help evaluate answers, especially by flagging missing caveats, overcla
 **Practitioner note**  
 Safe failure is part of answer quality. A T2D system should not be rewarded for answering every question. It should be rewarded for knowing when to answer, when to ask for clarification, when to refuse and when to escalate. In pilot, this also protects trust: users are more likely to accept a limitation they understand than a confident answer that later proves wrong.
 
-## 5.8 Validate logging, auditability, documentation and repeatability
+### 5.8 Validate logging, auditability, documentation and repeatability
 
 **Purpose:** Confirm that pilot interactions can be reconstructed, explained, supported and retested.
 
@@ -583,7 +589,7 @@ Auditability is not only about storing logs. Logs must be usable. Where appropri
 
 Log retention should also be explicit: long enough to support pilot review, audit, debugging and improvement, but not longer or broader than privacy, security and policy allow.
 
-## 5.9 Validate performance, cost and operational limits
+### 5.9 Validate performance, cost and operational limits
 
 **Purpose:** Confirm that the MVP can run within acceptable latency, cost, usage and support limits during controlled pilot use.
 
@@ -622,7 +628,7 @@ Log retention should also be explicit: long enough to support pilot review, audi
 **  
 **
 
-## 5.10 Classify failures, remediate blockers and approve pilot constraints
+### 5.10 Classify failures, remediate blockers and approve pilot constraints
 
 **Purpose:** Turn validation findings into a clear remediation decision, residual-risk position and approved Phase 7 pilot boundary.
 
@@ -661,7 +667,7 @@ Log retention should also be explicit: long enough to support pilot review, audi
 **Practitioner note**  
 If earlier phases have been done properly, Phase 6 should not discover fundamental gaps for the first time. It may still find defects, edge cases and control weaknesses, but these should usually be bounded enough to fix, constrain or defer. If Phase 6 exposes unresolved metric ownership, unsafe access design, missing auditability or a fundamentally unreliable MVP, the right decision may be to narrow, pause or stop rather than force remediation into the pilot timeline.
 
-# 6 Validation evidence decision pack
+## 6 Validation evidence decision pack
 
 Phase 6 should produce a clear evidence base for the pilot-readiness decision. The outputs should not be a loose collection of test results. They should show what was validated, what failed, what was fixed, what remains constrained and who accepts the residual risk.
 
@@ -669,7 +675,7 @@ Where the MVP may progress beyond a short POC, the evidence pack should also ide
 
 The level of detail should match the use case. A low-risk internal MVP may need a lightweight validation pack. A sensitive, regulated or decision-critical MVP may require a formal validation document, committee submission or approval record.
 
-## 6.1 Validation evidence pack
+### 6.1 Validation evidence pack
 
 The main output is a validation and remediation evidence pack. It should contain enough evidence for decision owners to approve, constrain, pause or reject controlled pilot use.
 
@@ -693,7 +699,7 @@ The pack should include:
 
 - **Automation and repeatability:** automated checks, manual checks, rerun triggers, regression coverage and gaps that must be automated before pilot expansion or production readiness.
 
-## 6.2 Evidence pack quality test
+### 6.2 Evidence pack quality test
 
 Before Phase 6 closes, the outputs should pass a simple quality test:
 
@@ -715,19 +721,19 @@ Before Phase 6 closes, the outputs should pass a simple quality test:
 
 If these conditions are not met, the phase should not close with a vague approval. The team should either remediate further, narrow the pilot boundary or pause until the decision can be made responsibly.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 6 should close with a clear pilot-readiness decision. The phase is complete only when the validation evidence, remediation status, residual risk, backlog and pilot boundary are clear enough for the relevant decision owners to approve, constrain, pause or reject Phase 7 user testing.
 
 A positive Phase 6 decision does not mean the system is production-ready. It means the MVP is sufficiently validated for the agreed pilot exposure, under the documented constraints and monitoring conditions.
 
-## 7.1 Required exit outputs
+### 7.1 Required exit outputs
 
 The required exit output is the validation evidence decision pack described in Section 6, completed to the standard required for the intended pilot exposure.
 
 The exit decision should confirm whether the MVP can proceed to pilot, proceed with constraints, remediate further, narrow scope, pause or stop. It should also identify the approved pilot boundary, residual risks, issue disposition, backlog, repeatability gaps and ownership route.
 
-## 7.2 Handover to Phase 7
+### 7.2 Handover to Phase 7
 
 The handover to Phase 7 should make clear how controlled user testing must be run. It should not simply pass the MVP to users.
 
@@ -753,7 +759,7 @@ Phase 7 should receive:
 
 If the project moves forward, the backlog should become an active management artefact, not an archive. Phase 7 should use it to prioritise pilot fixes, interpret user feedback and decide what must be resolved before any Phase 8 production-readiness review.
 
-## 7.3 Exit decision wording
+### 7.3 Exit decision wording
 
 The Phase 6 decision should be explicit. Suggested wording:
 
@@ -766,13 +772,13 @@ The Phase 6 decision should be explicit. Suggested wording:
 | Pause                    | Pilot should not begin until material uncertainty, ownership or assurance gaps are resolved.                |
 | Stop                     | The MVP should not proceed to pilot because the risk, evidence gap or remediation burden is not acceptable. |
 
-## 7.4 Practitioner note
+### 7.4 Practitioner note
 
 A weak Phase 6 ends with “approved, subject to fixes”. A strong Phase 6 states what was fixed, what was constrained, what was accepted, what was moved to backlog, who owns each item and when it must be reviewed.
 
 The handover should be operational, not symbolic. If pilot users, access groups, caveats, documentation, monitoring, support, backlog ownership and pause conditions are not ready, the system is not ready for controlled pilot use
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 Phase 6 can fail even when many tests have been run. The main risk is not only that defects remain. It is that validation creates false confidence, ownership is unclear, or the pilot starts with constraints that are documented but not operationally enforced.
 
@@ -787,6 +793,11 @@ Phase 6 can fail even when many tests have been run. The main risk is not only t
 | Pilot boundary is not enforced operationally      | Constraints may exist in documentation but not in access, UI, logging, monitoring or support.                             | Reflect pilot constraints in permissions, user guidance, answer behaviour, alerts, support process and pause conditions.                                           |
 | Automation is postponed too long                  | Validation becomes slow, manual and unreliable after changes to prompts, models, data, metadata or permissions.           | Identify checks that must become repeatable before pilot expansion or production readiness.                                                                        |
 
-## 8.1 Practitioner note
+### 8.1 Practitioner note
 
 A strong Phase 6 does not try to prove that the system is risk-free. It makes the risk visible, bounded and owned. The worst outcome is not finding issues before pilot. The worst outcome is finding issues and still proceeding with unclear constraints, weak ownership or no way to retest the system after change.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

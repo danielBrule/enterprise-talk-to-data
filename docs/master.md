@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Master
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -46,7 +52,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Enterprise Talk-to-Data (T2D) is not a chatbot connected to a database. It is a governed decision interface over trusted data.
 
@@ -80,31 +86,31 @@ Key decisions to be made:
 
 The Master Guide provides the strategic delivery logic; the phase documents explain how to execute each stage, and the annexes provide optional working tools.
 
-# 2 How to read this blueprint
+## 2 How to read this blueprint
 
 This Master Guide explains the delivery logic for building a governed Talk-to-Data capability. It is not intended to be read as a rigid methodology or a complete implementation manual. Teams should adapt the blueprint to their business context, data maturity, governance model, technology stack, security requirements and delivery constraints.
 
-## 2.1 Intended audience
+### 2.1 Intended audience
 
 This document is intended for the teams responsible for shaping, approving, delivering and operating a T2D capability: business sponsors, product owners, delivery leads, data and analytics teams, architects, security and governance stakeholders, and adoption leads.
 
-## 2.2 Master, phase documents and annexes
+### 2.2 Master, phase documents and annexes
 
 Use the Master Guide to understand the overall delivery logic: where T2D creates value, where it is inappropriate, what risks must be controlled and how the delivery phases fit together.
 
 Use the phase documents for practical delivery guidance. Use the annexes selectively for templates, checklists, matrices and examples. The annexes are optional working material; they are not intended to be read end to end.
 
-## 2.3 Companion implementation repository
+### 2.3 Companion implementation repository
 
 A companion implementation repository is maintained separately. This blueprint defines the delivery method, governance logic and evidence model. The implementation repository demonstrates selected patterns through a reference Talk-to-Data build.
 
-## 2.4 Scope and specialist review
+### 2.4 Scope and specialist review
 
 This document provides a delivery blueprint for T2D initiatives. It is not a technical design, legal assessment, security policy, compliance review, vendor selection framework or full project plan.
 
 Security, privacy, regulatory, contractual and audit requirements should be reviewed by the appropriate specialists for each organisation.
 
-# 3 Talk-to-Data concept
+## 3 Talk-to-Data concept
 
 T2D is the ability for users to ask questions about governed business data in natural language and receive reliable, explainable answers without writing SQL, building a report or navigating a dashboard.
 
@@ -116,7 +122,7 @@ For example, if a commercial user asks for revenue, the system must know which r
 
 The objective is not only to make data easier to access. It is to make business answers faster, safer and more consistent.
 
-## 3.1 What it is / what it is not
+### 3.1 What it is / what it is not
 
 | Talk-to-Data is                                                               | Talk-to-Data is not                                                 |
 |-------------------------------------------------------------------------------|---------------------------------------------------------------------|
@@ -127,7 +133,7 @@ The objective is not only to make data easier to access. It is to make business 
 | A capability that improves over time through feedback and semantic refinement | A static tool that works out of the box without ongoing maintenance |
 | A system that should fail safely when it cannot answer                        | A system that should guess when the answer is uncertain             |
 
-## 3.2 Where T2D creates value
+### 3.2 Where T2D creates value
 
 T2D creates value when users need flexible, trusted exploration rather than fixed reporting. It is most useful where business questions change frequently, users need follow-up analysis, and existing dashboards or analyst workflows are too slow for the decision being made.
 
@@ -141,7 +147,7 @@ T2D is usually appropriate when three conditions are present:
 
 - **Conversation adds value.** Users need quick flexible exploration, clarification and follow-up questions that are not already well served by existing BI or analyst workflow.
 
-## 3.3 Where T2D is the wrong tool
+### 3.3 Where T2D is the wrong tool
 
 T2D should not be used simply because GenAI is available. It is often the wrong tool for stable, repeatable and highly standardised reporting, where dashboards or scheduled reports are cheaper, clearer and easier to govern.
 
@@ -149,7 +155,7 @@ It is also a poor fit where the organisation cannot agree metric definitions, ca
 
 For complex judgement-based analysis, T2D may support exploration, but it should not replace analyst ownership. The system can help retrieve, summarise and test data-driven hypotheses, but human judgement remains necessary where interpretation, context and accountability matter.
 
-## 3.4 Target user flow
+### 3.4 Target user flow
 
 - **Understand the question.** Classify the user intent, business domain, metric, filters and expected output.
 
@@ -165,7 +171,7 @@ For complex judgement-based analysis, T2D may support exploration, but it should
 
 - **Log and improve.** Capture questions, queries, errors, feedback and evaluation outcomes for monitoring and continuous improvement.
 
-## 3.5 Text-to-SQL vs RAG-over-analytics
+### 3.5 Text-to-SQL vs RAG-over-analytics
 
 Most T2D systems combine two patterns:
 
@@ -178,7 +184,7 @@ These patterns should not be treated as interchangeable. Text-to-SQL is usually 
 
 A strong T2D design uses retrieval to constrain and explain the query, not to invent numeric answers from documents. Numeric answers should usually come from governed data execution, not generated prose.
 
-## 3.6 Bounded agentic AI
+### 3.6 Bounded agentic AI
 
 T2D can be viewed as a bounded form of agentic AI. In a basic implementation, the system translates a natural-language question into a governed query and returns an answer. In a more advanced implementation, it may select the relevant domain, retrieve metric definitions, choose tools, ask clarification questions, generate and validate queries, inspect results, apply caveats and decide whether it is safe to answer.
 
@@ -188,7 +194,7 @@ For this reason, agentic T2D should remain bounded by approved tools, approved d
 
 Agentic behaviour does not remove accountability. Product, data, security, AI and operating owners remain accountable for scope, definitions, access, model behaviour, monitoring and release control.
 
-## 3.7 Key risks and safe failure
+### 3.7 Key risks and safe failure
 
 | Risk                        | Failure mode                                                                                  | Required control                                                                |
 |-----------------------------|-----------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
@@ -203,13 +209,13 @@ Agentic behaviour does not remove accountability. Product, data, security, AI an
 
 For numeric and financial answers, fluency is not evidence of correctness. A T2D answer should make visible the source, metric definition, filters, time period, caveats and limits used to produce the result.
 
-### 3.7.1 Multi-turn conversation handling
+#### 3.7.1 Multi-turn conversation handling
 
 Multi-turn conversation is a major source of T2D value and risk. Follow-up questions can preserve useful context, but they can also create context drift, accidental scope expansion, stale filters or access leakage.
 
 A T2D design should define what carries across turns, when context resets, when clarification is required and how the conversation remains auditable. Multi-turn support should improve exploration without allowing unsupported reasoning, uncontrolled data exposure or hidden changes in scope.
 
-# 4 Delivery blueprint overview
+## 4 Delivery blueprint overview
 
 Delivering T2D requires more than building a natural-language interface. It requires coordinated work across business framing, data readiness, semantic modelling, governed data foundations, architecture, security, evaluation, adoption and operations.
 
@@ -217,7 +223,7 @@ The delivery logic is simple: start with a bounded business problem, make the da
 
 A T2D initiative should not progress because time has passed or a prototype looks impressive. It should progress because the evidence is strong enough that value is safely created.
 
-## 4.1 Delivery depth and proportionality
+### 4.1 Delivery depth and proportionality
 
 The phases in this blueprint describe the work required to deliver a T2D capability. They should be scaled to the project’s intent, risk and intended use.
 
@@ -225,7 +231,7 @@ A discovery exercise or POC may use a lighter version of the phases to test whet
 
 [Section 6.1](#start-with-project-intent) sets out the maturity levels used in this blueprint, from discovery and POC through to MVP, pilot, production readiness and ongoing run. The practical question for each project is therefore not only which activities are needed, but how much evidence, control and operational readiness are required before the capability is used more widely or for higher-risk decisions.
 
-## 4.2 Delivery principles
+### 4.2 Delivery principles
 
 | Principle                                              | Description                                                                                                                                                                                                                   |
 |--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -246,7 +252,7 @@ Stopping or pausing a project after framing should not be seen as failure. A wel
 
 The model is often less important than the end-to-end flow around it. A stronger model may improve performance, but it will not compensate for weak framing, unclear semantics, poor data foundations, unsafe access controls, missing evaluation or poor operational ownership.
 
-## 4.3 Canonical control definitions
+### 4.3 Canonical control definitions
 
 | Term               | Definition                                                                                                                                         |
 |--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -261,7 +267,7 @@ The model is often less important than the end-to-end flow around it. A stronger
 | Controlled change  | Versioned, tested and approved changes to prompts, models, metadata, tools, validation rules, access rules or answer behaviour                     |
 | Safe failure       | Behaviour where the system asks, caveats, refuses or escalates instead of guessing or exposing unsupported answers                                 |
 
-## 4.4 Phase overview and decision gates
+### 4.4 Phase overview and decision gates
 
 | Phase                                           | Indicative timeline[^1] | Core decision                                                                                                                                                        | Main evidence before progressing                                                                                                                   |
 |-------------------------------------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -277,13 +283,13 @@ The model is often less important than the end-to-end flow around it. A stronger
 
 **Note:** The phase model should be read as a delivery logic, not a fixed waterfall. Several phases may be performed lightly for a discovery or POC, repeated or deepened for an MVP, and formalised before pilot or production readiness. The important discipline is to avoid carrying POC assumptions into MVP, pilot or production without revalidating them
 
-## 4.5 Delivery flow
+### 4.5 Delivery flow
 
 The delivery flow is iterative rather than strictly linear. Framing sets the initial scope, but data readiness, semantic modelling and architecture often develop together. A prototype may expose missing definitions. Evaluation may reveal a query-grain issue. Pilot feedback may show that users ask questions differently from the framing workshop.
 
 These loops should be expected. The discipline is not to avoid iteration; it is to make sure each iteration improves scope, semantics, controls or evidence before the capability is exposed to more users.
 
-## 4.6 Cross-phase outputs
+### 4.6 Cross-phase outputs
 
 Some outputs are created, refined and reused across multiple phases of the T2D delivery. These artefacts provide continuity between phases.
 
@@ -304,7 +310,7 @@ In a real implementation, these artefacts may live across semantic layers, data 
 
 ***Note**: Golden questions should mature across the delivery lifecycle. Framing creates candidate questions. Data and semantic readiness determine which questions are eligible for evaluation. Prototype and validation turn them into expected answers and failure cases. Production readiness converts them into regression tests.*
 
-## 4.7 Illustrative semantic artefact: approved metric card
+### 4.7 Illustrative semantic artefact: approved metric card
 
 A production T2D system needs more than a metric name. It needs enough semantic context for the system to interpret, query, explain and caveat the answer consistently.
 
@@ -325,7 +331,7 @@ A production T2D system needs more than a metric name. It needs enough semantic 
 
 A metric card like this is not documentation for its own sake. It is part of the control that allows the system to select the right data, apply the right filters, explain the answer and know when to ask for clarification.
 
-# 5 Project governance and operating model
+## 5 Project governance and operating model
 
 Governance is not an afterthought in Talk-to-Data. It determines which questions can be answered, which definitions are trusted, which users can access which data, what evidence is required before exposure, and who owns the capability after launch.
 
@@ -345,7 +351,7 @@ A strong model, clean interface and working SQL generation are not enough if own
 
 Without clear answers, T2D can become an impressive prototype with no safe route to production. A more detailed governance and role matrix can be maintained in the annexes.
 
-## 5.1 Minimum governance model
+### 5.1 Minimum governance model
 
 The governance model should be proportionate to the project risk. A narrow prototype may require lightweight governance, while a production capability serving sensitive data, regulated data or large user groups will require clearer decision gates and separation of responsibilities.
 
@@ -362,7 +368,7 @@ The governance model should be proportionate to the project risk. A narrow proto
 
 The detailed role matrix should be adapted to the organisation and maintained separately.
 
-## 5.2 Decision gates
+### 5.2 Decision gates
 
 A T2D project should not progress only because a prototype works or the timeline has elapsed. It should progress because the required evidence and approvals are in place.
 
@@ -379,7 +385,7 @@ A T2D project should not progress only because a prototype works or the timeline
 
 The most important governance discipline is the willingness not to progress. A project should not move from POC to MVP simply because the natural-language interface works. It should progress only if the use case is valuable, the data is trusted enough, answer quality is evidenced, risks are controlled and the next stage has clear ownership.
 
-### 5.2.1 Decision outcomes
+#### 5.2.1 Decision outcomes
 
 At each decision gate, the question is not only whether the project can continue, but how it should continue. The standard outcomes should be:
 
@@ -391,7 +397,7 @@ At each decision gate, the question is not only whether the project can continue
 | Redirect / defer  | Use another route, such as BI or analyst workflow, or move the item to a later backlog. |
 | Stop              | Do not continue this use case as a T2D candidate.                                       |
 
-### 5.2.2 Illustrative evaluation expectations
+#### 5.2.2 Illustrative evaluation expectations
 
 Answer quality thresholds should be defined by use case risk, user group and decision impact. A low-risk internal pilot may tolerate more caveats and manual review than a production service used for senior reporting or regulated data.
 
@@ -408,13 +414,13 @@ As a practical guide, evaluation should distinguish between:
 
 For production, teams should not rely on a single accuracy percentage. They should set minimum expectations for priority questions, high-risk question types and safe failure behaviour. For example, production should not proceed if material errors occur on priority questions, if unsafe requests are answered, or if wrong answers cannot be explained and remediated.
 
-## 5.3 Budget, capacity and run cost
+### 5.3 Budget, capacity and run cost
 
 The final cost of a T2D initiative cannot be known precisely on day one because scope, data readiness, semantic complexity, access constraints and operating demand are still uncertain. A back-of-the-envelope estimate is still useful to support early prioritisation, funding discussions and proceed / pause decisions.
 
 **Note:** *The cost risk is not only the model bill. In T2D, cost can move into semantic preparation, warehouse execution, repeated evaluation, trace retention, support load and rework caused by weak definitions.*
 
-### 5.3.1 Development and operational involvement
+#### 5.3.1 Development and operational involvement
 
 T2D budgets should cover more than the AI or model component. A realistic budget needs to include product ownership, business SME time, data and semantic work, engineering, architecture, security, evaluation, adoption and post-launch support.
 
@@ -431,7 +437,7 @@ The indicative ranges below assume a bounded enterprise use case, one primary do
 
 These figures are planning ranges, not benchmarks or quotations. Their purpose is to help teams avoid underestimating the delivery and operating effort behind a production T2D capability.
 
-### 5.3.2 Indicative cost per query
+#### 5.3.2 Indicative cost per query
 
 Per-query cost is difficult to estimate precisely before usage patterns are known. It depends on model choice, prompt length, metadata retrieved, result size, number of tool calls, data warehouse cost, caching, logging and whether the system needs clarification or retry loops.
 
@@ -446,7 +452,7 @@ As a planning assumption for a bounded enterprise T2D capability, teams can use 
 
 These ranges cover indicative variable usage cost only. They exclude fixed platform costs, internal support effort, security operations, maintenance and ongoing evaluation.
 
-### 5.3.3 Key budget risks
+#### 5.3.3 Key budget risks
 
 - **Semantic effort is underestimated.** Metric definitions, joins, grains, filters and caveats take longer than expected.
 
@@ -458,7 +464,7 @@ These ranges cover indicative variable usage cost only. They exclude fixed platf
 
 - **Support ownership is unclear.** Without named owners, the service degrades as data, prompts, models and user behaviour change.
 
-## 5.4 Typical team shape
+### 5.4 Typical team shape
 
 The team should be shaped around the delivery stage. A POC can often be delivered by a small cross-functional team. MVP and production require broader involvement, especially around data ownership, semantic modelling, security, evaluation and support.
 
@@ -484,7 +490,7 @@ A typical bounded MVP may therefore require a core team of **5–8 active contri
 
 **Note:** *The exact team shape will vary, but the capability should not be staffed as an AI engineering task alone. T2D requires business, data, semantic, security, evaluation and operating ownership.*
 
-## 5.5 Build, buy or partner considerations
+### 5.5 Build, buy or partner considerations
 
 The team and cost profile will depend on whether the organisation builds the capability internally, buys a platform, or uses a delivery partner.
 
@@ -501,7 +507,7 @@ A vendor product may accelerate the interface, orchestration or model integratio
 
 Buying a T2D interface does not outsource accountability for data trust, metric definitions, access rules, answer quality or operating support.
 
-## 5.6 Operating model after launch
+### 5.6 Operating model after launch
 
 Production T2D needs an operating model, not just a deployment. After launch, the capability will change as users ask new questions, data sources evolve, metric definitions change, models are updated and failure modes are discovered.
 
@@ -539,7 +545,7 @@ The key operational risk is silent degradation. A T2D system can become less rel
 
 Metric definitions, semantic mappings, prompts and evaluation sets should be versioned. When a metric definition changes, the team should know which version was used for past answers, which tests need to be rerun, which users may be affected and whether historical answers remain valid. Material semantic changes should follow owner approval, regression testing and communication to affected users.
 
-## 5.7 Adoption and trust
+### 5.7 Adoption and trust
 
 Adoption depends on trust. Users need to understand what the system can answer, what it cannot answer, how caveats are presented, and when analyst support is still required.
 
@@ -547,13 +553,13 @@ Analysts and data teams should be involved early. They help validate definitions
 
 Training should focus less on “how to use a chatbot” and more on how to ask good questions, interpret answers, recognise caveats, provide feedback and escalate concerns. It should also address the probabilistic nature of LLM-based answers, so users neither over-trust nor under-trust the capability.
 
-# 6 How to adapt the blueprint to a real project
+## 6 How to adapt the blueprint to a real project
 
 This blueprint should not be applied mechanically. Each T2D initiative should adapt the delivery depth, governance, controls and artefacts to the intended use, business value, data maturity, risk profile and operating environment.
 
 The key adaptation question is not “which steps can be skipped?” It is “what evidence is required before this capability is exposed to more users, more data or more decisions?”
 
-## 6.1 Start with project intent
+### 6.1 Start with project intent
 
 The first adaptation decision is the delivery intent. A proof of concept, MVP, pilot and production service require different levels of rigour.
 
@@ -568,7 +574,7 @@ The first adaptation decision is the delivery intent. A proof of concept, MVP, p
 
 A common failure is treating a POC as if it proves production readiness. It does not. A POC may prove that the interaction pattern is possible; production requires evidence that it is reliable, secure, supportable and worth operating.
 
-## 6.2 Calibrate delivery depth
+### 6.2 Calibrate delivery depth
 
 Delivery depth should increase when the use case has higher risk, broader exposure or greater business impact.
 
@@ -592,7 +598,7 @@ Use lighter controls where the project is exploratory, low-risk, internally cont
 
 The discipline is to be proportionate without being casual. Lightweight delivery is acceptable for learning; it is not acceptable for uncontrolled production exposure.
 
-## 6.3 Use decision gates, not fixed timelines
+### 6.3 Use decision gates, not fixed timelines
 
 The blueprint should be adapted around evidence gates rather than fixed timelines. A phase is complete when the required decisions and evidence are in place, not when the planned date arrives.
 
@@ -610,7 +616,7 @@ For example:
 
 If the evidence is weak, the project should narrow, pause, remediate or stop.
 
-## 6.4 Decide what to simplify, strengthen or defer
+### 6.4 Decide what to simplify, strengthen or defer
 
 When adapting the blueprint, teams should make explicit choices about which parts can be simplified, which need strengthening, and which should be deferred.
 
@@ -623,7 +629,7 @@ When adapting the blueprint, teams should make explicit choices about which part
 
 The output of adaptation should be a clear delivery stance: what the project will do now, what it will not do yet, what evidence is required to progress, and what risks are being accepted.
 
-## 6.5 Practical adaptation checklist
+### 6.5 Practical adaptation checklist
 
 Before applying the blueprint, teams should confirm the delivery stance:
 
@@ -639,7 +645,7 @@ Before applying the blueprint, teams should confirm the delivery stance:
 
 The detailed approval criteria should then be managed through the decision gates in [section 5.2](#decision-gates).
 
-# 7 Final practitioner view
+## 7 Final practitioner view
 
 The hard part of T2D is not making a model produce an answer. The hard part is making sure all the answers are grounded in the right definition, the right data, the right permissions, the right context and the right level of confidence.
 
@@ -648,3 +654,8 @@ T2D should therefore be treated as a governed analytics product, not a chatbot f
 The goal is not to make every question answerable. It is to make the right questions answerable, safely, reliably and with enough evidence that the organisation can trust the result.
 
 [^1]: Indicative timelines may be useful for planning, but they should not be treated as progression criteria. A phase is complete when the required evidence and decisions are in place.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

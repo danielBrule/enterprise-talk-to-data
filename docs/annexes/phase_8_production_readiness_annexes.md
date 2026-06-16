@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 8 Annexes: Production Readiness & Controlled Release
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 How to use this annex](#1-how-to-use-this-annex)
@@ -89,7 +95,7 @@
 
 ---
 
-# 1 How to use this annex
+## 1 How to use this annex
 
 These annexes provide optional working templates for **Phase 8: Production readiness and controlled release**. They are intended to help teams convert pilot evidence into a controlled production release decision, not to create a mandatory checklist or a parallel delivery methodology.
 
@@ -122,9 +128,9 @@ The central test for Phase 8 documentation is practical: can users understand wh
 **  
 **
 
-# 2 Activity 1: Confirm production scope and release boundary
+## 2 Activity 1: Confirm production scope and release boundary
 
-## 2.1 Production release boundary template
+### 2.1 Production release boundary template
 
 | Area                        | Production release decision                                                 |
 |-----------------------------|-----------------------------------------------------------------------------|
@@ -146,7 +152,7 @@ The central test for Phase 8 documentation is practical: can users understand wh
 | Owner                       | Person or group accountable for the release boundary.                       |
 | Approval status             | Draft / reviewed / approved / rejected.                                     |
 
-## 2.2 Boundary-to-evidence mapping
+### 2.2 Boundary-to-evidence mapping
 
 | Release item              | Included? | Phase 7 evidence                                      | Production concern                                   | Decision                             |
 |---------------------------|-----------|-------------------------------------------------------|------------------------------------------------------|--------------------------------------|
@@ -157,7 +163,7 @@ The central test for Phase 8 documentation is practical: can users understand wh
 | Forecasting questions     | No        | Users requested it, but not tested                    | Unsupported answer type and high interpretation risk | Exclude                              |
 | Executive summary answers | Limited   | Valued by pilot users                                 | Risk of overstatement                                | Include only with source and caveats |
 
-## 2.3 Suggested release boundary statuses
+### 2.3 Suggested release boundary statuses
 
 | Status                  | Meaning                                                                  |
 |-------------------------|--------------------------------------------------------------------------|
@@ -170,7 +176,7 @@ The central test for Phase 8 documentation is practical: can users understand wh
 | Move to Phase 9 roadmap | Useful future candidate, but not needed for first release.               |
 | Return to earlier phase | Requires renewed data, semantic, architecture, validation or pilot work. |
 
-## 2.4 Illustrative example: controlled production boundary
+### 2.4 Illustrative example: controlled production boundary
 
 Example — illustrative
 
@@ -191,7 +197,7 @@ Example — illustrative
 | Cost / capacity implication | Expected 100–150 questions per week; daily support review for first two weeks.       |
 | Owner                       | Sales operations product owner.                                                      |
 
-## 2.5 Scope challenge questions
+### 2.5 Scope challenge questions
 
 Use these questions before approving the release boundary:
 
@@ -215,7 +221,7 @@ Use these questions before approving the release boundary:
 
 - Is there a named owner for every included domain, metric and release constraint?
 
-## 2.6 Common boundary mistakes
+### 2.6 Common boundary mistakes
 
 | Mistake                                        | Why it matters                                                                                |
 |------------------------------------------------|-----------------------------------------------------------------------------------------------|
@@ -227,7 +233,7 @@ Use these questions before approving the release boundary:
 | Forgetting support impact                      | A broader boundary creates more incidents, questions and interpretation support.              |
 | Ignoring cost impact                           | More users and broader question types can increase model, query, monitoring and support cost. |
 
-## 2.7 Evidence to retain
+### 2.7 Evidence to retain
 
 - Approved production release boundary.
 
@@ -243,9 +249,9 @@ Use these questions before approving the release boundary:
 
 - Decision record approving or rejecting the proposed boundary.
 
-# 3 Activity 2: Triage pilot findings and production-readiness backlog
+## 3 Activity 2: Triage pilot findings and production-readiness backlog
 
-## 3.1 Production-readiness issue disposition register
+### 3.1 Production-readiness issue disposition register
 
 | Item                   | Description                                                                                                                                 |
 |------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -268,7 +274,7 @@ Use these questions before approving the release boundary:
 | Evidence required      | Test, regression result, sign-off, monitoring rule, documentation, risk acceptance.                                                         |
 | Review date            | Date for decision or follow-up.                                                                                                             |
 
-## 3.2 Issue disposition guide
+### 3.2 Issue disposition guide
 
 | Disposition            | Use when                                                                                             | Release implication                                 |
 |------------------------|------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
@@ -281,7 +287,7 @@ Use these questions before approving the release boundary:
 | Later enhancement      | The item is valuable but outside release readiness.                                                  | Add to roadmap, not release decision.               |
 | Redesign / stop signal | The issue exposes structural weakness in data, semantics, architecture, controls or operating model. | Return to earlier phase, redesign, pause or stop.   |
 
-## 3.3 Priority assessment matrix
+### 3.3 Priority assessment matrix
 
 Issue priority should not be based on technical severity alone.
 
@@ -295,7 +301,7 @@ Issue priority should not be based on technical severity alone.
 | Cost impact              | Negligible.                      | Noticeable but manageable.                   | Could exceed budget, monitoring or support capacity.                |
 | Visibility               | Internal delivery team.          | Business users.                              | Executive, audit, regulator or external stakeholder.                |
 
-## 3.4 Illustrative examples
+### 3.4 Illustrative examples
 
 | Issue                                                  | Technical severity | Production priority | Reason                                                     | Disposition                            |
 |--------------------------------------------------------|--------------------|---------------------|------------------------------------------------------------|----------------------------------------|
@@ -308,7 +314,7 @@ Issue priority should not be based on technical severity alone.
 | Users repeatedly ask unsupported forecasting questions | Not a defect       | Medium              | Scope misunderstanding may create trust risk.              | Onboarding update and refusal rule     |
 | SQL generation fails for a supported metric            | High               | High                | Supported production question cannot be relied on.         | Production blocker                     |
 
-## 3.5 Pre-release hardening backlog template
+### 3.5 Pre-release hardening backlog template
 
 | Fix ID  | Issue linked | Required fix                                         | Owner                 | Priority | Effort | Regression required       | Release dependency         | Status |
 |---------|--------------|------------------------------------------------------|-----------------------|----------|--------|---------------------------|----------------------------|--------|
@@ -316,7 +322,7 @@ Issue priority should not be based on technical severity alone.
 | FIX-002 | ISS-021      | Tighten follow-up query cost guardrail               | Engineering           | High     | Medium | Cost and query regression | Required before release    | Open   |
 | FIX-003 | ISS-032      | Update onboarding to clarify unsupported forecasting | Product / adoption    | Medium   | Small  | Documentation review      | Required before onboarding | Open   |
 
-## 3.6 Release constraint log
+### 3.6 Release constraint log
 
 | Constraint                            | Reason                                     | Applies to                | Owner          | User communication needed? | Monitoring needed?        | Review trigger         |
 |---------------------------------------|--------------------------------------------|---------------------------|----------------|----------------------------|---------------------------|------------------------|
@@ -324,14 +330,14 @@ Issue priority should not be based on technical severity alone.
 | Customer drill-down only for analysts | Access and interpretation risk             | Sales operations analysts | Data owner     | Yes                        | Access logs               | After access review    |
 | Usage cap of 150 questions / week     | Cost and support capacity                  | First release cohort      | Platform owner | Yes                        | Cost dashboard            | After four weeks       |
 
-## 3.7 Residual-risk candidate template
+### 3.7 Residual-risk candidate template
 
 | Risk                                                | Why not fixed before release?                          | Release condition                                 | Accountable owner  | Monitoring / control           | Review date             |
 |-----------------------------------------------------|--------------------------------------------------------|---------------------------------------------------|--------------------|--------------------------------|-------------------------|
 | Current-month revenue may be provisional            | Source refresh timing cannot be changed before release | Caveat must be displayed in every relevant answer | Finance data owner | Caveat presence check          | Monthly                 |
 | Some unsupported questions likely during first week | Users are still learning scope                         | Refusal wording and onboarding material updated   | Product owner      | Unsupported-question dashboard | Two weeks after release |
 
-## 3.8 Triage meeting agenda
+### 3.8 Triage meeting agenda
 
 - Confirm release boundary under consideration.
 
@@ -353,7 +359,7 @@ Issue priority should not be based on technical severity alone.
 
 - Update the release recommendation.
 
-## 3.9 Common triage mistakes
+### 3.9 Common triage mistakes
 
 | Mistake                                        | Why it matters                                                                                        |
 |------------------------------------------------|-------------------------------------------------------------------------------------------------------|
@@ -365,7 +371,7 @@ Issue priority should not be based on technical severity alone.
 | Ignoring executive visibility                  | A small defect in a senior workflow can damage trust more than a larger issue in a low-risk workflow. |
 | Assuming all residual risks are equal          | Residual risk must be accepted by the right owner, not just noted by the project team.                |
 
-## 3.10 Evidence to retain
+### 3.10 Evidence to retain
 
 - Production-readiness issue disposition register.
 
@@ -386,9 +392,9 @@ Issue priority should not be based on technical severity alone.
 **  
 **
 
-# 4 Activity 3: Complete pre-release hardening and regression checks
+## 4 Activity 3: Complete pre-release hardening and regression checks
 
-## 4.1 Pre-release hardening backlog template
+### 4.1 Pre-release hardening backlog template
 
 | Item                | Description                                                                                                                      |
 |---------------------|----------------------------------------------------------------------------------------------------------------------------------|
@@ -407,7 +413,7 @@ Issue priority should not be based on technical severity alone.
 | Status              | Open / in progress / fixed / regression passed / accepted / deferred / blocked.                                                  |
 | Decision            | Release, release with constraint, delay, narrow, return to earlier phase, stop.                                                  |
 
-## 4.2 Fix classification guide
+### 4.2 Fix classification guide
 
 | Fix type                       | Examples                                                                    | Typical evidence                                                   |
 |--------------------------------|-----------------------------------------------------------------------------|--------------------------------------------------------------------|
@@ -420,7 +426,7 @@ Issue priority should not be based on technical severity alone.
 | Documentation / onboarding fix | Known limitation unclear, unsupported questions not explained.              | Updated guide, release note, onboarding review.                    |
 | Cost fix                       | Expensive query pattern, uncontrolled model route, usage spike.             | Cost estimate, guardrail test, budget impact note.                 |
 
-## 4.3 Regression check template
+### 4.3 Regression check template
 
 | Item              | Description                                                                                                        |
 |-------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -436,7 +442,7 @@ Issue priority should not be based on technical severity alone.
 | Owner             | Person accountable for the check.                                                                                  |
 | Re-test trigger   | What future change should trigger this test again.                                                                 |
 
-## 4.4 Suggested non-regression coverage
+### 4.4 Suggested non-regression coverage
 
 | Change made             | Minimum regression checks                                                             |
 |-------------------------|---------------------------------------------------------------------------------------|
@@ -450,7 +456,7 @@ Issue priority should not be based on technical severity alone.
 | UI or onboarding change | Scope visibility, limitation visibility, feedback route, support route.               |
 | Cost control change     | Usage threshold, query cap, model-routing cost, high-cost question path.              |
 
-## 4.5 Illustrative examples
+### 4.5 Illustrative examples
 
 | Fix                                                  | Why required before release                                     | Regression check                                                                                                   | Release decision           |
 |------------------------------------------------------|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------|
@@ -460,7 +466,7 @@ Issue priority should not be based on technical severity alone.
 | Improve table export formatting                      | Useful but does not affect answer trust or operational support. | Basic UI check.                                                                                                    | Phase 9 backlog            |
 | Add dashboard link to every answer                   | Valuable but not required for first controlled release.         | Not needed for release.                                                                                            | Later enhancement          |
 
-## 4.6 Fix and regression capacity plan
+### 4.6 Fix and regression capacity plan
 
 | Role / skill            | Needed for                                       | Estimated capacity | Timing     | Reserved? | Risk if unavailable                        |
 |-------------------------|--------------------------------------------------|--------------------|------------|-----------|--------------------------------------------|
@@ -471,7 +477,7 @@ Issue priority should not be based on technical severity alone.
 | Product owner           | Prioritisation, release notes, known limitations | 3 days             | Throughout | Yes / No  | Fixes lack release decision context.       |
 | Support owner           | Runbook and escalation validation                | 2 days             | Week 2     | Yes / No  | Release not supportable.                   |
 
-## 4.7 Behaviour-change record
+### 4.7 Behaviour-change record
 
 | Change                                            | User-visible? | Support-visible? | Governance-visible? | Documentation update needed? | Release note needed? |
 |---------------------------------------------------|---------------|------------------|---------------------|------------------------------|----------------------|
@@ -481,7 +487,7 @@ Issue priority should not be based on technical severity alone.
 | Internal log tagging improved                     | No            | Yes              | Yes                 | No                           | No                   |
 | Access revocation process changed                 | No            | Yes              | Yes                 | Yes                          | Yes                  |
 
-## 4.8 Hardening cut-off rule
+### 4.8 Hardening cut-off rule
 
 Before starting hardening, agree a cut-off rule to prevent Phase 8 becoming an open-ended improvement loop.
 
@@ -496,7 +502,7 @@ Suggested rule:
 | Phase 9 improvement | Deferred to Phase 9 backlog.                                        |
 | Later enhancement   | Deferred to roadmap.                                                |
 
-## 4.9 Common hardening mistakes
+### 4.9 Common hardening mistakes
 
 | Mistake                                  | Why it matters                                                                     |
 |------------------------------------------|------------------------------------------------------------------------------------|
@@ -508,7 +514,7 @@ Suggested rule:
 | Deferring support fixes to Phase 9       | Support gaps become live incidents after release.                                  |
 | Ignoring cost impact of fixes            | A safer fix may increase latency, model usage, monitoring or support effort.       |
 
-## 4.10 Evidence to retain
+### 4.10 Evidence to retain
 
 - Pre-release hardening backlog.
 
@@ -526,9 +532,9 @@ Suggested rule:
 
 - Remaining unresolved issue list with release implication.
 
-# 5 Activity 4: Confirm production control readiness
+## 5 Activity 4: Confirm production control readiness
 
-## 5.1 Production control readiness checklist
+### 5.1 Production control readiness checklist
 
 | Control area         | Readiness questions                                                                          | Evidence to retain                                          |
 |----------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------------|
@@ -544,7 +550,7 @@ Suggested rule:
 | Auditability         | Can the organisation trace who asked what, which data was used and what answer was produced? | Trace logs, audit log sample, retention decision.           |
 | Compliance / privacy | Are required compliance, privacy and data-owner conditions reflected in the system?          | Review record, sign-off where required, residual-risk note. |
 
-## 5.2 Production control review record
+### 5.2 Production control review record
 
 | Area           | Owner                     | Review required? | Sign-off required? | Status       | Conditions / comments                     |
 |----------------|---------------------------|------------------|--------------------|--------------|-------------------------------------------|
@@ -556,7 +562,7 @@ Suggested rule:
 | Audit          | Internal audit            | Optional         | No                 | Not required | Audit log retained for review.            |
 | Platform owner | Data platform lead        | Yes              | Yes                | Approved     | Monitoring and access logs available.     |
 
-## 5.3 Data, semantic and refresh readiness template
+### 5.3 Data, semantic and refresh readiness template
 
 | Item                           | Production decision                                                   |
 |--------------------------------|-----------------------------------------------------------------------|
@@ -572,7 +578,7 @@ Suggested rule:
 | Metadata readiness             | Complete / partial / insufficient.                                    |
 | Release implication            | Include, include with caveat, constrain, fix before release, exclude. |
 
-## 5.4 Access lifecycle readiness template
+### 5.4 Access lifecycle readiness template
 
 | Scenario                         | Expected behaviour                                         | Evidence required                 | Owner                    | Status |
 |----------------------------------|------------------------------------------------------------|-----------------------------------|--------------------------|--------|
@@ -583,7 +589,7 @@ Suggested rule:
 | User lacks row-level permission  | Restricted data not returned.                              | Row-level access test.            | Data platform owner      |        |
 | Support investigates issue       | Support can view required logs without overexposure.       | Support access review.            | Security / support owner |        |
 
-## 5.5 Audit and traceability evidence checklist
+### 5.5 Audit and traceability evidence checklist
 
 A production release should retain enough evidence to support diagnosis, governance and review.
 
@@ -603,7 +609,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Access decision       | Allowed, denied, constrained or refused.               |
 | Error / incident link | Link to support ticket or incident if relevant.        |
 
-## 5.6 Illustrative example: production control gap
+### 5.6 Illustrative example: production control gap
 
 | Finding                                                                 | Release implication                                    | Response                                                                     |
 |-------------------------------------------------------------------------|--------------------------------------------------------|------------------------------------------------------------------------------|
@@ -613,7 +619,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Metric owner has approved pilot use but not production use.             | Ownership gap.                                         | Obtain production approval or exclude metric from release.                   |
 | Revocation process is manual and untested.                              | Production access lifecycle risk.                      | Test revocation before release and assign owner / SLA.                       |
 
-## 5.7 Control readiness status guide
+### 5.7 Control readiness status guide
 
 | Status                | Meaning                                                             | Release implication                               |
 |-----------------------|---------------------------------------------------------------------|---------------------------------------------------|
@@ -624,7 +630,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Accept residual risk  | Control gap remains but is knowingly accepted by accountable owner. | Record risk acceptance and review date.           |
 | Not ready             | Control gap makes release unsafe or ungoverned.                     | Exclude, narrow, return to earlier phase or stop. |
 
-## 5.8 Common control-readiness mistakes
+### 5.8 Common control-readiness mistakes
 
 | Mistake                                    | Why it matters                                                                         |
 |--------------------------------------------|----------------------------------------------------------------------------------------|
@@ -636,7 +642,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Making controls manual without capacity    | Manual controls fail unless owned, scheduled, monitored and funded.                    |
 | Forgetting cost of controls                | Monitoring, audit retention, access management and quality checks all create run cost. |
 
-## 5.9 Evidence to retain
+### 5.9 Evidence to retain
 
 - Production control readiness summary.
 
@@ -652,9 +658,9 @@ A production release should retain enough evidence to support diagnosis, governa
 
 - Control ownership and maintenance responsibilities.
 
-# 6 Activity 5: Confirm operational reliability and observability
+## 6 Activity 5: Confirm operational reliability and observability
 
-## 6.1 Operational readiness checklist
+### 6.1 Operational readiness checklist
 
 | Area                  | Readiness questions                                                         | Evidence to retain                                          |
 |-----------------------|-----------------------------------------------------------------------------|-------------------------------------------------------------|
@@ -669,7 +675,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | User issues           | How will feedback, complaints and support tickets be linked to traces?      | Feedback-to-trace process.                                  |
 | Pause / rollback      | Who can pause, narrow or roll back the release?                             | Pause / rollback decision route.                            |
 
-## 6.2 Monitoring coverage matrix
+### 6.2 Monitoring coverage matrix
 
 | Component          | What to monitor                                              | Example signal                                             |
 |--------------------|--------------------------------------------------------------|------------------------------------------------------------|
@@ -684,7 +690,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Support            | Tickets, issue type, response time, repeated user problems.  | Open incidents, repeated unsupported questions.            |
 | Data freshness     | Last refresh, failed refresh, stale asset.                   | Freshness breach, missing source update.                   |
 
-## 6.3 Operational threshold template
+### 6.3 Operational threshold template
 
 | Metric / signal          | Normal range  | Warning threshold             | Critical threshold            | Owner                    | Response                                                   |
 |--------------------------|---------------|-------------------------------|-------------------------------|--------------------------|------------------------------------------------------------|
@@ -696,7 +702,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Access failures          | None expected | Repeated denied-user attempts | Incorrect access granted      | Security / IAM owner     | Investigate immediately, consider pause.                   |
 | Missing caveat rate      | 0             | Any repeated issue            | Any issue on high-risk metric | Product / data owner     | Fix before continued use if material.                      |
 
-## 6.4 Incident severity guide
+### 6.4 Incident severity guide
 
 | Severity | Example                                                                                                              | Expected response                                                           |
 |----------|----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
@@ -705,7 +711,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Medium   | Repeated unsupported questions, confusing answer format, intermittent failures, support burden higher than expected. | Triage, monitor, update guidance or backlog.                                |
 | Low      | Minor formatting issue, isolated unclear wording, low-impact UI problem.                                             | Fix if easy or add to Phase 9 backlog.                                      |
 
-## 6.5 Alert routing template
+### 6.5 Alert routing template
 
 | Alert                          | Trigger                                       | First owner          | Escalation owner | User communication needed?                    |
 |--------------------------------|-----------------------------------------------|----------------------|------------------|-----------------------------------------------|
@@ -716,7 +722,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Missing caveat                 | Caveat not shown for required metric.         | Product / data owner | Governance owner | Yes, if users may have relied on answer.      |
 | Repeated unsupported questions | Unsupported-question threshold exceeded.      | Product owner        | Adoption lead    | Possibly; update onboarding or guidance.      |
 
-## 6.6 Pause and rollback decision guide
+### 6.6 Pause and rollback decision guide
 
 | Trigger                                  | Possible response                                               |
 |------------------------------------------|-----------------------------------------------------------------|
@@ -728,7 +734,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Monitoring unavailable                   | Delay release or pause until minimum observability is restored. |
 | Owner unavailable for critical response  | Pause affected release component until ownership is restored.   |
 
-## 6.7 Feedback-to-trace template
+### 6.7 Feedback-to-trace template
 
 | Item               | Description                                                                           |
 |--------------------|---------------------------------------------------------------------------------------|
@@ -745,7 +751,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Response           | Fix, explain, constrain, monitor, defer, escalate.                                    |
 | User communication | What was communicated back to the user.                                               |
 
-## 6.8 Early-life support monitoring cadence
+### 6.8 Early-life support monitoring cadence
 
 | Period              | Recommended cadence            | Focus                                                                            |
 |---------------------|--------------------------------|----------------------------------------------------------------------------------|
@@ -754,7 +760,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | First month         | Weekly.                        | Trends, cost, issue closure, roadmap candidates, support capacity.               |
 | After stabilisation | Monthly or governance cadence. | Adoption, quality, cost, risk, improvement and expansion readiness.              |
 
-## 6.9 Common observability mistakes
+### 6.9 Common observability mistakes
 
 | Mistake                                     | Why it matters                                                                            |
 |---------------------------------------------|-------------------------------------------------------------------------------------------|
@@ -766,7 +772,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Dashboards built for the delivery team only | Support, product and owners need operational views they can act on.                       |
 | Missing unsupported-question tracking       | Repeated unsupported demand is often the first signal that scope or onboarding is weak.   |
 
-## 6.10 Evidence to retain
+### 6.10 Evidence to retain
 
 - Operational reliability and observability summary.
 
@@ -786,9 +792,9 @@ A production release should retain enough evidence to support diagnosis, governa
 
 - Operational gaps with release implications.
 
-# 7 Activity 6: Prepare support, documentation, onboarding and controlled adoption readiness
+## 7 Activity 6: Prepare support, documentation, onboarding and controlled adoption readiness
 
-## 7.1 Documentation readiness checklist
+### 7.1 Documentation readiness checklist
 
 | Documentation area  | Readiness question                                                   | Evidence to retain                                 |
 |---------------------|----------------------------------------------------------------------|----------------------------------------------------|
@@ -804,7 +810,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Versioning          | Is documentation versioned and aligned to the production release?    | Version history, owner record.                     |
 | Maintenance         | Is there an owner and cadence for keeping documentation current?     | Documentation ownership plan.                      |
 
-## 7.2 Documentation set by audience
+### 7.2 Documentation set by audience
 
 | Audience                      | Documentation needed                                                                                        | Main purpose                                     |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
@@ -815,7 +821,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Platform / engineering owners | Deployment notes, monitoring dashboards, alert routes, logs, technical dependencies.                        | Operate and maintain the service.                |
 | Governance / risk owners      | Release boundary, residual-risk acceptance, access controls, audit evidence, sign-off record.               | Defend the release decision and oversight model. |
 
-## 7.3 User onboarding checklist
+### 7.3 User onboarding checklist
 
 | Area               | What users should understand                                                   |
 |--------------------|--------------------------------------------------------------------------------|
@@ -830,7 +836,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Changes from pilot | What has changed since Phase 7.                                                |
 | Roadmap            | What may come later and what is deliberately not included now.                 |
 
-## 7.4 Release notes template
+### 7.4 Release notes template
 
 | Item                    | Description                                     |
 |-------------------------|-------------------------------------------------|
@@ -848,7 +854,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Support route           | How users raise issues.                         |
 | Owner                   | Product or release owner.                       |
 
-## 7.5 Known limitations template
+### 7.5 Known limitations template
 
 | Limitation                                | User impact                                     | Required user behaviour                     | Owner                  | Review trigger                |
 |-------------------------------------------|-------------------------------------------------|---------------------------------------------|------------------------|-------------------------------|
@@ -857,7 +863,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Customer drill-down limited to analysts.  | Managers may not see customer-level details.    | Ask sales operations for detailed analysis. | Data owner             | Access review complete.       |
 | Pipeline data refreshed daily.            | Same-day changes may not appear.                | Use operational CRM for real-time updates.  | Sales operations owner | Refresh improvement approved. |
 
-## 7.6 Support runbook outline
+### 7.6 Support runbook outline
 
 | Section                | Content                                                                                             |
 |------------------------|-----------------------------------------------------------------------------------------------------|
@@ -872,7 +878,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | User communication     | How to respond to users during incidents.                                                           |
 | Evidence retention     | What must be logged and where.                                                                      |
 
-## 7.7 Controlled adoption readiness plan
+### 7.7 Controlled adoption readiness plan
 
 | Item                             | Decision                                                                                   |
 |----------------------------------|--------------------------------------------------------------------------------------------|
@@ -885,7 +891,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Review cadence                   | Daily / weekly / monthly review during early-life period.                                  |
 | Expansion condition              | What must be true before more users are added.                                             |
 
-## 7.8 Issue communication examples
+### 7.8 Issue communication examples
 
 | Scenario                          | User-facing communication                                                                                                                                                             |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -895,7 +901,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Release constraint                | “Customer-level drill-down is available only to sales operations analysts in this release because access controls are still being reviewed for wider users.”                          |
 | Behaviour change after fix        | “Current-month revenue answers now include a provisional-data caveat. This was added to avoid over-reliance before month-end close.”                                                  |
 
-## 7.9 Documentation ownership plan
+### 7.9 Documentation ownership plan
 
 | Document                 | Owner                      | Review cadence               | Update trigger                                   |
 |--------------------------|----------------------------|------------------------------|--------------------------------------------------|
@@ -906,7 +912,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Responsible-use guide    | Product / governance owner | Quarterly or on major change | Risk change, new user group, new answer type.    |
 | Monitoring / alert guide | Platform owner             | Monthly                      | New alert, threshold change, incident learning.  |
 
-## 7.10 Common documentation and onboarding mistakes
+### 7.10 Common documentation and onboarding mistakes
 
 | Mistake                                      | Why it matters                                                                         |
 |----------------------------------------------|----------------------------------------------------------------------------------------|
@@ -918,7 +924,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | No documentation owner                       | Documentation becomes stale as soon as Phase 9 begins.                                 |
 | Onboarding too broad                         | Users may assume the system supports more than the controlled release boundary.        |
 
-## 7.11 Evidence to retain
+### 7.11 Evidence to retain
 
 - Production documentation readiness summary.
 
@@ -936,9 +942,9 @@ A production release should retain enough evidence to support diagnosis, governa
 
 - Evidence that users and support teams were onboarded before access.
 
-# 8 Activity 7: Consolidate operating model, budget and roadmap capacity
+## 8 Activity 7: Consolidate operating model, budget and roadmap capacity
 
-## 8.1 Operating model capacity worksheet
+### 8.1 Operating model capacity worksheet
 
 | Area                             | Capacity question                                                                    | Evidence / input                                             |
 |----------------------------------|--------------------------------------------------------------------------------------|--------------------------------------------------------------|
@@ -951,7 +957,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Governance and risk review       | Who reviews residual risks, constraints, changes and expansion requests?             | Risk acceptance, governance cadence.                         |
 | Roadmap delivery                 | Who delivers approved improvements and expansion?                                    | Phase 9 roadmap, capacity plan.                              |
 
-## 8.2 Run / fix / improve / expand roadmap model
+### 8.2 Run / fix / improve / expand roadmap model
 
 | Lane    | Purpose                                                                   | Typical work                                                                        | Capacity owner                          |
 |---------|---------------------------------------------------------------------------|-------------------------------------------------------------------------------------|-----------------------------------------|
@@ -960,7 +966,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Improve | Make the current release better without expanding scope materially.       | Better onboarding, clearer caveats, better monitoring, answer-quality improvements. | Product / engineering / support.        |
 | Expand  | Add new users, domains, questions, integrations or higher-risk use cases. | New data scope, new semantic work, new controls, new validation, broader rollout.   | Product / data / platform / governance. |
 
-## 8.3 Cost and capacity estimate template
+### 8.3 Cost and capacity estimate template
 
 | Cost / capacity area            | Estimate | Owner                   | Funding route | Review cadence            | Notes                                            |
 |---------------------------------|----------|-------------------------|---------------|---------------------------|--------------------------------------------------|
@@ -975,7 +981,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Governance / risk review        |          | Governance owner        |               | Monthly or decision-based | Residual risk, constraints, expansion approvals. |
 | Roadmap delivery                |          | Product owner           |               | Monthly / quarterly       | Improvements and expansion.                      |
 
-## 8.4 Capacity reservation template
+### 8.4 Capacity reservation template
 
 | Role / team     | Required for                                               | Minimum capacity | Duration | Reserved? | Risk if not reserved                   |
 |-----------------|------------------------------------------------------------|------------------|----------|-----------|----------------------------------------|
@@ -987,7 +993,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Platform owner  | Monitoring, cost, reliability, deployment                  |                  |          | Yes / No  | Operational issues are not acted on.   |
 | Security / risk | Access issues, risk review, residual-risk decisions        |                  |          | Yes / No  | Control issues delay or block release. |
 
-## 8.5 Roadmap prioritisation guide
+### 8.5 Roadmap prioritisation guide
 
 | Candidate item                        | Run / fix / improve / expand | Evidence basis                    | Capacity needed              | Cost impact | Decision                               |
 |---------------------------------------|------------------------------|-----------------------------------|------------------------------|-------------|----------------------------------------|
@@ -997,7 +1003,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Automate access revocation report     | Improve / control            | Manual access process             | Platform / IAM               | Medium      | Prioritise if release cohort expands.  |
 | Add margin analysis                   | Expand                       | High demand but metric unresolved | Data + semantic + validation | High        | Roadmap only after semantic readiness. |
 
-## 8.6 Funding and approval record
+### 8.6 Funding and approval record
 
 | Item                    | Decision                                                        |
 |-------------------------|-----------------------------------------------------------------|
@@ -1010,7 +1016,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Funding gaps            | Unfunded areas that may constrain release or roadmap.           |
 | Release implication     | Proceed, constrain, delay, narrow or stop.                      |
 
-## 8.7 Illustrative example: capacity-aware roadmap
+### 8.7 Illustrative example: capacity-aware roadmap
 
 | Lane    | Item                                        | Timing        | Capacity assumption                       | Release implication                  |
 |---------|---------------------------------------------|---------------|-------------------------------------------|--------------------------------------|
@@ -1020,7 +1026,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Expand  | Add finance user group                      | Month 2+      | Data, semantic, support and access review | Only after first release stabilises. |
 | Expand  | Add margin questions                        | Later roadmap | Metric definition and validation required | Return to semantic readiness first.  |
 
-## 8.8 Common operating-model and budget mistakes
+### 8.8 Common operating-model and budget mistakes
 
 | Mistake                                        | Why it matters                                                                                    |
 |------------------------------------------------|---------------------------------------------------------------------------------------------------|
@@ -1032,7 +1038,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Ignoring data and semantic capacity            | T2D roadmap expansion usually depends on data and semantic work, not only engineering.            |
 | No cost trigger                                | Teams discover cost pressure only after the budget is already exceeded.                           |
 
-## 8.9 Evidence to retain
+### 8.9 Evidence to retain
 
 - Operating model and capacity estimate.
 
@@ -1050,9 +1056,9 @@ A production release should retain enough evidence to support diagnosis, governa
 
 - Release implication of any unfunded capacity gaps.
 
-# 9 Activity 8: Approve and execute controlled release, residual-risk acceptance and Phase 9 handover
+## 9 Activity 8: Approve and execute controlled release, residual-risk acceptance and Phase 9 handover
 
-## 9.1 Controlled release decision record
+### 9.1 Controlled release decision record
 
 | Item                              | Decision                                                                                            |
 |-----------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -1072,7 +1078,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Decision owner                    | Accountable owner approving release.                                                                |
 | Review date                       | First post-release review date.                                                                     |
 
-## 9.2 Final release approval checklist
+### 9.2 Final release approval checklist
 
 | Area             | Release question                                                     | Status | Owner                     |
 |------------------|----------------------------------------------------------------------|--------|---------------------------|
@@ -1087,7 +1093,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Change rights    | Are change, expansion, pause and rollback rights clear?              |        | Release owner             |
 | Phase 9 handover | Are owners, cadence, backlog and roadmap transferred?                |        | Product / operating owner |
 
-## 9.3 Residual-risk acceptance record
+### 9.3 Residual-risk acceptance record
 
 | Risk                                          | Why it remains                                       | Release condition                       | Accountable owner    | Monitoring / control                   | Review trigger                          |
 |-----------------------------------------------|------------------------------------------------------|-----------------------------------------|----------------------|----------------------------------------|-----------------------------------------|
@@ -1095,7 +1101,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Unsupported questions expected in first week. | Users are still learning release boundary.           | Refusal wording and onboarding updated. | Product owner        | Unsupported-question dashboard.        | Threshold breach or repeated confusion. |
 | Manual access review during early life.       | Automation not ready for first release.              | Named owner and weekly review.          | IAM / security owner | Access-change log.                     | Cohort expansion request.               |
 
-## 9.4 Release package contents
+### 9.4 Release package contents
 
 | Section                | Content                                                                            |
 |------------------------|------------------------------------------------------------------------------------|
@@ -1110,7 +1116,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Risk evidence          | Residual risks, accepted risks, monitored risks and review triggers.               |
 | Phase 9 handover       | Owners, cadence, backlog, roadmap and expansion criteria.                          |
 
-## 9.5 Release execution or handover plan
+### 9.5 Release execution or handover plan
 
 | Step                                | Description                                              | Owner                        | Status |
 |-------------------------------------|----------------------------------------------------------|------------------------------|--------|
@@ -1123,7 +1129,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | First-day review                    | Review usage, errors, access, cost and user issues.      | Product / platform / support |        |
 | Early-life cadence                  | Confirm daily / weekly review rhythm.                    | Operating owner              |        |
 
-## 9.6 Pause, rollback and narrowing authority
+### 9.6 Pause, rollback and narrowing authority
 
 | Trigger                              | Possible action                                                | Decision owner           | Communication required |
 |--------------------------------------|----------------------------------------------------------------|--------------------------|------------------------|
@@ -1135,7 +1141,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Data freshness breach                | Add warning, disable affected domain or pause answers.         | Data / product owner     | Yes                    |
 | Owner unavailable for critical issue | Pause affected release area.                                   | Release owner            | If user impact         |
 
-## 9.7 Phase 9 handover template
+### 9.7 Phase 9 handover template
 
 | Area                    | Handover decision                                                       |
 |-------------------------|-------------------------------------------------------------------------|
@@ -1153,7 +1159,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Expand backlog          | Potential new users, domains, questions or integrations.                |
 | Expansion conditions    | What must be true before scope grows.                                   |
 
-## 9.8 Post-release review criteria
+### 9.8 Post-release review criteria
 
 | Area        | Review question                                                      |
 |-------------|----------------------------------------------------------------------|
@@ -1167,7 +1173,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Controls    | Are access, audit, data and semantic controls holding in production? |
 | Roadmap     | Should Phase 9 focus on run, fix, improve or expand?                 |
 
-## 9.9 Expansion criteria
+### 9.9 Expansion criteria
 
 - Before adding users, domains, question types or integrations, confirm:
 
@@ -1187,7 +1193,7 @@ A production release should retain enough evidence to support diagnosis, governa
 
 - the expansion is funded and prioritised against run, fix and improve work.
 
-## 9.10 Common release approval mistakes
+### 9.10 Common release approval mistakes
 
 | Mistake                             | Why it matters                                                                      |
 |-------------------------------------|-------------------------------------------------------------------------------------|
@@ -1199,7 +1205,7 @@ A production release should retain enough evidence to support diagnosis, governa
 | Expanding immediately after go-live | Early demand can hide unresolved support, cost or control issues.                   |
 | Losing the release boundary         | Users and stakeholders start treating a controlled release as general availability. |
 
-## 9.11 Evidence to retain
+### 9.11 Evidence to retain
 
 - Controlled release decision record.
 
@@ -1218,3 +1224,8 @@ A production release should retain enough evidence to support diagnosis, governa
 - Post-release review criteria.
 
 - Expansion criteria and first review date.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

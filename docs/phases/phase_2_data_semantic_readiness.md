@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 2: Data & Semantic Readiness Assessment
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -36,7 +42,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 2 tests whether the framed Talk-to-Data questions are answerable from trusted data, approved definitions, safe joins, usable metadata and enforceable access rules.
 
@@ -52,13 +58,13 @@ By the end of Phase 2, senior stakeholders should be able to say which priority 
 
 The core output is an answerability matrix that forces a clear MVP-readiness decision for each priority question: ready or not ready. Caveats, remediation actions, backlog routes and exclusions should explain the decision, not replace it.
 
-# 2 Phase overview
+## 2 Phase overview
 
 Phase 2 turns the assumptions from framing into evidence. It tests whether the scoped T2D use case has a credible path through the organisation’s data, definitions, joins, filters and access rules.
 
 The phase should expose the gap between a narrow POC that can demonstrate value and a capability that can scale safely. The key discipline is to avoid treating “data exists” as readiness. For T2D, readiness means the system can use the right source, definition, grain, join path, filter and access rule consistently enough to produce trusted answers.
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 2 is to produce an answerability matrix for the priority T2D questions. Each question should be classified as ready for MVP, ready with caveats, dependent on remediation, deferred or out of scope, with the evidence, caveats, owners and required actions captured. To produce this view, Phase 2 should confirm:
 
@@ -78,7 +84,7 @@ The objective of Phase 2 is to produce an answerability matrix for the priority 
 
 The depth of Phase 2 should reflect the delivery intent. A discovery or POC may require enough validation to support safe learning with clear caveats. An MVP / pilot / production path requires stronger evidence on trust, definitions, data model safety, quality, access and ownership.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 2 should remain bounded to the framed use case, priority users and priority question set. It should not become a broad enterprise data assessment or a general data governance review.
 
@@ -86,7 +92,7 @@ The phase covers only the evidence needed to decide MVP inclusion, caveats, reme
 
 The test for inclusion is simple: if an issue materially affects whether the T2D system can answer the scoped questions safely, consistently or explainably, it belongs in Phase 2.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Phase 2 does not build the governed data foundation. That is the role of Phase 3. It does not implement metric logic, create production-ready semantic assets, design the orchestration layer or validate the working MVP.
 
@@ -94,13 +100,13 @@ It also does not fix every data-quality, lineage, ownership or access issue it d
 
 Its role is to classify the impact of readiness gaps on the scoped T2D questions and decide whether each question can proceed, proceed with caveats, require remediation, be deferred or be excluded.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 For a bounded single-domain use case with available stakeholders and accessible documentation, Phase 2 may take a few days to one or two weeks. Effort increases sharply when definitions are contested, lineage is unclear, data spans multiple domains, access rules are complex or expected-answer sources are not available.
 
 The phase should not be measured by how many assets are reviewed. It should be measured by whether each priority question has a clear readiness decision and evidence trail.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 | Role                                | Main responsibility in Phase 2                                                                    |
 |-------------------------------------|---------------------------------------------------------------------------------------------------|
@@ -116,11 +122,11 @@ The phase should not be measured by how many assets are reviewed. It should be m
 
 The key point is accountability. Phase 2 should not end with a list of open issues owned by “the data team”. Every material gap should have an owner, a decision, and a route to either MVP inclusion, remediation, backlog or exclusion.
 
-# 3 Readiness decision and delivery implications
+## 3 Readiness decision and delivery implications
 
 Phase 2 must end with a delivery decision, not a generic statement that data readiness has been assessed. The decision should be based on the answerability matrix: what can be answered safely now, what requires caveats, what needs remediation, and what should remain outside the MVP. The test is not whether a prototype can be made to work; it is whether the data and semantic evidence is strong enough to justify the next delivery step.
 
-## 3.1 Possible Phase 2 outcomes
+### 3.1 Possible Phase 2 outcomes
 
 | Outcome   | Meaning                                                                                    | Typical trigger                                                                            |
 |-----------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
@@ -132,7 +138,7 @@ Phase 2 must end with a delivery decision, not a generic statement that data rea
 
 A proceed decision should not mean that all risks are closed. It means the remaining risks are understood, owned and acceptable for the next delivery stage.
 
-## 3.2 Minimum conditions to proceed
+### 3.2 Minimum conditions to proceed
 
 The use case should normally proceed only when the team can demonstrate that:
 
@@ -154,7 +160,7 @@ The use case should normally proceed only when the team can demonstrate that:
 
 The standard should be higher for pilot or production than for a constrained POC.
 
-## 3.3 Common reasons to narrow, remediate, defer or stop
+### 3.3 Common reasons to narrow, remediate, defer or stop
 
 The team should avoid moving forward unchanged where any of the following apply:
 
@@ -176,7 +182,7 @@ The team should avoid moving forward unchanged where any of the following apply:
 
 A T2D system should not be allowed to hide unresolved data and semantic issues behind a fluent answer. If the team cannot explain why a question is answerable, it is not ready for production-style use.
 
-## 3.4 How Phase 2 shapes later phases
+### 3.4 How Phase 2 shapes later phases
 
 Phase 2 creates the evidence base for the next delivery stages. Its outputs should not remain as assessment documents; they should become design inputs.
 
@@ -191,7 +197,7 @@ Phase 2 creates the evidence base for the next delivery stages. Its outputs shou
 
 This is the practical value of Phase 2: it turns data and semantic uncertainty into delivery decisions. The team should know not only what can be built, but what must be controlled, remediated, deferred or excluded before the system is exposed to users.
 
-# 4 Data and semantic readiness activities overview
+## 4 Data and semantic readiness activities overview
 
 Phase 2 is organised around a small set of activities that turn the framed question set into an answerability matrix. The activities are not a rigid sequence. In practice, source validation, semantic discovery, data model review, quality assessment and access review often run in parallel and inform each other.
 
@@ -199,7 +205,7 @@ This phase is not a hard science. In many organisations, the required documentat
 
 The work should remain anchored to the priority questions. A source, metric, join, quality issue or access rule only matters in this phase if it affects whether the T2D system can answer the scoped questions safely, consistently and explainably.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 | Activity                         | Main question                                                             | Main output                                                                                 |
 |----------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -214,7 +220,7 @@ The work should remain anchored to the priority questions. A source, metric, joi
 
 **Note:** Activities 5.2, 5.3 and 5.4 may identify questions, data structures or semantic items with access, masking, aggregation or inference implications. These should be flagged during the relevant activity but assessed and controlled in Activity 5.7.
 
-## 4.2 Activity logic
+### 4.2 Activity logic
 
 The activities should be treated as connected checks, not separate workstreams. A question may appear answerable after source mapping, but become unsafe once grain, joins, access or metric ambiguity are reviewed. Equally, a question may be deferred not because the data is missing, but because the semantic definition is contested or the access route is not acceptable.
 
@@ -222,7 +228,7 @@ The main control mechanism is the answerability matrix. It should be updated as 
 
 Access, masking, aggregation and inference implications may appear during source mapping, data model review or semantic definition work. These should be flagged when discovered and assessed through the access and exposure review.
 
-## 4.3 Practitioner note
+### 4.3 Practitioner note
 
 Phase 2 should not become a data inventory exercise. The inventory is useful only if it changes a delivery decision: which questions can be answered, under which definitions, from which sources, for which users, and with which caveats or controls.
 
@@ -230,9 +236,9 @@ The main constraint is often not analysis effort, but access to the right owners
 
 Not every limitation is a blocker. Some issues, such as refresh timing, late-arriving data, partial loads, metric caveats or restricted drill-down, may be acceptable if they are documented, monitored and surfaced clearly in the answer. The risk is not imperfection; it is hidden imperfection.
 
-# 5 Core readiness activities
+## 5 Core readiness activities
 
-## 5.1 Validate source inventory
+### 5.1 Validate source inventory
 
 Validate which data assets are relevant, trusted and usable for the scoped T2D use case. The aim is not to document the full data estate, but to identify the sources that may support the priority questions and determine whether they are credible enough for MVP use.
 
@@ -278,7 +284,7 @@ A source readiness view showing which assets are relevant, trusted enough for MV
 
 **Practitioner note**: Challenging the trust status of a source can quickly become political, especially when it supports executive reporting or a widely used dashboard. The aim is not to discredit existing assets, but to be precise about whether they are suitable for T2D use, what caveats apply, and what must be validated before they generate conversational answers.
 
-## 5.2 Map questions to data
+### 5.2 Map questions to data
 
 Map each priority question to the sources, metrics, dimensions, filters and caveats required to answer it. This is the first version of the answerability matrix.
 
@@ -316,7 +322,7 @@ An initial answerability matrix linking each priority question to its required d
 
 - A question is valuable but cannot yet support a reliable expected answer.
 
-## 5.3 Review data model readiness
+### 5.3 Review data model readiness
 
 Assess whether the underlying data model is safe enough for T2D querying. This is where many plausible but wrong answers originate: incorrect grain, unsafe joins, duplicate keys, unclear date logic or misleading aggregation.
 
@@ -354,7 +360,7 @@ A model and join-risk view identifying safe query paths, unsafe joins, aggregati
 
 - The system would need to infer joins dynamically without approved rules.
 
-## 5.4 Confirm semantic definitions
+### 5.4 Confirm semantic definitions
 
 Confirm whether the required business terms, KPIs, measures, filters, dimensions, synonyms and caveats are explicit enough for consistent T2D answers.
 
@@ -396,7 +402,7 @@ A semantic readiness view showing approved, contested and missing definitions, w
 
 **Practitioner note:** Semantic readiness should not be interpreted as exhaustive semantic coverage. For T2D, the objective is to define enough approved meaning for the scoped users, questions and delivery stage. Some terms, synonyms, filters, dimensions and caveats will remain incomplete or evolve through use. The control is not to pretend that every possible interpretation has been captured, but to define which meanings are approved, which require clarification, which must be caveated, which should be refused and which belong in the semantic backlog.
 
-## 5.5 Assess data gaps and quality
+### 5.5 Assess data gaps and quality
 
 Identify whether missing data, poor quality, freshness issues, load failures, late-arriving data or reconciliation gaps could affect trusted answers. The focus should be on material issues that affect the scoped questions, not a full data quality audit.
 
@@ -442,7 +448,7 @@ A data quality impact view showing issue, affected questions, severity, business
 
 **Practitioner note:** Data quality assessment is usually easier for governed SQL tables, marts or semantic-layer assets than for spreadsheets, extracts or less structured files. File-based sources may contain manual edits, hidden formulas, inconsistent layouts, local definitions or undocumented refresh processes. These limitations should be made explicit before they are used to support T2D answers.
 
-## 5.6 Assess metadata and lineage
+### 5.6 Assess metadata and lineage
 
 Assess whether metadata, lineage, glossary and documentation are usable enough to support T2D interpretation, traceability and explanation.
 
@@ -482,7 +488,7 @@ A metadata and lineage readiness view identifying documentation gaps, traceabili
 
 **Practitioner note:** For T2D, metadata is not only documentation. It is part of the system’s operating context. Metadata may be used to route questions to the right domain, retrieve approved definitions, constrain query generation, explain answers and decide when the system should clarify or refuse. Metadata that is incomplete, stale or too unstructured can therefore become an answer-quality risk, not just a governance gap.
 
-## 5.7 Review access and exposure
+### 5.7 Review access and exposure
 
 Confirm whether scoped answers can be exposed safely to target users. Access review for T2D must go beyond basic authentication. It should consider row-level access, column restrictions, aggregation thresholds, masking, follow-up questions and inference risk.
 
@@ -526,7 +532,7 @@ An access and exposure view showing what can be exposed, restricted, masked, agg
 
 **Note 2:** Exposure risk increases as conversations iterate. Users may combine filters, ask follow-up questions, narrow cohorts or compare results over time in ways that reveal information not visible in a single answer. It is not realistic to anticipate every possible inference path. Access review should therefore define common risk patterns, aggregation limits, refusal rules, monitoring needs and escalation routes, while recognising that residual multi-turn exposure risk may remain.
 
-## 5.8 Consolidate readiness gaps
+### 5.8 Consolidate readiness gaps
 
 Consolidate the findings into a final answerability matrix and remediation backlog. This activity turns assessment into a delivery decision.
 
@@ -566,13 +572,13 @@ A final answerability matrix with a binary MVP-readiness decision for each prior
 
 - The team proceeds because the prototype is possible, not because the evidence supports it.
 
-# 6 Answerability decision pack
+## 6 Answerability decision pack
 
 Phase 2 should end with one consolidated artefact: the **answerability matrix**. Supporting notes on sources, semantics, data quality, metadata and access may sit behind it, but the main output should be a decision-ready view of each priority question.
 
 The matrix should force a clear position: **ready for MVP — yes or no**. Caveats, remediation needs, backlog routes and exclusions should explain the decision, not replace it.
 
-## 6.1 Answerability matrix
+### 6.1 Answerability matrix
 
 | Field                              | Purpose                                                                                                        |
 |------------------------------------|----------------------------------------------------------------------------------------------------------------|
@@ -590,7 +596,7 @@ The matrix should force a clear position: **ready for MVP — yes or no**. Cavea
 | Next action                        | Include, caveat, remediate, backlog or exclude.                                                                |
 | Follow-up safety                   | Whether likely follow-up questions remain within approved scope, access rules and safe aggregation boundaries. |
 
-## 6.2 Answerability pack quality test
+### 6.2 Answerability pack quality test
 
 Before exiting Phase 2, the answerability matrix should allow stakeholders to answer:
 
@@ -610,11 +616,11 @@ Before exiting Phase 2, the answerability matrix should allow stakeholders to an
 
 If the matrix cannot support these decisions, Phase 2 is not complete enough to justify build.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 2 should end with a clear readiness decision and a controlled handover to the next delivery phases. The handover should not be a general data assessment pack. It should provide the specific evidence needed to build, test, secure and govern the scoped T2D capability.
 
-## 7.1 Required exit outputs
+### 7.1 Required exit outputs
 
 The minimum exit output is the final **answerability matrix**. It should include:
 
@@ -636,7 +642,7 @@ The minimum exit output is the final **answerability matrix**. It should include
 
 Supporting artefacts may include source notes, metric cards, ambiguity logs, data quality findings, access notes or lineage evidence, but these should remain supporting material rather than replacing the matrix.
 
-## 7.2 Handover to later phases
+### 7.2 Handover to later phases
 
 The handover should convert the answerability matrix into phase-specific inputs. It should not repeat the full assessment narrative. Each later phase should receive the decisions, caveats, constraints and unresolved gaps it needs to continue delivery safely.
 
@@ -650,7 +656,7 @@ The handover should convert the answerability matrix into phase-specific inputs.
 | Versioning and change control         | Semantic definitions, source mappings, filters, joins, caveats and candidate golden questions that require versioning, approval or controlled change.                               |
 | Backlog / roadmap                     | Deferred questions, blocked use cases, required changes, owners, dependencies and triggers for reconsideration.                                                                     |
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 Phase 2 should actively look for the risks that cause T2D systems to appear credible in prototype but fail in real use. The most dangerous risks are not always missing data. They are often unclear definitions, unsafe joins, weak access controls, hidden caveats and unresolved ownership.
 
@@ -667,8 +673,13 @@ Phase 2 should actively look for the risks that cause T2D systems to appear cred
 | Prototype overconfidence     | A narrow demo works, but only because questions, data and access have been manually controlled.                                | Separate POC learning from scalable MVP readiness.                      |
 | Unowned gaps                 | Issues are captured but no one can approve, remediate or accept them.                                                          | Assign owners or block/narrow affected questions.                       |
 
-## 8.1 Practitioner note
+### 8.1 Practitioner note
 
 The biggest Phase 2 failure is false confidence. A question should not be treated as ready because a model can generate a plausible answer. It is ready only when the source, definition, grain, join, filter, quality caveat and access route are understood well enough to support a defensible answer.
 
 [^1]: Lineage has two levels. The first is traceability: can the answer be linked to the table, model or semantic asset used by T2D? The second is production lineage: how was that asset created, transformed, reconciled and approved? Both matter, but the second is often harder and determines whether the source is genuinely trustable.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 4 Annexes: Design Architecture
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 How to use this annex](#1-how-to-use-this-annex)
@@ -89,7 +95,7 @@
 
 ---
 
-# 1 How to use this annex
+## 1 How to use this annex
 
 This annex pack contains example tools, templates and checklists supporting the **Phase 4 Design Architecture and Orchestration Guide**. It is intended as practical inspiration for facilitation, documentation and delivery, not as a mandatory to-do list.
 
@@ -99,9 +105,9 @@ Teams should use only the templates that add value. For a narrow POC, many annex
 
 The first three sections are cross-cutting. Model patterns, cost scenarios and evaluation / model-switching support Activities 5.3, 5.4, 5.9 and 5.10 in the main guide. The activity worksheets in Section 5 support specific Phase 4 design activities.
 
-# 2 Model patterns
+## 2 Model patterns
 
-## 2.1 Model family and likely use
+### 2.1 Model family and likely use
 
 | Model family                     | Example models / technologies                                              | Likely use in T2D                                          | Strengths                                 | Watch-outs                                        |
 |----------------------------------|----------------------------------------------------------------------------|------------------------------------------------------------|-------------------------------------------|---------------------------------------------------|
@@ -113,7 +119,7 @@ The first three sections are cross-cutting. Model patterns, cost scenarios and e
 | Self-hosted / private model      | Llama, Mistral open-weight, Qwen, private cloud deployments                | Sensitive data, residency constraints, regulated use cases | More control over deployment and data     | Higher operating complexity                       |
 | Fine-tuned / task-specific model | Fine-tuned small model, distilled model, classifier                        | Repeated narrow tasks with stable patterns                 | Consistent, efficient for known workflows | Requires data, maintenance and regression testing |
 
-## 2.2 Model use by orchestration task
+### 2.2 Model use by orchestration task
 
 | Task                      | Likely model pattern                     | Notes                                                         |
 |---------------------------|------------------------------------------|---------------------------------------------------------------|
@@ -128,9 +134,9 @@ The first three sections are cross-cutting. Model patterns, cost scenarios and e
 | Follow-up handling        | Medium or strong model                   | Risk increases when context is inherited across turns.        |
 | Safety / refusal decision | Rules plus model-assisted classification | Refusal should be policy-led, not purely model-led.           |
 
-# 3 Cost scenarios
+## 3 Cost scenarios
 
-## 3.1 Cost scenario worksheet
+### 3.1 Cost scenario worksheet
 
 Cost should be estimated by orchestration step, not only as a total model bill. The same user interaction may trigger metadata retrieval, one or more model calls, query validation, execution, answer generation and logging.
 
@@ -140,7 +146,7 @@ Cost should be estimated by orchestration step, not only as a total model bill. 
 | MVP           | Metadata retrieval, intent routing, query generation, validation, execution, answer generation                        | Context check, possible re-query, answer regeneration             | Model routing, validation calls, query execution, logs         |
 | Complex pilot | Multi-step retrieval, stronger model for SQL, layered validation, execution, result interpretation, answer generation | Context inheritance, new filters, re-query, additional validation | Strong model use, warehouse cost, concurrency, trace retention |
 
-## 3.2 Indicative cost structure
+### 3.2 Indicative cost structure
 
 | Cost component          | Initial request             | Follow-up request                        | Notes                                       |
 |-------------------------|-----------------------------|------------------------------------------|---------------------------------------------|
@@ -153,7 +159,7 @@ Cost should be estimated by orchestration step, not only as a total model bill. 
 | Logging / trace storage | Required                    | Required                                 | Retention policy affects cost.              |
 | Evaluation / regression | Periodic or batch           | Periodic or batch                        | Should be budgeted from MVP onward.         |
 
-## 3.3 Indicative cost-per-interaction template
+### 3.3 Indicative cost-per-interaction template
 
 The values below are placeholders for planning, not vendor quotes. They should be replaced with organisation-specific pricing, model choice, token volumes, warehouse cost, retrieval pattern, logging retention and expected usage.
 
@@ -163,7 +169,7 @@ The values below are placeholders for planning, not vendor quotes. They should b
 | MVP           | £0.003–£0.02   | £0.03–£0.20     | £0.005–£0.10         | £0.001–£0.005        | £0.04–£0.30                              | £0.02–£0.18                    |
 | Complex pilot | £0.01–£0.05    | £0.15–£1.00     | £0.05–£1.00+         | £0.005–£0.03         | £0.20–£2.00+                             | £0.10–£1.50+                   |
 
-## 3.4 Cost estimation template
+### 3.4 Cost estimation template
 
 | Input                               | Low scenario | Medium scenario | High scenario |
 |-------------------------------------|--------------|-----------------|---------------|
@@ -181,9 +187,9 @@ The values below are placeholders for planning, not vendor quotes. They should b
 
 Estimated monthly cost should include model calls, metadata retrieval, query execution, validation, logging, trace storage, evaluation, regression testing, monitoring and operational support.
 
-# 4 Evaluation, model-switching and performance tracking
+## 4 Evaluation, model-switching and performance tracking
 
-## 4.1 Simple model evaluation approach
+### 4.1 Simple model evaluation approach
 
 Model evaluation should compare models on the same task, with the same inputs, against the same expected outputs. The evaluation should include both successful questions and failure cases.
 
@@ -198,7 +204,7 @@ Model evaluation should compare models on the same task, with the same inputs, a
 | Estimate cost and latency | Compare quality against cost and response time.                                                    |
 | Select by task            | Choose the simplest model pattern that meets quality, safety and cost thresholds.                  |
 
-## 4.2 Evaluation dimensions
+### 4.2 Evaluation dimensions
 
 | Dimension            | Question to answer                                                         |
 |----------------------|----------------------------------------------------------------------------|
@@ -215,7 +221,7 @@ Model evaluation should compare models on the same task, with the same inputs, a
 | Data exposure        | Was unnecessary data, metadata or query detail avoided?                    |
 | Maintainability      | Can prompts, models and evaluation sets be updated safely?                 |
 
-## 4.3 Technology patterns for switching and tracking
+### 4.3 Technology patterns for switching and tracking
 
 Teams should avoid hard-coding model choices directly into the orchestration logic. A simple abstraction layer makes it easier to compare models, switch providers, route tasks and track performance over time.
 
@@ -231,13 +237,13 @@ Teams should avoid hard-coding model choices directly into the orchestration log
 
 Example technologies may include LangChain, LlamaIndex, Semantic Kernel, Haystack, DSPy, MLflow, Weights & Biases, LangSmith, Helicone, PromptLayer, OpenTelemetry, provider-native tracing and cloud-native monitoring. The specific choice matters less than the capability: the team needs a controlled way to switch models, compare performance, trace failures and govern changes.
 
-# 5 Activities
+## 5 Activities
 
-## 5.1 Confirm orchestration principles and constraints
+### 5.1 Confirm orchestration principles and constraints
 
 For model, cost and evaluation assumptions that cut across activities, see Sections 2 to 4.
 
-### 5.1.1 Orchestration principles checklist
+#### 5.1.1 Orchestration principles checklist
 
 | Principle                      | Design question                                                            | Evidence to capture                                            |
 |--------------------------------|----------------------------------------------------------------------------|----------------------------------------------------------------|
@@ -250,7 +256,7 @@ For model, cost and evaluation assumptions that cut across activities, see Secti
 | Log what matters               | Can failures, misuse and quality issues be investigated?                   | Required logs, traces and retention assumptions.               |
 | Govern change                  | Who approves changes to models, prompts, tools and validation?             | Change owners, approval route and decision log.                |
 
-### 5.1.2 Security, exposure, cost and scale assumptions template
+#### 5.1.2 Security, exposure, cost and scale assumptions template
 
 | Area                  | Question                                                                                                 |
 |-----------------------|----------------------------------------------------------------------------------------------------------|
@@ -280,7 +286,7 @@ For model, cost and evaluation assumptions that cut across activities, see Secti
 | Query load            | What query volume can the warehouse, API or semantic layer support?                                      |
 | Throttling            | When should usage be slowed, queued, blocked or escalated?                                               |
 
-### 5.1.3 Model and tool constraint register
+#### 5.1.3 Model and tool constraint register
 
 | Constraint area  | Decision to capture                              | Example                                                |
 |------------------|--------------------------------------------------|--------------------------------------------------------|
@@ -293,7 +299,7 @@ For model, cost and evaluation assumptions that cut across activities, see Secti
 | Human review     | Which actions require approval or escalation?    | Sensitive data, high-risk answers, failed validation.  |
 | Logging          | What must be logged for each model or tool step? | Prompt ID, metadata version, query, validation result. |
 
-### 5.1.4 Change-control decision log
+#### 5.1.4 Change-control decision log
 
 | Change type              | Example                                     | Approval owner                      | Evidence required                      |
 |--------------------------|---------------------------------------------|-------------------------------------|----------------------------------------|
@@ -305,7 +311,7 @@ For model, cost and evaluation assumptions that cut across activities, see Secti
 | Threshold change         | Change cost, latency or quality thresholds. | Product owner / operating owner.    | Impact assessment.                     |
 | Safe-failure change      | Change refusal or escalation rules.         | Product owner / governance lead.    | User and risk review.                  |
 
-### 5.1.5 Minimum evidence before closing Activity 5.1
+#### 5.1.5 Minimum evidence before closing Activity 5.1
 
 Before closing this activity, the team should be able to show:
 
@@ -319,9 +325,9 @@ Before closing this activity, the team should be able to show:
 
 - change-control expectations;
 
-## 5.2 Question-to-answer flow worksheet
+### 5.2 Question-to-answer flow worksheet
 
-### 5.2.1 End-to-end flow worksheet
+#### 5.2.1 End-to-end flow worksheet
 
 The flow is shown sequentially for clarity, but it may loop. Query generation and validation may iterate when the query needs revision, metadata is missing, permissions fail, or the user must clarify the request. The loop should be bounded: after defined attempts or failed checks, the system should refuse, clarify or escalate rather than continue regenerating.
 
@@ -339,7 +345,7 @@ The flow is shown sequentially for clarity, but it may loop. Query generation an
 | Answer generation      | Produce the user-facing answer.                                                              | Interpreted result, response rules.              | Answer, caveat, refusal or escalation.        | Orchestration owner           | Answer, sources, assumptions, confidence signals.           |
 | Feedback and logging   | Capture feedback and trace.                                                                  | Answer, logs, user response.                     | Trace, feedback, improvement signal.          | Operating owner               | Feedback, trace ID, issue category.                         |
 
-### 5.2.2 Flow decision checklist
+#### 5.2.2 Flow decision checklist
 
 | Decision area | Question                                                                   | Decision / assumption |
 |---------------|----------------------------------------------------------------------------|-----------------------|
@@ -356,7 +362,7 @@ The flow is shown sequentially for clarity, but it may loop. Query generation an
 | Logging       | What must be logged at each step?                                          |                       |
 | Feedback      | How can users flag wrong, unclear or unhelpful answers?                    |                       |
 
-### 5.2.3 Safe-failure examples
+#### 5.2.3 Safe-failure examples
 
 | Situation                           | Preferred behaviour                                      | Evidence to capture                           |
 |-------------------------------------|----------------------------------------------------------|-----------------------------------------------|
@@ -368,7 +374,7 @@ The flow is shown sequentially for clarity, but it may loop. Query generation an
 | Result conflicts with caveat        | Answer with caveat or escalate for review.               | Caveat applied, result issue.                 |
 | Follow-up changes scope silently    | Restate assumptions or ask clarification.                | Prior context, new context, decision.         |
 
-### 5.2.4 Minimum evidence before closing Activity 5.2
+#### 5.2.4 Minimum evidence before closing Activity 5.2
 
 Before closing this activity, the team should be able to show:
 
@@ -384,9 +390,9 @@ Before closing this activity, the team should be able to show:
 
 - prototype boundaries and simplifications.
 
-## 5.3 Metadata retrieval and grounding worksheet
+### 5.3 Metadata retrieval and grounding worksheet
 
-### 5.3.1 Metadata contract checklist
+#### 5.3.1 Metadata contract checklist
 
 | Metadata area    | Required fields                                                          | Runtime use                                   |
 |------------------|--------------------------------------------------------------------------|-----------------------------------------------|
@@ -399,7 +405,7 @@ Before closing this activity, the team should be able to show:
 | Security rule    | Role, row/column restrictions, masking, aggregation limits               | Enforce access and exposure controls          |
 | Quality limit    | Freshness, completeness, known gaps, reliability caveats                 | Decide whether to answer, caveat or refuse    |
 
-### 5.3.2 Retrieval design worksheet
+#### 5.3.2 Retrieval design worksheet
 
 Where retrieval or ranking uses a model, the model pattern, cost and evaluation assumptions should align with Sections 2 to 4.
 
@@ -417,7 +423,7 @@ Where retrieval or ranking uses a model, the model pattern, cost and evaluation 
 | Logging           | Which metadata IDs and versions are logged?                  |                       |
 | Evaluation        | How is retrieval quality tested?                             |                       |
 
-### 5.3.3 Grounding rules
+#### 5.3.3 Grounding rules
 
 | Grounding area     | Rule to define                                         | Example decision                                                  |
 |--------------------|--------------------------------------------------------|-------------------------------------------------------------------|
@@ -427,7 +433,7 @@ Where retrieval or ranking uses a model, the model pattern, cost and evaluation 
 | Follow-up handling | Which metadata can be inherited across turns?          | Metric and period may persist; new dimension requires validation. |
 | Refusal            | Which metadata gaps should block an answer?            | No approved metric or unsafe join path.                           |
 
-### 5.3.4 Missing or conflicting metadata handling
+#### 5.3.4 Missing or conflicting metadata handling
 
 | Situation                  | Preferred behaviour                             | Evidence to capture                    |
 |----------------------------|-------------------------------------------------|----------------------------------------|
@@ -438,7 +444,7 @@ Where retrieval or ranking uses a model, the model pattern, cost and evaluation 
 | Metadata stale             | Warn, refuse or escalate depending on risk.     | Version, date, status.                 |
 | Access rule unclear        | Block execution until rule is confirmed.        | User role, asset, unresolved rule.     |
 
-### 5.3.5 Minimum evidence before closing Activity 5.3
+#### 5.3.5 Minimum evidence before closing Activity 5.3
 
 Before closing this activity, the team should be able to show:
 
@@ -454,9 +460,9 @@ Before closing this activity, the team should be able to show:
 
 - logging requirements for metadata IDs and versions.
 
-## 5.4 Model, prompt and routing strategy worksheet
+### 5.4 Model, prompt and routing strategy worksheet
 
-### 5.4.1 Model/task allocation
+#### 5.4.1 Model/task allocation
 
 | Task                        | Selected model / pattern | Reason | Constraints | Fallback |
 |-----------------------------|--------------------------|--------|-------------|----------|
@@ -468,7 +474,7 @@ Before closing this activity, the team should be able to show:
 | Follow-up handling          |                          |        |             |          |
 | Safe-failure classification |                          |        |             |          |
 
-### 5.4.2 Prompt control checklist
+#### 5.4.2 Prompt control checklist
 
 | Area              | Question                                        | Decision / assumption |
 |-------------------|-------------------------------------------------|-----------------------|
@@ -480,7 +486,7 @@ Before closing this activity, the team should be able to show:
 | Prompt logging    | Which prompt ID, version and inputs are logged? |                       |
 | Prompt approval   | Who approves changes before release?            |                       |
 
-### 5.4.3 Routing and fallback rules
+#### 5.4.3 Routing and fallback rules
 
 | Situation          | Preferred route         | Fallback / escalation        |
 |--------------------|-------------------------|------------------------------|
@@ -491,7 +497,7 @@ Before closing this activity, the team should be able to show:
 | High-risk answer   | Stronger review path    | Human review or refusal      |
 | Model unavailable  | Approved fallback model | Degraded mode or pause       |
 
-### 5.4.4 Minimum evidence before closing Activity 5.4
+#### 5.4.4 Minimum evidence before closing Activity 5.4
 
 Before closing this activity, the team should be able to show:
 
@@ -507,9 +513,9 @@ Before closing this activity, the team should be able to show:
 
 - evaluation approach for shortlisted models.
 
-## 5.5 Tool boundaries and execution hand-off worksheet
+### 5.5 Tool boundaries and execution hand-off worksheet
 
-### 5.5.1 Tool registry
+#### 5.5.1 Tool registry
 
 | Tool                    | Purpose                              | Allowed actions                             | Prohibited actions                             | Identity model                    | Owner                         |
 |-------------------------|--------------------------------------|---------------------------------------------|------------------------------------------------|-----------------------------------|-------------------------------|
@@ -519,7 +525,7 @@ Before closing this activity, the team should be able to show:
 | Logging / trace tool    | Capture orchestration evidence.      | Store trace, decisions, IDs and outcomes.   | Store unnecessary sensitive data.              | Service identity.                 | Operating owner               |
 | Feedback tool           | Capture user feedback.               | Record rating, issue type and comments.     | Override answer quality status without review. | User identity.                    | Product / operating owner     |
 
-### 5.5.2 Tool permission worksheet
+#### 5.5.2 Tool permission worksheet
 
 | Decision area      | Question                                                                     | Decision / assumption |
 |--------------------|------------------------------------------------------------------------------|-----------------------|
@@ -534,7 +540,7 @@ Before closing this activity, the team should be able to show:
 | Logging            | What input, output, decision and error details are logged?                   |                       |
 | Escalation         | What failures require human review or support?                               |                       |
 
-### 5.5.3 Execution hand-off pattern
+#### 5.5.3 Execution hand-off pattern
 
 | Step                 | Control question                                        | Required evidence                               |
 |----------------------|---------------------------------------------------------|-------------------------------------------------|
@@ -545,7 +551,7 @@ Before closing this activity, the team should be able to show:
 | Handle failure       | Should the system retry, clarify, refuse or escalate?   | Error type, retry count, final decision.        |
 | Log trace            | Can the action be reconstructed later?                  | Trace ID, inputs, outputs, decisions, owner.    |
 
-### 5.5.4 Tool failure handling
+#### 5.5.4 Tool failure handling
 
 | Failure                          | Preferred behaviour                                         | Evidence to capture                       |
 |----------------------------------|-------------------------------------------------------------|-------------------------------------------|
@@ -557,7 +563,7 @@ Before closing this activity, the team should be able to show:
 | Tool returns restricted fields   | Mask, block or escalate.                                    | Field names, policy rule, decision.       |
 | Logging tool fails               | Continue only if minimum audit evidence is preserved.       | Missing log, fallback trace, owner.       |
 
-### 5.5.5 Minimum evidence before closing Activity 5.5
+#### 5.5.5 Minimum evidence before closing Activity 5.5
 
 Before closing this activity, the team should be able to show:
 
@@ -575,11 +581,11 @@ Before closing this activity, the team should be able to show:
 
 - unresolved tool risks and owners.
 
-## 5.6 Query generation and validation worksheet
+### 5.6 Query generation and validation worksheet
 
 The examples in this annex are illustrative. They should be adapted to the actual use case, data sensitivity, user scope, technology stack, delivery stage and organisational controls. The aim is to provide a practical starting point, not a mandatory query policy.
 
-### 5.6.1 Applying approved metrics, joins, filters and limits
+#### 5.6.1 Applying approved metrics, joins, filters and limits
 
 | Design area        | Concrete example                                                                   | Expected control                                                           |
 |--------------------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
@@ -592,7 +598,7 @@ The examples in this annex are illustrative. They should be adapted to the actua
 | Cost limit         | Query scans more data than allowed.                                                | Dry-run, block or require approval.                                        |
 | Access rule        | User asks for region they cannot access.                                           | Enforce row/column security before execution.                              |
 
-### 5.6.2 Query type policy
+#### 5.6.2 Query type policy
 
 | Query type               | Status     | Example                                 | Expected behaviour                                |
 |--------------------------|------------|-----------------------------------------|---------------------------------------------------|
@@ -607,7 +613,7 @@ The examples in this annex are illustrative. They should be adapted to the actua
 | DDL / destructive SQL    | Blocked    | Drop table, create table, alter view.   | Block deterministically.                          |
 | Unbounded detail export  | Blocked    | Export all customer transactions.       | Refuse or route to governed export process.       |
 
-### 5.6.3 Validation checks before execution
+#### 5.6.3 Validation checks before execution
 
 | Validation check      | Example failure                                           | Expected action                                                |
 |-----------------------|-----------------------------------------------------------|----------------------------------------------------------------|
@@ -625,7 +631,7 @@ The examples in this annex are illustrative. They should be adapted to the actua
 | Result-shape check    | Output is too detailed for answer use.                    | Aggregate, summarise or block.                                 |
 | Runtime estimate      | Query is expected to exceed runtime or timeout threshold. | Block, simplify, ask user to narrow scope or require approval. |
 
-### 5.6.4 Revise, clarify, refuse or escalate rules
+#### 5.6.4 Revise, clarify, refuse or escalate rules
 
 | Situation                   | Preferred action                                   | Example response behaviour                                                                 |
 |-----------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------|
@@ -639,7 +645,7 @@ The examples in this annex are illustrative. They should be adapted to the actua
 | Validation repeatedly fails | Stop loop and escalate.                            | “This question needs review before it can be answered.”                                    |
 | Runtime estimate too high   | Ask user to narrow scope or reduce detail.         | “This query may take too long. Please reduce the time period, filters or level of detail.” |
 
-### 5.6.5 Validation approach
+#### 5.6.5 Validation approach
 
 | Validation layer                     | Best handled by              | Notes                                                |
 |--------------------------------------|------------------------------|------------------------------------------------------|
@@ -651,7 +657,7 @@ The examples in this annex are illustrative. They should be adapted to the actua
 | Review complex SQL intent            | Model-assisted plus rules    | Useful for harder queries, but not sufficient alone. |
 | Assess answer caveats                | Model-assisted plus metadata | Must preserve approved caveats.                      |
 
-### 5.6.6 Minimum evidence before closing Activity 5.6
+#### 5.6.6 Minimum evidence before closing Activity 5.6
 
 Before closing this activity, the team should be able to show:
 
@@ -669,9 +675,9 @@ Before closing this activity, the team should be able to show:
 
 - unresolved query risks and owners.
 
-## 5.7 Answer generation and safe-failure worksheet
+### 5.7 Answer generation and safe-failure worksheet
 
-### 5.7.1 Answer content checklist
+#### 5.7.1 Answer content checklist
 
 | Answer element      | Required / optional     | Example                                                 | Notes                                               |
 |---------------------|-------------------------|---------------------------------------------------------|-----------------------------------------------------|
@@ -686,7 +692,7 @@ Before closing this activity, the team should be able to show:
 | Confidence signal   | Optional                | “Based on approved metric and current data.”            | Avoid false precision.                              |
 | Suggested follow-up | Optional                | “Would you like this by region?”                        | Should stay within approved scope.                  |
 
-### 5.7.2 Result interpretation checks
+#### 5.7.2 Result interpretation checks
 
 | Check                    | Example issue                           | Expected action                                       |
 |--------------------------|-----------------------------------------|-------------------------------------------------------|
@@ -698,7 +704,7 @@ Before closing this activity, the team should be able to show:
 | Conflicting caveat       | Result conflicts with known limitation. | Apply caveat or escalate.                             |
 | Low retrieval confidence | Metric or source match uncertain.       | Clarify before answering.                             |
 
-### 5.7.3 Refusal, clarification and escalation rules
+#### 5.7.3 Refusal, clarification and escalation rules
 
 | Situation                 | Preferred behaviour                 | Example response pattern                                  |
 |---------------------------|-------------------------------------|-----------------------------------------------------------|
@@ -710,7 +716,7 @@ Before closing this activity, the team should be able to show:
 | High-risk result          | Escalate or caveat.                 | “This result needs review before use in decision-making.” |
 | Follow-up changes scope   | Clarify or restate assumptions.     | “Do you want to keep the same region and period?”         |
 
-### 5.7.4 Evidence visibility options
+#### 5.7.4 Evidence visibility options
 
 | User type                     | Recommended evidence                                    | Watch-outs                               |
 |-------------------------------|---------------------------------------------------------|------------------------------------------|
@@ -719,7 +725,7 @@ Before closing this activity, the team should be able to show:
 | Analyst                       | Definition, filters, source, caveats, SQL/query.        | SQL visibility must respect permissions. |
 | Auditor / governance reviewer | Metadata IDs, query, validation result, logs, versions. | Usually not shown in normal user answer. |
 
-### 5.7.5 Answer safety checks before response
+#### 5.7.5 Answer safety checks before response
 
 | Safety check     | Question                                       | Action if failed                |
 |------------------|------------------------------------------------|---------------------------------|
@@ -731,7 +737,7 @@ Before closing this activity, the team should be able to show:
 | Certainty check  | Is the wording stronger than the evidence?     | Soften wording or caveat.       |
 | Follow-up check  | Are inherited assumptions visible?             | Restate assumptions or clarify. |
 
-### 5.7.6 Minimum evidence before closing Activity 5.7
+#### 5.7.6 Minimum evidence before closing Activity 5.7
 
 Before closing this activity, the team should be able to show:
 
@@ -749,9 +755,9 @@ Before closing this activity, the team should be able to show:
 
 - logging requirements for answers and refusal reasons.
 
-## 5.8 Multi-turn conversation handling worksheet
+### 5.8 Multi-turn conversation handling worksheet
 
-### 5.8.1 5.8.1. Context inheritance rules
+#### 5.8.1 5.8.1. Context inheritance rules
 
 Context inheritance should not mean passing the whole conversation back to the model. A safer pattern is to maintain a small, structured session state that records only the context needed for follow-up questions. Each new turn should update, reuse, reset or reject that state.
 
@@ -770,7 +776,7 @@ Context inheritance should not mean passing the whole conversation back to the m
 
 The system should treat context as structured state, not memory. Each follow-up should classify whether it reuses existing context, modifies it, requires new metadata, requires a new query, or must be clarified/refused. Material inherited assumptions should be shown back to the user.
 
-#### 5.8.1.1 Example
+##### 5.8.1.1 Example
 
 | User turn                      | State change                                     | System behaviour                                                   |
 |--------------------------------|--------------------------------------------------|--------------------------------------------------------------------|
@@ -779,7 +785,7 @@ The system should treat context as structured state, not memory. Each follow-up 
 | “What about margin?”           | Metric change detected.                          | Retrieve margin metadata or clarify if multiple definitions exist. |
 | “Show customer-level detail.”  | Detail level change detected.                    | Recheck permissions and row/detail limits.                         |
 
-### 5.8.2 Follow-up handling patterns
+#### 5.8.2 Follow-up handling patterns
 
 | Follow-up type         | Example                              | Preferred behaviour                                                     |
 |------------------------|--------------------------------------|-------------------------------------------------------------------------|
@@ -793,7 +799,7 @@ The system should treat context as structured state, not memory. Each follow-up 
 | Ambiguous follow-up    | “What about margin?”                 | Clarify metric or scope before answering.                               |
 | Out-of-scope follow-up | “Forecast next quarter.”             | Refuse or route to supported workflow.                                  |
 
-### 5.8.3 Clarify, re-query, reuse or refuse rules
+#### 5.8.3 Clarify, re-query, reuse or refuse rules
 
 | Situation                              | Preferred action                        | Reason                                         |
 |----------------------------------------|-----------------------------------------|------------------------------------------------|
@@ -806,7 +812,7 @@ The system should treat context as structured state, not memory. Each follow-up 
 | Follow-up moves outside approved scope | Refuse or escalate.                     | Keep system within governed use case.          |
 | Multiple failed turns occur            | Escalate or end safely.                 | Avoid repeated guessing.                       |
 
-### 5.8.4 Session retention and logging
+#### 5.8.4 Session retention and logging
 
 | Area               | Design question                              | Decision / assumption |
 |--------------------|----------------------------------------------|-----------------------|
@@ -820,7 +826,7 @@ The system should treat context as structured state, not memory. Each follow-up 
 | Feedback link      | Can feedback be linked to the relevant turn? |                       |
 | Retention policy   | How long are conversation traces retained?   |                       |
 
-### 5.8.5 Conversation safety checks
+#### 5.8.5 Conversation safety checks
 
 | Safety check     | Question                                      | Action if failed           |
 |------------------|-----------------------------------------------|----------------------------|
@@ -832,7 +838,7 @@ The system should treat context as structured state, not memory. Each follow-up 
 | Caveat check     | Are prior caveats still preserved?            | Restate caveats.           |
 | Ambiguity check  | Could the follow-up mean several things?      | Clarify.                   |
 
-### 5.8.6 Minimum evidence before closing Activity 5.8
+#### 5.8.6 Minimum evidence before closing Activity 5.8
 
 Before closing this activity, the team should be able to show:
 
@@ -848,9 +854,9 @@ Before closing this activity, the team should be able to show:
 
 - logging requirements for context and turn-level decisions.
 
-## 5.9 Model and orchestration evaluation worksheet
+### 5.9 Model and orchestration evaluation worksheet
 
-### 5.9.1 Evaluation tool options
+#### 5.9.1 Evaluation tool options
 
 | Tool / pattern                   | Where it helps                                                               | Pros                                               | Cons                                                       |
 |----------------------------------|------------------------------------------------------------------------------|----------------------------------------------------|------------------------------------------------------------|
@@ -865,7 +871,7 @@ Before closing this activity, the team should be able to show:
 | Observability / tracing platform | Tracks traces, failures, latency, cost and feedback.                         | Essential for debugging and monitoring.            | Sensitive prompts/results need retention controls.         |
 | Evaluation framework             | Runs repeatable evals across models, prompts and datasets.                   | Useful for regression and model switching.         | Can be over-engineered for early POCs.                     |
 
-### 5.9.2 Example technologies
+#### 5.9.2 Example technologies
 
 | Technology            | Likely use                                                               | Pros                                                    | Cons                                                    |
 |-----------------------|--------------------------------------------------------------------------|---------------------------------------------------------|---------------------------------------------------------|
@@ -882,7 +888,7 @@ Before closing this activity, the team should be able to show:
 | Helicone              | LLM observability, cost and latency tracking.                            | Quick visibility into model calls.                      | Depends on deployment and routing pattern.              |
 | Provider-native tools | OpenAI, Anthropic, Azure, Google or AWS tracing/evaluation tools.        | Integrated with provider stack.                         | May increase provider lock-in.                          |
 
-### 5.9.3 Evaluation design template
+#### 5.9.3 Evaluation design template
 
 | Area             | Decision / question                | Example                                                          |
 |------------------|------------------------------------|------------------------------------------------------------------|
@@ -897,7 +903,7 @@ Before closing this activity, the team should be able to show:
 | Regression       | When are tests rerun?              | Prompt, model, metadata or validation changes.                   |
 | Evidence         | What is retained?                  | Test ID, prompt version, model version, output, score, reviewer. |
 
-### 5.9.4 Suggested scoring dimensions
+#### 5.9.4 Suggested scoring dimensions
 
 | Dimension            | What to score                                     | Blocking failure example                     |
 |----------------------|---------------------------------------------------|----------------------------------------------|
@@ -913,7 +919,7 @@ Before closing this activity, the team should be able to show:
 | Cost                 | Cost fits usage assumptions.                      | Uses strongest model for every step.         |
 | Usability            | Answer is understandable and useful.              | Technically correct but unclear to user.     |
 
-### 5.9.5 Tool selection guidance
+#### 5.9.5 Tool selection guidance
 
 | Situation       | Preferred approach                                                                                     |
 |-----------------|--------------------------------------------------------------------------------------------------------|
@@ -922,7 +928,7 @@ Before closing this activity, the team should be able to show:
 | Pilot           | Evaluation framework, observability platform, regression tests, feedback-linked monitoring.            |
 | Production path | CI/CD evaluation gates, model registry, OpenTelemetry or equivalent tracing, formal approval workflow. |
 
-### 5.9.6 Minimum evidence before closing Activity 5.9
+#### 5.9.6 Minimum evidence before closing Activity 5.9
 
 Before closing this activity, the team should be able to show:
 
@@ -940,9 +946,9 @@ Before closing this activity, the team should be able to show:
 
 - retained evaluation evidence and owners.
 
-## 5.10 Quality monitoring and improvement loop worksheet
+### 5.10 Quality monitoring and improvement loop worksheet
 
-### 5.10.1 Quality signal catalogue
+#### 5.10.1 Quality signal catalogue
 
 | Signal             | What it shows                                      | Example metric                                      |
 |--------------------|----------------------------------------------------|-----------------------------------------------------|
@@ -959,7 +965,7 @@ Before closing this activity, the team should be able to show:
 | Drift              | Whether quality changes over time.                 | Regression pass rate after model or prompt changes. |
 | Usage              | Whether users are adopting the capability.         | Active users, sessions and repeat usage.            |
 
-### 5.10.2 Feedback capture design
+#### 5.10.2 Feedback capture design
 
 | Feedback type      | Capture method                                                     | Use                                         |
 |--------------------|--------------------------------------------------------------------|---------------------------------------------|
@@ -970,7 +976,7 @@ Before closing this activity, the team should be able to show:
 | Escalation request | User asks for analyst or owner review.                             | Trigger support or governance route.        |
 | Follow-up pattern  | Repeated rephrasing or clarification.                              | Identify unclear answers or poor grounding. |
 
-### 5.10.3 Monitoring dashboard outline
+#### 5.10.3 Monitoring dashboard outline
 
 | Area                  | Example measures                                                       | Owner                         |
 |-----------------------|------------------------------------------------------------------------|-------------------------------|
@@ -983,7 +989,7 @@ Before closing this activity, the team should be able to show:
 | Cost                  | Cost per interaction, model spend, query execution cost, logging cost. | Product / operating owner     |
 | Operations            | Incidents, escalations, unresolved issues, SLA breaches.               | Operating owner               |
 
-### 5.10.4 Issue triage and routing
+#### 5.10.4 Issue triage and routing
 
 | Issue type              | Likely owner                  | Typical action                                         |
 |-------------------------|-------------------------------|--------------------------------------------------------|
@@ -997,7 +1003,7 @@ Before closing this activity, the team should be able to show:
 | Poor user understanding | Product owner / business SME  | Improve answer format or guidance.                     |
 | Repeated refusal        | Product owner / data owner    | Decide whether scope should expand or stay restricted. |
 
-### 5.10.5 Improvement triggers
+#### 5.10.5 Improvement triggers
 
 | Trigger                  | Example threshold                                    | Response                                   |
 |--------------------------|------------------------------------------------------|--------------------------------------------|
@@ -1011,7 +1017,7 @@ Before closing this activity, the team should be able to show:
 | Security event           | Restricted data appears in prompt, log or answer.    | Stop affected route and escalate.          |
 | Regression failure       | Golden test set falls below threshold.               | Block release or roll back change.         |
 
-### 5.10.6 Improvement backlog
+#### 5.10.6 Improvement backlog
 
 | Backlog item | Source signal                                      | Root cause | Owner | Priority | Target action |
 |--------------|----------------------------------------------------|------------|-------|----------|---------------|
@@ -1019,7 +1025,7 @@ Before closing this activity, the team should be able to show:
 |              | User feedback / validation / regression / incident |            |       |          |               |
 |              | User feedback / validation / regression / incident |            |       |          |               |
 
-### 5.10.7 Minimum evidence before closing Activity 5.10
+#### 5.10.7 Minimum evidence before closing Activity 5.10
 
 - Before closing this activity, the team should be able to show:
 
@@ -1037,9 +1043,9 @@ Before closing this activity, the team should be able to show:
 
 - governance link for model, prompt, metadata and validation changes.
 
-## 5.11 Orchestration governance and change-control worksheet
+### 5.11 Orchestration governance and change-control worksheet
 
-### 5.11.1 5.11.1. Change-control scope
+#### 5.11.1 5.11.1. Change-control scope
 
 | Change area         | Example change                             | Approval owner                | Evidence required                                     |
 |---------------------|--------------------------------------------|-------------------------------|-------------------------------------------------------|
@@ -1052,7 +1058,7 @@ Before closing this activity, the team should be able to show:
 | Safe-failure rule   | Change refusal or escalation rule.         | Product / governance owner    | User impact review and risk assessment.               |
 | Logging / retention | Change trace or prompt retention.          | Security / governance lead    | Privacy, audit and retention review.                  |
 
-### 5.11.2 5.11.2. Change classification
+#### 5.11.2 5.11.2. Change classification
 
 | Change type                 | Risk level    | Example                                         | Required route                                 |
 |-----------------------------|---------------|-------------------------------------------------|------------------------------------------------|
@@ -1063,7 +1069,7 @@ Before closing this activity, the team should be able to show:
 | Security / retention change | High          | Store prompts for longer period.                | Privacy, security and governance review.       |
 | Scope expansion             | High          | Add new domain, metric group or user group.     | Product, data, security and evaluation review. |
 
-### 5.11.3 5.11.3. Release evidence checklist
+#### 5.11.3 5.11.3. Release evidence checklist
 
 | Evidence item                 | Required for                                          | Owner                      |
 |-------------------------------|-------------------------------------------------------|----------------------------|
@@ -1077,7 +1083,7 @@ Before closing this activity, the team should be able to show:
 | Rollback plan                 | Medium and high-risk changes                          | AI / solution architect    |
 | Approval record               | Medium and high-risk changes                          | Governance owner           |
 
-### 5.11.4 5.11.4. Regression and rollback triggers
+#### 5.11.4 5.11.4. Regression and rollback triggers
 
 | Trigger                  | Example                                           | Required response                              |
 |--------------------------|---------------------------------------------------|------------------------------------------------|
@@ -1089,7 +1095,7 @@ Before closing this activity, the team should be able to show:
 | Validation failure spike | More queries blocked or failing after change.     | Review prompt, metadata or validation rule.    |
 | User feedback issue      | Increase in wrong or unclear answer reports.      | Triage and add regression cases.               |
 
-### 5.11.5 5.11.5. Governance cadence
+#### 5.11.5 5.11.5. Governance cadence
 
 | Cadence                  | Purpose                                                            | Participants                                         |
 |--------------------------|--------------------------------------------------------------------|------------------------------------------------------|
@@ -1098,7 +1104,7 @@ Before closing this activity, the team should be able to show:
 | Monthly after launch     | Review performance, incidents, changes and improvement priorities. | Product, data, AI, security and operating owners.    |
 | Ad hoc                   | Review high-risk changes, incidents or security events.            | Relevant decision owners and approvers.              |
 
-### 5.11.6 5.11.6. Minimum evidence before closing Activity 5.11
+#### 5.11.6 5.11.6. Minimum evidence before closing Activity 5.11
 
 Before closing this activity, the team should be able to show:
 
@@ -1115,3 +1121,8 @@ Before closing this activity, the team should be able to show:
 - decision and approval logging route;
 
 - unresolved governance risks and owners.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

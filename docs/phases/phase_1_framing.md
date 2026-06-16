@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 1: Framing
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -38,7 +44,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 The framing phase determines whether Talk-to-Data (T2D) is the right response to a real business need, and whether the initial ambition is realistic within the expected timeline, budget and organisational constraints.
 
@@ -50,9 +56,9 @@ A successful framing phase does not solve every data, semantic, security, operat
 
 By the end of framing, senior stakeholders should be able to say, in plain language, what is being built, for whom, why it matters, what is out of scope, what is assumed, what is risky, whether the timeline and budget are credible, who owns the decision, and what evidence is required before moving forward.
 
-# 2 Phase Overview
+## 2 Phase Overview
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 1 is to decide whether Talk-to-Data should move forward, and if so, how the first delivery scope should be shaped.
 
@@ -64,7 +70,7 @@ Weak framing usually fails later: the prototype looks promising but cannot be tr
 
 **Practitioner note**: Communication matters during framing. If the phase is presented only as risk, governance and control, it may slow momentum or make the initiative feel blocked before it has been properly explored. If those topics are avoided, the project may start on weak assumptions and become harder to correct later. The aim is to create a balanced discussion: enough structure to make the decision responsible, and enough openness to let a valuable idea develop.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 1 should remain deliberately bounded. It should identify what is known, what is assumed, what is risky and what must be validated later. The minimum framing questions are:
 
@@ -90,7 +96,7 @@ Phase 1 should remain deliberately bounded. It should identify what is known, wh
 
 - **Who provisionally owns the business outcome, delivery decisions and operating route**, recognising that ownership may evolve between POC, MVP, pilot and production.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Framing is not a full data readiness assessment, semantic modelling exercise, security review, architecture design, vendor selection process or production plan.
 
@@ -100,7 +106,7 @@ However, framing must expose major blockers. If the business problem is vague, t
 
 A framing phase that stops or redirects a weak T2D initiative has done its job.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 For a focused discovery, POC or early MVP, framing can usually be completed in a few days to one week if the right stakeholders are available.
 
@@ -108,7 +114,7 @@ The effort should match the risk. A narrow internal prototype using non-sensitiv
 
 The phase should not be measured by elapsed time. The real measure is whether the team has enough evidence to make a responsible proceed, narrow, pause, redirect or stop decision.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 The exact participants may vary, but the framing decision should not be made by the AI or technology team alone. The minimum ownership model is:
 
@@ -126,7 +132,7 @@ The exact participants may vary, but the framing decision should not be made by 
 
 The important point is not that every role attends every discussion. It is that the major decisions have named owners. The important point is not that every role attends every meeting.
 
-# 3 Framing decision and delivery implications
+## 3 Framing decision and delivery implications
 
 Framing should not end with a vague recommendation to “continue discovery”. It should end with one of five explicit outcomes: **proceed, narrow, pause, redirect or stop**[^1].
 
@@ -134,7 +140,7 @@ The decision should be based on the evidence gathered during framing and on the 
 
 A proceed decision is not a final commitment to production. It means the initiative is credible enough to enter the next delivery phases with a defined scope, known assumptions and testable risks. Later phases may still expose data, semantic, security, architecture, evaluation or operating issues that require the scope, timeline, budget or delivery approach to be adjusted.
 
-## 3.1 The five possible framing outcomes
+### 3.1 The five possible framing outcomes
 
 Framing should end with one of five explicit delivery decisions that should be used consistently in the framing decision record.
 
@@ -146,7 +152,7 @@ Framing should end with one of five explicit delivery decisions that should be u
 | Redirect | Address the need through another intervention.                      | A dashboard, report, semantic-layer fix or analyst workflow is more appropriate.        |
 | Stop     | Do not proceed with T2D for this use case.                          | The value case is weak, the risk is too high, or the conditions for success are absent. |
 
-## 3.2 Minimum conditions to proceed
+### 3.2 Minimum conditions to proceed
 
 A proceed decision does not mean the initiative is fully de-risked. It means the minimum conditions justify moving to the next delivery phases. Proceed only when
 
@@ -164,7 +170,7 @@ A proceed decision does not mean the initiative is fully de-risked. It means the
 
 - **Ownership exists:** named owners cover value, delivery and key controls.
 
-## 3.3 Common reasons to reassess the initiative
+### 3.3 Common reasons to reassess the initiative
 
 The team should avoid moving directly into build if any of the following conditions apply without a credible mitigation or learning objective:
 
@@ -188,7 +194,7 @@ The team should avoid moving directly into build if any of the following conditi
 
 - **Unrealistic delivery envelope:** the timeline, budget or capacity is materially inconsistent with the ambition.
 
-## 3.4 How framing shapes later phases
+### 3.4 How framing shapes later phases
 
 Framing creates the inputs for several later phases, not only the next one. It should give each phase enough direction to start, while making clear which assumptions still need validation.
 
@@ -201,13 +207,13 @@ Framing creates the inputs for several later phases, not only the next one. It s
 
 <span id="_Framing_activities_overview" class="anchor"></span>The full handover to later phases is consolidated in [Section 7.3](#handover-to-later-phases).
 
-# 4 Framing activities overview
+## 4 Framing activities overview
 
 The framing phase is organised around nine activities. They provide a practical structure for the work, not a rigid delivery sequence. In a focused POC, several activities may be covered in the same workshop. In a higher-risk initiative, they may require separate sessions and deeper evidence.
 
 The activities should be used to build a shared view of the opportunity, the constraints and the decisions still required. Their role is to turn a broad T2D idea into a bounded delivery scope, a set of testable assumptions and a clear set of outputs for the next phases.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 | Activity                               | Main question                                                                         | Indicative duration |
 |----------------------------------------|---------------------------------------------------------------------------------------|---------------------|
@@ -229,7 +235,7 @@ The most useful framing discussions often happen at the boundaries between activ
 
 The activities should not be treated as equal-risk checklist items. In most T2D initiatives, the areas most likely to change the framing decision are business value, semantic ambiguity, exposure risk, evaluation route and operating ownership.
 
-## 4.2 Output need levels
+### 4.2 Output need levels
 
 Each activity should produce outputs at different levels of importance:
 
@@ -243,13 +249,13 @@ This distinction is important. Treating every output as mandatory makes framing 
 
 Detailed question banks, templates and scorecards sit in the annexes; the main guide focuses on the decisions and outputs required to frame the initiative.
 
-# 5 Framing activities
+## 5 Framing activities
 
 This chapter describes the nine activities used to frame a T2D initiative. Each activity should produce enough evidence to support the framing decision, while remaining proportionate to the ambition, risk and delivery stage.
 
 Outputs use the need levels defined in [Chapter 4](#_Framing_activities_overview). Detailed question banks, example templates and extended scorecards are maintained in the [Phase 1 Annex Pack](https://d.docs.live.net/61FBE9373288B976/Desktop/decks/T2D/T2D%20-%20phase%201%20-%20Framing%20-%20Annexes.pdf).
 
-## 5.1 Business framing
+### 5.1 Business framing
 
 Business framing defines why T2D is being considered, where it should start and what value it should create. The goal is to confirm that T2D is being used to improve a real decision or workflow, not to justify a GenAI use case.
 
@@ -290,7 +296,7 @@ The output should be a bounded starting point: first domain, first users, priori
 | Success criteria are vague or purely qualitative. | The team may be unable to prove value or make informed trade-offs.  | Define measurable or observable success criteria linked to decision quality, speed, cost, risk or user value.    |
 | No sponsor owns the value case.                   | Funding, prioritisation and decision ownership may be weak.         | Identify the sponsor or decision owner before proceeding.                                                        |
 
-## 5.2 User and workflow discovery
+### 5.2 User and workflow discovery
 
 User and workflow discovery develops an initial view of who may use the T2D capability, which workflows it may support, how users appear to get answers today, and where the current approach may be breaking down.
 
@@ -330,7 +336,7 @@ The activity should identify the recurring questions and follow-up patterns that
 | Follow-ups and edge cases are unclear                                      | The team may overestimate conversational value or include unsafe scope.               | Capture likely follow-ups and classify edge cases as MVP, clarify/refuse/escalate, or roadmap.        |
 | Trust requirements are unclear.                                            | Users may not rely on answers even when they are technically correct.                 | Capture likely trust needs such as source, caveat, freshness, definition or SQL visibility.           |
 
-## 5.3 Initial data landscape scan
+### 5.3 Initial data landscape scan
 
 The data landscape scan identifies whether plausible sources, reports, marts, APIs or semantic assets exist to support the priority questions. It is not a full data readiness assessment. The aim is to identify candidate sources, known gaps, ownership, freshness, coverage and obvious blockers.
 
@@ -375,7 +381,7 @@ Where owners, lineage, refresh rules or known issues are undocumented, this shou
 | Existing semantic assets may be reusable.                           | Reuse may save effort, but hidden assumptions may be wrong.                                                        | List candidate assets and validate fitness in Phase 2.                                                 |
 | Data access route is uncertain.                                     | A plausible source may still be difficult to query safely.                                                         | Capture access assumptions and align with security and architecture framing.                           |
 
-## 5.4 Initial semantic framing
+### 5.4 Initial semantic framing
 
 Initial semantic framing identifies the metrics, dimensions, filters, joins, grains and business definitions that may be required for the first T2D release.
 
@@ -418,7 +424,7 @@ In practice, the hardest semantic issue is rarely whether a metric has a definit
 | The MVP depends on highly contested metrics.               | The first release may become too risky, slow or politically difficult to approve.      | Consider simpler metrics, a narrower domain or deferring the contested area.                       |
 | Stakeholders treat semantic disagreement as a model issue. | The team may overestimate what the LLM can safely resolve.                             | Make semantic ownership and approval needs explicit.                                               |
 
-## 5.5 Security and governance framing
+### 5.5 Security and governance framing
 
 Security and governance framing identifies early access, privacy, compliance, audit and exposure constraints that may affect the T2D initiative.
 
@@ -462,7 +468,7 @@ For T2D, security risk is not limited to whether a user can access a table or da
 | Model or vendor policy is uncertain.                 | Data or metadata sharing may breach enterprise policy.                                  | Identify approved routes and open policy questions.                               |
 | No clear risk acceptance route exists.               | Decisions may stall or become implicit.                                                 | Identify the likely risk owner or approval forum.                                 |
 
-## 5.6 Solution architecture framing
+### 5.6 Solution architecture framing
 
 Solution architecture framing tests whether there is a plausible technical route for the T2D initiative within enterprise constraints. The purpose is not to design the target architecture. It is to confirm that a plausible controlled route exists for model access, metadata retrieval, query validation, execution, logging and deployment.
 
@@ -504,7 +510,7 @@ Architecture approval is not only a formal process. In many organisations, feasi
 | Deployment route is unclear.                              | The prototype may have no credible route to pilot or production.     | Clarify likely environment, release and approval assumptions.                           |
 | Non-functional expectations are not discussed.            | Latency, cost, reliability or support needs may be underestimated.   | Capture early NFR assumptions and validate them in later phases.                        |
 
-## 5.7 Delivery planning and MVP boundary
+### 5.7 Delivery planning and MVP boundary
 
 MVP delivery planning converts the framed scope into an initial delivery view: what will be built first, what will be excluded, which workstreams are needed, which assumptions must be tested, and whether the ambition is credible within the available timeline, budget and capacity.
 
@@ -545,7 +551,7 @@ The plan should avoid false confidence about production. A POC or early MVP may 
 | Governance gates are unclear.                      | Approval delays may block delivery later.                            | Identify likely approval forums and decision points.                                      |
 | Dependencies sit outside the project team.         | Delivery may depend on teams with different priorities.              | Record dependencies and likely escalation or sequencing assumptions.                      |
 
-## 5.8 Evaluation design framing
+### 5.8 Evaluation design framing
 
 Evaluation design framing defines the initial approach for testing whether T2D answers are correct, useful and safe enough for the intended use case.
 
@@ -588,7 +594,7 @@ Evaluation should eventually cover more than final answer accuracy, including qu
 | Evaluation ownership is unclear.                          | Quality evidence may remain informal.                               | Identify a provisional owner or decision forum.                                             |
 | Regression testing is not considered.                     | Future changes may break previously correct behaviour.              | Capture repeatable testing as a later-phase requirement.                                    |
 
-## 5.9 Operating model framing
+### 5.9 Operating model framing
 
 Operating model framing identifies whether there is a credible route to support, monitor and improve the T2D capability if it moves beyond POC.
 
@@ -644,7 +650,7 @@ If no operating route is visible, the initiative may still proceed as a POC, but
 
 At framing stage, the operating model is a direction-of-travel test. The team does not need the final support model, monitoring process or release governance. It does need an early view of who could inherit the service, what they would need to run it safely, and whether those needs are realistic.
 
-# 6 Framing decision pack
+## 6 Framing decision pack
 
 The output of Phase 1 should be a decision pack, not a large discovery report. It should contain enough evidence for stakeholders to decide whether to proceed, narrow, pause, redirect or stop, and enough context for later phases to validate the remaining assumptions.
 
@@ -670,7 +676,7 @@ Detailed templates and examples are maintained in the Phase 1 Annex Pack.
 | Risk, decision and assumption log | Records material risks, decisions made, open assumptions and validation actions.                     | Mandatory   | All later phases                                 |
 | Longer-term ambition              | Describes the likely direction beyond the first release without over-expanding the MVP.              | Recommended | Roadmap, stakeholder alignment                   |
 
-## 6.1 Decision-pack quality test
+### 6.1 Decision-pack quality test
 
 Each output should be tested against three questions:
 
@@ -683,13 +689,13 @@ Each output should be tested against three questions:
 
 An output that does not support a decision or later delivery activity should either be simplified or moved to the annex pack.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 The framing phase should end with a clear decision, a bounded scope and a practical handover into later phases. It should not end with a general recommendation to continue discovery.
 
 Exit does not mean that all questions have been resolved. It means the team has enough evidence to decide whether to proceed, narrow, pause, redirect or stop, and enough clarity to know what must be validated next.
 
-## 7.1 Readiness check before exit
+### 7.1 Readiness check before exit
 
 Before exiting framing, the team should test the framing outputs against the minimum conditions in [Section 3.2](#minimum-conditions-to-proceed).
 
@@ -709,7 +715,7 @@ This check should support judgement, not replace it. The team should not average
 
 The exit decision should identify any unresolved weakness clearly and state whether it leads to a decision to proceed, narrow, pause, redirect or stop.
 
-## 7.2 Required exit outputs
+### 7.2 Required exit outputs
 
 The required exit outputs are the minimum version of the framing decision pack described in [Section 6](#framing-activities):
 
@@ -728,7 +734,7 @@ The required exit outputs are the minimum version of the framing decision pack d
 | Ownership view                    | Provisional owners for key decisions and later validation.                                    |
 | Risk, decision and assumption log | Material risks, decisions made, open assumptions and follow-up actions.                       |
 
-## 7.3 Handover to later phases
+### 7.3 Handover to later phases
 
 The handover from framing should make clear what later phases are expected to validate, refine or challenge. Although Phase 1 primarily informs the immediate readiness, architecture and prototype work, its outputs should also create a traceable line of sight to pilot, productionisation and adoption.
 
@@ -743,7 +749,7 @@ The handover from framing should make clear what later phases are expected to va
 | Phase 8 — Production readiness                  | Use the ownership view, operating assumptions, governance route, run-cost assumptions and validation evidence to prepare for live operation.                        |
 | Phase 9 — Run, adopt and improve                | Use the priority question set, feedback routes, semantic ownership and evaluation approach to support adoption, monitor trust and improve the capability over time. |
 
-## 7.4 Exit decision wording
+### 7.4 Exit decision wording
 
 The exit decision should apply the outcome model defined in Section 3.1. It should be written plainly and should avoid vague wording such as “continue discovery” or “progress subject to alignment.”
 
@@ -755,11 +761,11 @@ The exit decision should apply the outcome model defined in Section 3.1. It shou
 | Redirect | Redirect the need to a dashboard, reporting, semantic-layer, data-governance or analyst-workflow intervention. |
 | Stop     | Stop this T2D use case because the value, feasibility or risk position is not strong enough.                   |
 
-## 7.5 Practitioner note
+### 7.5 Practitioner note
 
 A good framing exit is not a long pack. It is a clear decision with traceable assumptions. The strongest handover is one where the next team can see exactly what is known, what has been assumed, what remains risky and what would cause the scope, timeline or delivery approach to change.
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 Framing should make the main delivery risks visible early enough to shape scope, ownership and the next validation steps. It does not remove these risks, but it should prevent the team from moving into build with major uncertainty hidden or ignored.
 
@@ -776,8 +782,13 @@ Framing should make the main delivery risks visible early enough to shape scope,
 | **Unrealistic delivery envelope** | Timeline, budget or capacity may not match the ambition.                                                           | Re-scope, adjust the plan or position the work as a learning POC.                                            |
 | **No operating route**            | A promising prototype may have no team to support, monitor or improve it.                                          | Identify likely ownership options and run-cost drivers before progressing too far.                           |
 
-## 8.1 Practitioner note
+### 8.1 Practitioner note
 
 Most weak T2D initiatives do not fail because the first prototype cannot answer anything. They fail because the prototype answers enough to look promising, but not enough to be trusted, governed, evaluated or operated. Framing should therefore focus less on whether a demo can be built and more on whether the organisation has a credible route from demo to controlled capability.
 
 [^1]: The most useful framing decision is often not a simple “go” or “no go”. Many T2D ideas are directionally valuable but initially too broad: too many users, too many domains, too many metrics, too many data sources and too many answer types. In those cases, narrowing the first release is not a lack of ambition. It is the delivery discipline that gives the initiative a realistic chance of becoming trusted, evaluated and operated.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

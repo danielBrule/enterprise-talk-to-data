@@ -37,8 +37,6 @@ flowchart TD
     ANS --> U(["User"])
     SF --> U
     L[("Logging, tracing and feedback")]
-    I -.-> L
-    G -.-> L
     Q -.-> L
     V -.-> L
     X -.-> L
@@ -49,9 +47,9 @@ flowchart TD
 
 ## The reference implementation (in active development)
 
-The blueprint is not only prose. A reference implementation is being built to demonstrate the
-patterns the documents argue for, using OpenAI, Python, SQL, Azure, Terraform and Docker. It will
-be published in this repository. What it sets out to demonstrate:
+The blueprint is not only prose. A reference implementation is being built in [`src/`](src/) to
+demonstrate the patterns the documents argue for, using OpenAI, Python, SQL, Azure, Terraform and
+Docker. What it sets out to demonstrate:
 
 - **Access-aware querying** — results are filtered to the tables, columns and rows each user is
   permitted to see, enforced in the query and execution path, not requested in the prompt.
@@ -123,15 +121,24 @@ annex pack (practical material to adapt, not follow mechanically).
 - **Blueprint (all nine phases + annexes):** published.
 - **Reference implementation:** in active development; will be published in this repository.
 
-## Repository structure
+## Repository
 
 ```text
-docs/
-  master.md            Strategic overview: logic, risks, gates, operating model
-  phases/              The nine phase guides
-  annexes/             Templates, checklists, registers, worked examples
-  pdf/                 Formatted PDF versions of every document
+README.md            This file — the pitch and a map of the repo
+requirements.txt     Python dependencies for the reference implementation
+Makefile             Task runner (env, pdf) — wraps scripts/build.ps1
+scripts/             Build tooling (PDF generation)
+src/                 Reference implementation (in development) — see src/README.md
+docs/                The blueprint — see docs/README.md
+  master.md          Strategic overview: logic, risks, gates, operating model
+  phases/            The nine phase guides
+  annexes/           Templates, checklists, registers, worked examples
+  pdf/               Formatted PDF versions of every document
 ```
+
+- **The blueprint** lives in [`docs/`](docs/) — start with [`docs/README.md`](docs/README.md).
+- **The implementation** lives in [`src/`](src/) — see [`src/README.md`](src/README.md).
+- **Regenerate the PDFs** after editing any Markdown with `make pdf` (see the Makefile).
 
 ## Who wrote this
 
@@ -155,4 +162,4 @@ selection framework. Cost, effort and timeline figures are illustrative planning
 benchmarks. Security, privacy and regulatory requirements should be reviewed by the appropriate
 specialists for each organisation.
 
-
+<!-- TODO: add a LICENSE file and reference it here, e.g. "Licensed under CC BY 4.0." -->

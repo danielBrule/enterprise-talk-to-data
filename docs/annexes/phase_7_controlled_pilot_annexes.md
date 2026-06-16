@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 7 Annexes: Controlled Pilot & User Testing
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 How to use this annex](#1-how-to-use-this-annex)
@@ -96,7 +102,7 @@
 
 ---
 
-# 1 How to use this annex
+## 1 How to use this annex
 
 These annexes provide optional working templates for Phase 7: Controlled pilot and user testing. They are intended as practical starter materials for planning, running, monitoring and assessing a controlled Talk-to-Data pilot.
 
@@ -108,9 +114,9 @@ For a broader business pilot, decision-critical use case or MVP on a production 
 
 The annexes should not turn Phase 7 into a heavy governance exercise. Their role is to make the pilot controlled, observable and decision-useful. Teams should use the templates that help them answer the core Phase 7 question: whether the MVP can be used safely, usefully and supportably by real users, and what must be true before production readiness can be assessed.
 
-# 2 Activity 1: Confirm pilot operating plan, cohort and control boundary
+## 2 Activity 1: Confirm pilot operating plan, cohort and control boundary
 
-## 2.1 Pilot start confirmation checklist
+### 2.1 Pilot start confirmation checklist
 
 | Area                | Confirmation question                                            | Status | Owner | Evidence / note |
 |---------------------|------------------------------------------------------------------|--------|-------|-----------------|
@@ -131,7 +137,7 @@ The annexes should not turn Phase 7 into a heavy governance exercise. Their role
 
 Suggested status values: Ready / Ready with caveat / Gap / Blocked / Not applicable.
 
-## 2.2 Pilot operating plan template
+### 2.2 Pilot operating plan template
 
 | Item                   | Description                                                                     |
 |------------------------|---------------------------------------------------------------------------------|
@@ -157,7 +163,7 @@ Suggested status values: Ready / Ready with caveat / Gap / Blocked / Not applica
 | Pause authority        | Person or forum empowered to pause, narrow or restart pilot usage.              |
 | Final decision owner   | Person or forum deciding Phase 7 outcome.                                       |
 
-## 2.3 Pilot boundary statement template
+### 2.3 Pilot boundary statement template
 
 Purpose: create a short, plain-language statement of what the pilot covers and does not cover.
 
@@ -193,7 +199,7 @@ Example — illustrative:
 | Escalation conditions   | Possible data exposure, materially misleading answer, repeated unsupported use.             |
 | Pause conditions        | Incorrect access enforcement, misleading answer in supported scope, audit trace failure.    |
 
-## 2.4 Pilot governance and decision route
+### 2.4 Pilot governance and decision route
 
 | Decision type           | Decision owner               | Evidence required                                                     | Typical timing         |
 |-------------------------|------------------------------|-----------------------------------------------------------------------|------------------------|
@@ -207,7 +213,7 @@ Example — illustrative:
 | Proceed to Phase 8      | Decision forum               | Pilot learning pack, backlog, risk and supportability evidence        | End of pilot           |
 | Stop pilot              | Sponsor / decision forum     | Value, risk, supportability or feasibility evidence                   | As needed              |
 
-## 2.5 Pilot start meeting agenda
+### 2.5 Pilot start meeting agenda
 
 Purpose: confirm that the pilot can start without reopening earlier phase decisions.
 
@@ -231,7 +237,7 @@ Purpose: confirm that the pilot can start without reopening earlier phase decisi
 
 - Confirm go / no-go to start controlled pilot.
 
-## 2.6 Quick readiness decision record
+### 2.6 Quick readiness decision record
 
 | Item                          | Decision                                  |
 |-------------------------------|-------------------------------------------|
@@ -247,7 +253,7 @@ Example decision wording — illustrative:
 
 The Phase 7 pilot may start for the approved regional sales cohort, limited to sales performance and pipeline questions. Margin, forecasting and salesperson-level questions remain out of scope. Current-month revenue caveats must be visible to users. Any access issue, misleading supported answer or missing trace should trigger immediate review and potential pause of the affected scope.
 
-## 2.7 Common mistakes to avoid
+### 2.7 Common mistakes to avoid
 
 | Mistake                                        | Why it matters                                                                     |
 |------------------------------------------------|------------------------------------------------------------------------------------|
@@ -258,9 +264,9 @@ The Phase 7 pilot may start for the approved regional sales cohort, limited to s
 | Not defining pause authority                   | Everyone sees the issue, but nobody is empowered to stop or narrow exposure.       |
 | Missing unsupported-question handling          | Natural user demand expands scope without approval.                                |
 
-# 3 Activity 2: Prepare user, support and operator guidance
+## 3 Activity 2: Prepare user, support and operator guidance
 
-## 3.1 Documentation readiness checklist
+### 3.1 Documentation readiness checklist
 
 | Documentation area      | Confirmation question                                | Minimum for small pilot            | Higher standard for larger pilot                                | Status | Owner |
 |-------------------------|------------------------------------------------------|------------------------------------|-----------------------------------------------------------------|--------|-------|
@@ -280,7 +286,7 @@ The Phase 7 pilot may start for the approved regional sales cohort, limited to s
 
 Suggested status values: Ready / Ready with caveat / Gap / Blocked / Not applicable.
 
-## 3.2 Pilot user quick-start guide template
+### 3.2 Pilot user quick-start guide template
 
 | Section                   | Content to provide                                                               |
 |---------------------------|----------------------------------------------------------------------------------|
@@ -297,7 +303,7 @@ Suggested status values: Ready / Ready with caveat / Gap / Blocked / Not applica
 | How to escalate           | When and how to report access issues, wrong answers, missing data or incidents.  |
 | Known limitations         | Current limitations users should understand before using the pilot.              |
 
-## 3.3 Example user guidance — illustrative
+### 3.3 Example user guidance — illustrative
 
 What this pilot is for: This pilot helps approved regional sales managers ask questions about sales performance and pipeline conversion using the approved sales data assets.
 
@@ -330,7 +336,7 @@ Usage and cost expectations: Use the pilot for real workflow questions, not high
 
 Feedback: Use the feedback option after useful, wrong, confusing or unsupported answers. Feedback should describe what you expected and whether the answer helped the workflow.
 
-## 3.4 Supported and unsupported question examples
+### 3.4 Supported and unsupported question examples
 
 | Question                                   | Expected system behaviour                                    | User guidance note                               |
 |--------------------------------------------|--------------------------------------------------------------|--------------------------------------------------|
@@ -343,7 +349,7 @@ Feedback: Use the feedback option after useful, wrong, confusing or unsupported 
 | “Export all customer-level data.”          | Refuse if row-level export is not approved.                  | Data exposure risk.                              |
 | “Can I use this in the board pack?”        | Explain pilot limitation and escalation route.               | Pilot output is not production-approved.         |
 
-## 3.5 Support guide template
+### 3.5 Support guide template
 
 | Support area                   | What support should know                                                    | Escalation route                          |
 |--------------------------------|-----------------------------------------------------------------------------|-------------------------------------------|
@@ -358,7 +364,7 @@ Feedback: Use the feedback option after useful, wrong, confusing or unsupported 
 | Possible exposure issue        | User sees data they should not see or system reveals restricted content.    | Security / governance lead immediately.   |
 | Incident or pause trigger      | Issue may require narrowing or pausing pilot usage.                         | Pilot decision owner / pause authority.   |
 
-## 3.6 Operator and technical documentation checklist
+### 3.6 Operator and technical documentation checklist
 
 | Area                          | Documentation required                                                        | Available? | Location / owner | Gap |
 |-------------------------------|-------------------------------------------------------------------------------|------------|------------------|-----|
@@ -375,7 +381,7 @@ Feedback: Use the feedback option after useful, wrong, confusing or unsupported 
 | Retest evidence               | Required evidence after changes before affected usage resumes.                |            |                  |     |
 | Incident record               | Where incidents, decisions, owners and follow-up actions are captured.        |            |                  |     |
 
-## 3.7 Usage and cost guidance template
+### 3.7 Usage and cost guidance template
 
 | Area                     | Guidance to define                                                                            |
 |--------------------------|-----------------------------------------------------------------------------------------------|
@@ -399,7 +405,7 @@ Example — illustrative:
 | Heavy-use review         | Usage patterns are reviewed weekly by the product owner and operating owner.                   |
 | Escalation route         | Report repeated slow responses through the pilot support channel.                              |
 
-## 3.8 Onboarding session agenda
+### 3.8 Onboarding session agenda
 
 - Explain pilot objective and approved boundary.
 
@@ -421,7 +427,7 @@ Example — illustrative:
 
 - Confirm user is ready to start pilot use.
 
-## 3.9 Documentation gap log
+### 3.9 Documentation gap log
 
 | Gap | Affected audience           | Risk | Owner | Decision                                               | Target date |
 |-----|-----------------------------|------|-------|--------------------------------------------------------|-------------|
@@ -435,9 +441,9 @@ Example — illustrative:
 | Support cannot access trace dashboard.            | Support           | Support depends on build team for diagnosis.  | Operating owner | Fix before pilot.      |             |
 | Cost guidance not included in quick-start note.   | Users             | Users may create avoidable broad queries.     | Product owner   | Add before onboarding. |             |
 
-# 4 Activity 3: Test pilot access, onboarding, role changes and offboarding
+## 4 Activity 3: Test pilot access, onboarding, role changes and offboarding
 
-## 4.1 Pilot access lifecycle test plan
+### 4.1 Pilot access lifecycle test plan
 
 | Scenario                      | Purpose                                                       | Test user / role | Expected behaviour                                         | Expected timing | Evidence required                              | Status |
 |-------------------------------|---------------------------------------------------------------|------------------|------------------------------------------------------------|-----------------|------------------------------------------------|--------|
@@ -451,7 +457,7 @@ Example — illustrative:
 
 Suggested status values: Planned / Tested / Passed / Passed with caveat / Failed / Not tested / Not applicable.
 
-## 4.2 Access-change timing record
+### 4.2 Access-change timing record
 
 | Scenario                      | Approval time | Provisioning time | Permission sync time | App / cache refresh time | Total observed time | Expected timing met? | Notes |
 |-------------------------------|---------------|-------------------|----------------------|--------------------------|---------------------|----------------------|-------|
@@ -463,7 +469,7 @@ Suggested status values: Planned / Tested / Passed / Passed with caveat / Failed
 
 Practical note: for a small POC, expected timings may be informal or manually handled. If the pilot is on a path to production, expected and observed timings should be measured and carried into Phase 8 as access-administration evidence.
 
-## 4.3 Access boundary test matrix
+### 4.3 Access boundary test matrix
 
 | User / group             | Approved data scope    | Question asked         | Expected access behaviour        | Actual behaviour | Pass / fail | Evidence |
 |--------------------------|------------------------|------------------------|----------------------------------|------------------|-------------|----------|
@@ -473,7 +479,7 @@ Practical note: for a small POC, expected timings may be informal or manually ha
 | Changed role user        | New approved role only | Prior-scope question   | Old scope unavailable.           |                  |             |          |
 | Restricted data user     | No sensitive data      | Customer-level request | Refuse or block query.           |                  |             |          |
 
-## 4.4 Traceability evidence checklist
+### 4.4 Traceability evidence checklist
 
 Testing access lifecycle requires enough traceability to confirm which boundary was applied at runtime.
 
@@ -492,7 +498,7 @@ Testing access lifecycle requires enough traceability to confirm which boundary 
 
 For sensitive data, broad access to raw logs may not be appropriate. Use restricted log access, redacted traces, pseudonymised user identifiers, query summaries or controlled audit views where needed.
 
-## 4.5 Example access lifecycle test — illustrative
+### 4.5 Example access lifecycle test — illustrative
 
 | Item                        | Example                                                                                                         |
 |-----------------------------|-----------------------------------------------------------------------------------------------------------------|
@@ -505,7 +511,7 @@ For sensitive data, broad access to raw logs may not be appropriate. Use restric
 | Pass condition              | Answer uses South region filter after change and North region is no longer accessible.                          |
 | Failure pattern             | User continues to see North region data after role change, or answer combines both regions without explanation. |
 
-## 4.6 Access exception and workaround log
+### 4.6 Access exception and workaround log
 
 | Issue | Scenario                                            | Impact | Temporary workaround | Risk | Owner | Decision                                    | Phase 8 implication |
 |-------|-----------------------------------------------------|--------|----------------------|------|-------|---------------------------------------------|---------------------|
@@ -518,7 +524,7 @@ Example — illustrative:
 | Role changes require manual app refresh.  | Region change | Access update not visible immediately.                   | Build team refreshes user cache. | Stale permissions during transition. | Technical owner | Accept for pilot with monitoring. | Production needs automated refresh or clear SLA. |
 | Support cannot view redacted query trace. | Access issue  | Support cannot diagnose whether issue is access or data. | Escalate to build team.          | Slow incident handling.              | Operating owner | Fix before broader pilot.         | Support trace view required before production.   |
 
-## 4.7 Minimum evidence by delivery intent
+### 4.7 Minimum evidence by delivery intent
 
 | Delivery intent             | Minimum expectation                                                                                                                                          |
 |-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -527,7 +533,7 @@ Example — illustrative:
 | Production-path MVP         | Joiner, mover, leaver, revocation, role-change and permission-sync behaviour should be tested with timing evidence, traceability and named owners.           |
 | Sensitive / regulated scope | Access testing should include redacted or restricted trace review, audit evidence, stale-permission checks and clear pause conditions.                       |
 
-## 4.8 Common mistakes to avoid
+### 4.8 Common mistakes to avoid
 
 | Mistake                                      | Why it matters                                                                                       |
 |----------------------------------------------|------------------------------------------------------------------------------------------------------|
@@ -539,9 +545,9 @@ Example — illustrative:
 | Not testing offboarding                      | Removed users may retain pilot access longer than expected.                                          |
 | No Phase 8 carry-forward                     | Manual workarounds and timing gaps are forgotten instead of becoming production-readiness items.     |
 
-# 5 Activity 4: Run controlled pilot usage and monitored sessions
+## 5 Activity 4: Run controlled pilot usage and monitored sessions
 
-## 5.1 Pilot usage plan
+### 5.1 Pilot usage plan
 
 | Area                     | Decision / description                                                              |
 |--------------------------|-------------------------------------------------------------------------------------|
@@ -557,7 +563,7 @@ Example — illustrative:
 | Evidence captured        | Questions, traces, feedback, observations, support tickets, errors, caveats.        |
 | Main caveats             | Known limits in user mix, workflow coverage, timing or usage realism.               |
 
-## 5.2 User cohort realism check
+### 5.2 User cohort realism check
 
 | User type                                 | Included? | Why included / excluded | Evidence caveat |
 |-------------------------------------------|-----------|-------------------------|-----------------|
@@ -579,7 +585,7 @@ Example — illustrative:
 | Skeptical users                    | No        | Not available during pilot window.            | Trust and adoption risks may be under-tested.     |
 | Users with different access scopes | Yes       | Regional and central users included.          | Useful for access-boundary testing.               |
 
-## 5.3 Monitored session plan
+### 5.3 Monitored session plan
 
 | Session | User / role | Workflow task | Questions to try                                        | Observation focus | Facilitator | Evidence                          |
 |---------|-------------|---------------|---------------------------------------------------------|-------------------|-------------|-----------------------------------|
@@ -603,7 +609,7 @@ Suggested observation focus:
 
 - Does the session reveal workflow friction, UI friction or support needs?
 
-## 5.4 Real-use observation template
+### 5.4 Real-use observation template
 
 | Field                               | Notes                                                                      |
 |-------------------------------------|----------------------------------------------------------------------------|
@@ -620,7 +626,7 @@ Suggested observation focus:
 | Issue candidate?                    | Product / data / semantic / access / user education / support / process.   |
 | Follow-up action                    |                                                                            |
 
-## 5.5 Outside-scope question log
+### 5.5 Outside-scope question log
 
 | Question | User role | Why outside scope                                           | System behaviour                                        | Correct behaviour? | Backlog implication                                        |
 |----------|-----------|-------------------------------------------------------------|---------------------------------------------------------|--------------------|------------------------------------------------------------|
@@ -634,7 +640,7 @@ Example — illustrative:
 | “Which salesperson performed worst?” | Regional manager | Individual performance excluded. | Clarified then refused.         | Yes                | Reinforce guidance.                |
 | “Forecast revenue next quarter.”     | Sponsor          | Forecasting not validated.       | Gave descriptive trend only.    | Partial            | Review wording and refusal policy. |
 
-## 5.6 Pilot behaviour evidence log
+### 5.6 Pilot behaviour evidence log
 
 | Behaviour observed                            | Example / evidence | Risk                           | Decision                              |
 |-----------------------------------------------|--------------------|--------------------------------|---------------------------------------|
@@ -647,7 +653,7 @@ Example — illustrative:
 | User abandons due to latency                  |                    | Adoption and operational risk  | Monitor / optimise / constrain        |
 | User creates high-cost broad queries          |                    | Cost and performance risk      | Add usage guidance / limit / monitor  |
 
-## 5.7 Facilitator guidance for monitored sessions
+### 5.7 Facilitator guidance for monitored sessions
 
 | Do                                                           | Avoid                                                         |
 |--------------------------------------------------------------|---------------------------------------------------------------|
@@ -658,7 +664,7 @@ Example — illustrative:
 | Link observations to traces, feedback or support tickets.    | Relying only on meeting notes.                                |
 | Record when the user cohort is unusually expert or friendly. | Presenting champion-user evidence as representative adoption. |
 
-## 5.8 Evidence caveat statement template
+### 5.8 Evidence caveat statement template
 
 Use this when the pilot user group is not fully representative.
 
@@ -666,7 +672,7 @@ Pilot findings should be interpreted with caution because the user cohort was we
 
 **Example — illustrative:** Pilot findings should be interpreted with caution because the user cohort was weighted towards motivated sales operations users and the commercial sponsor. This provides useful evidence on high-intent usage and workflow value, but may under-test normal sales-manager behaviour, onboarding friction and wider support load. These limitations should be considered before broader rollout.
 
-## 5.9 Session summary template
+### 5.9 Session summary template
 
 | Item                      | Summary                   |
 |---------------------------|---------------------------|
@@ -683,7 +689,7 @@ Pilot findings should be interpreted with caution because the user cohort was we
 | Support issues raised     |                           |
 | Follow-up actions         |                           |
 
-## 5.10 Common mistakes to avoid
+### 5.10 Common mistakes to avoid
 
 | Mistake                                           | Why it matters                                                                      |
 |---------------------------------------------------|-------------------------------------------------------------------------------------|
@@ -695,9 +701,9 @@ Pilot findings should be interpreted with caution because the user cohort was we
 | Ignoring workflow context                         | A technically correct answer may still not help the real task.                      |
 | Presenting narrow-user evidence as representative | Phase 8 may underestimate onboarding, support and adoption risk.                    |
 
-# 6 Activity 5: Capture feedback and monitor pilot signals
+## 6 Activity 5: Capture feedback and monitor pilot signals
 
-## 6.1 Feedback and monitoring routes
+### 6.1 Feedback and monitoring routes
 
 | Route                     | Best use                                                     | Watch-outs                                                           |
 |---------------------------|--------------------------------------------------------------|----------------------------------------------------------------------|
@@ -709,7 +715,7 @@ Pilot findings should be interpreted with caution because the user cohort was we
 | Monitoring dashboard      | Usage, errors, refusals, cost, latency and support signals.  | Only useful if reviewed and linked to decisions.                     |
 | Review meeting            | Pattern review across users, questions, feedback and issues. | Can become anecdotal if not trace-linked.                            |
 
-## 6.2 Feedback-to-trace and monitoring register
+### 6.2 Feedback-to-trace and monitoring register
 
 | Field                           | Description                                                                                                   |
 |---------------------------------|---------------------------------------------------------------------------------------------------------------|
@@ -749,7 +755,7 @@ Suggested issue categories:
 
 - Governance, risk or escalation issue.
 
-## 6.3 Pilot monitoring dashboard structure
+### 6.3 Pilot monitoring dashboard structure
 
 | Area            | Signal to monitor                                         | Why it matters                               | Typical owner               |
 |-----------------|-----------------------------------------------------------|----------------------------------------------|-----------------------------|
@@ -766,7 +772,7 @@ Suggested issue categories:
 | Latency         | End-to-end response time and step-level delay.            | Tests usability and scale assumptions.       | Technical owner.            |
 | Risk events     | Misleading answer, exposure concern, repeated misuse.     | Triggers triage, constraint or pause.        | Risk / decision owner.      |
 
-## 6.4 Feedback quality checklist
+### 6.4 Feedback quality checklist
 
 | Question                                                       | Why it matters                                                                 | Status |
 |----------------------------------------------------------------|--------------------------------------------------------------------------------|--------|
@@ -779,7 +785,7 @@ Suggested issue categories:
 | Is the signal linked to monitoring, support or trace evidence? | Prevents feedback and monitoring from becoming separate evidence streams.      |        |
 | Is there a decision route?                                     | Ensures feedback becomes triage input, not a comment archive.                  |        |
 
-## 6.5 Structured feedback form template
+### 6.5 Structured feedback form template
 
 | Field               | Prompt                                                                          |
 |---------------------|---------------------------------------------------------------------------------|
@@ -794,7 +800,7 @@ Suggested issue categories:
 | Action taken        | Used answer / verified / escalated / ignored / asked follow-up.                 |
 | Additional comments | Free text.                                                                      |
 
-## 6.6 Usage-pattern and distinctive-user follow-up list
+### 6.6 Usage-pattern and distinctive-user follow-up list
 
 | Signal                         | Possible interpretation                                                          | Follow-up question                                                 |
 |--------------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------|
@@ -807,7 +813,7 @@ Suggested issue categories:
 | Long or expensive sessions     | Broad queries, unclear user intent or cost-risk pattern.                         | Were you exploring broadly or trying to answer a specific task?    |
 | Frequent follow-ups            | Useful exploration or initial answers not clear enough.                          | Did follow-ups help, or were you compensating for unclear answers? |
 
-## 6.7 Trust and responsible-use indicators
+### 6.7 Trust and responsible-use indicators
 
 | Indicator        | Positive signal                                      | Risk signal                                                    |
 |------------------|------------------------------------------------------|----------------------------------------------------------------|
@@ -819,7 +825,7 @@ Suggested issue categories:
 | Decision use     | Users use answers for approved pilot workflows.      | Users use pilot outputs for unapproved reporting or decisions. |
 | Confidence       | Users trust useful answers with appropriate caution. | Users either over-trust or avoid the tool entirely.            |
 
-## 6.8 Error, refusal and clarification log
+### 6.8 Error, refusal and clarification log
 
 | Interaction ID | User role | Question type                       | Event                                                    | Expected behaviour? | Severity                       | Owner | Decision                                    |
 |----------------|-----------|-------------------------------------|----------------------------------------------------------|---------------------|--------------------------------|-------|---------------------------------------------|
@@ -833,7 +839,7 @@ Example — illustrative:
 | T-1087         | Sales analyst    | Revenue by region | Empty result   | No                  | Medium   | Data owner       | Investigate data filter. |
 | T-1121         | Sponsor          | Forecasting       | Partial answer | No                  | High     | Evaluation owner | Review refusal rule.     |
 
-## 6.9 Cost and latency review template
+### 6.9 Cost and latency review template
 
 | Metric                              | Expected range | Observed value | Issue?   | Likely cause                                      | Action |
 |-------------------------------------|----------------|----------------|----------|---------------------------------------------------|--------|
@@ -845,7 +851,7 @@ Example — illustrative:
 | Timeout rate                        |                |                | Yes / no | Query complexity / infrastructure / model latency |        |
 | Cost per active user                |                |                | Yes / no | Usage pattern / model choice / query cost         |        |
 
-## 6.10 High-cost or high-latency interaction review
+### 6.10 High-cost or high-latency interaction review
 
 | Interaction | User role | Question | Cost / latency issue                                      | Likely driver                                                   | Decision                                       |
 |-------------|-----------|----------|-----------------------------------------------------------|-----------------------------------------------------------------|------------------------------------------------|
@@ -858,7 +864,7 @@ Example — illustrative:
 | T-1204      | Sales manager | “Show all customers by product for the last three years.” | Slow and expensive query | Broad result and long time window | Add guidance and result-size limit. |
 | T-1218      | Sales analyst | “Compare every region, segment and month.”                | High query cost          | Multi-dimensional broad query     | Review query guardrail.             |
 
-## 6.11 Positive-value evidence template
+### 6.11 Positive-value evidence template
 
 Positive feedback should be linked to real workflow value, not only satisfaction.
 
@@ -872,7 +878,7 @@ Example — illustrative:
 |------------------------|-----------------------|---------------------------------------------|------------------------------------------------------------------------------|------------------------------------------------------|----------------------------------------------------------------------|
 | Regional sales manager | Weekly trading review | Revenue and pipeline conversion by segment. | Reduced preparation time and enabled follow-up questions during review prep. | Trace IDs, user feedback and monitored session note. | User is a motivated pilot champion; broader adoption not yet proven. |
 
-## 6.12 Feedback and monitoring diagnosis guide
+### 6.12 Feedback and monitoring diagnosis guide
 
 | User says / signal shows…      | Do not assume…                | Check…                                                                                         |
 |--------------------------------|-------------------------------|------------------------------------------------------------------------------------------------|
@@ -885,7 +891,7 @@ Example — illustrative:
 | High usage                     | The system is ready to scale. | Value, misuse, cost, latency, support burden and unsupported demand.                           |
 | Repeated unsupported questions | The product is failing.       | Boundary handling, user guidance and future-scope demand.                                      |
 
-## 6.13 Feedback and monitoring review cadence
+### 6.13 Feedback and monitoring review cadence
 
 | Cadence                                | Review focus                                                                                         | Participants                                                       |
 |----------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
@@ -894,7 +900,7 @@ Example — illustrative:
 | After hot fix                          | Did the fix work and avoid regression?                                                               | Product, technical owner, support, affected risk owner.            |
 | End-of-pilot                           | Value, trust, workflow fit, supportability, risk, Phase 8 backlog and decision recommendation.       | Decision forum and accountable owners.                             |
 
-## 6.14 Pilot signal summary template
+### 6.14 Pilot signal summary template
 
 | Area                 | Summary                                                                     |
 |----------------------|-----------------------------------------------------------------------------|
@@ -912,7 +918,7 @@ Example — illustrative:
 | Backlog implications | Fix now, constrain, Phase 8, later enhancement, no action.                  |
 | Decision implication | Continue, fix, constrain, pause, extend or Phase 8 backlog.                 |
 
-## 6.15 Common mistakes to avoid
+### 6.15 Common mistakes to avoid
 
 | Mistake                                                | Why it matters                                                        |
 |--------------------------------------------------------|-----------------------------------------------------------------------|
@@ -928,9 +934,9 @@ Example — illustrative:
 | Dashboards without review cadence                      | Monitoring only matters if it drives decisions.                       |
 | Letting feedback bypass triage                         | Issues become anecdotes instead of controlled pilot evidence.         |
 
-# 7 Activity 6: Review answer quality, caveat understanding and user interpretation
+## 7 Activity 6: Review answer quality, caveat understanding and user interpretation
 
-## 7.1 Real-interaction answer-quality review template
+### 7.1 Real-interaction answer-quality review template
 
 | Interaction ID | User role | Question type                       | Supported?         | Answer quality                      | Caveat handling                  | User interpretation                  | Decision                                               |
 |----------------|-----------|-------------------------------------|--------------------|-------------------------------------|----------------------------------|--------------------------------------|--------------------------------------------------------|
@@ -954,7 +960,7 @@ Suggested review dimensions:
 
 - User understood the answer in the intended way.
 
-## 7.2 Answer-quality scoring guide
+### 7.2 Answer-quality scoring guide
 
 | Score            | Meaning                                                                     | Typical action                                 |
 |------------------|-----------------------------------------------------------------------------|------------------------------------------------|
@@ -964,7 +970,7 @@ Suggested review dimensions:
 | Fail             | Answer is wrong, misleading, unsafe or misunderstood in a material way.     | Triage, constrain or pause affected scope.     |
 | Unknown          | Trace is insufficient or user interpretation is unclear.                    | Follow up through interview or support review. |
 
-## 7.3 Caveat and limitation review
+### 7.3 Caveat and limitation review
 
 | Caveat area | Review question                                              | Finding | Action |
 |-------------|--------------------------------------------------------------|---------|--------|
@@ -983,7 +989,7 @@ Example — illustrative:
 | Specificity | Did it explain the limitation? | “Data may be incomplete” was too generic.             | State that current-month revenue is provisional. |
 | User action | Did the user act on it?        | User used provisional value as final.                 | Improve wording and onboarding example.          |
 
-## 7.4 Misunderstood-answer log
+### 7.4 Misunderstood-answer log
 
 | Interaction ID | Answer was technically correct? | What user appeared to understand | Intended meaning | Risk                | Follow-up needed? | Decision                                                          |
 |----------------|---------------------------------|----------------------------------|------------------|---------------------|-------------------|-------------------------------------------------------------------|
@@ -996,7 +1002,7 @@ Example — illustrative:
 | T-2041         | Yes                             | User treated month-to-date revenue as final month revenue. | Current month is provisional and incomplete. | High   | Yes               | Change answer label and caveat placement.   |
 | T-2098         | Yes                             | User read a variance as causal explanation.                | System only showed descriptive change.       | Medium | Yes               | Add wording: “This does not explain cause.” |
 
-## 7.5 Follow-up interview trigger list
+### 7.5 Follow-up interview trigger list
 
 Some interactions cannot be judged from traces alone. Use this list to identify cases requiring a short interview.
 
@@ -1010,7 +1016,7 @@ Some interactions cannot be judged from traces alone. Use this list to identify 
 | User repeatedly asked unsupported questions         | Need to separate guidance gap from unmet demand.                                 | Did you know this was outside scope?                          |
 | User did not give feedback despite heavy use        | Need to surface silent issues or overconfidence.                                 | Did anything feel unclear, risky or particularly useful?      |
 
-## 7.6 User interpretation interview guide
+### 7.6 User interpretation interview guide
 
 | Area           | Questions                                                         |
 |----------------|-------------------------------------------------------------------|
@@ -1025,7 +1031,7 @@ Some interactions cannot be judged from traces alone. Use this list to identify 
 | Boundary       | Did you understand whether the question was in scope?             |
 | Improvement    | What would make the answer safer or more useful?                  |
 
-## 7.7 Refusal and clarification understanding review
+### 7.7 Refusal and clarification understanding review
 
 | Interaction ID | Behaviour                          | Expected?          | User understood why? | Issue                                                                          | Action                            |
 |----------------|------------------------------------|--------------------|----------------------|--------------------------------------------------------------------------------|-----------------------------------|
@@ -1038,7 +1044,7 @@ Example — illustrative:
 | T-2120         | Refusal       | Yes       | No                   | User thought system was broken, not out of scope. | Improve refusal wording and quick-start guide. |
 | T-2152         | Clarification | Yes       | Yes                  | User selected region and continued.               | Positive evidence.                             |
 
-## 7.8 Answer-format improvement log
+### 7.8 Answer-format improvement log
 
 | Issue                            | Example | Risk                                    | Proposed improvement                                | Owner | Retest needed? |
 |----------------------------------|---------|-----------------------------------------|-----------------------------------------------------|-------|----------------|
@@ -1048,7 +1054,7 @@ Example — illustrative:
 | Refusal too generic              |         | User does not know what to ask instead. | Add boundary and alternative suggestion.            |       | Yes / No       |
 | Confidence wording misleading    |         | User over-trusts answer.                | Use plain-language confidence / evidence statement. |       | Yes / No       |
 
-## 7.9 Real-interaction review summary
+### 7.9 Real-interaction review summary
 
 | Area                          | Summary                                                         |
 |-------------------------------|-----------------------------------------------------------------|
@@ -1062,7 +1068,7 @@ Example — illustrative:
 | Main fixes                    | Wording, UI, caveat, guidance, data, semantic or model changes. |
 | Pilot decision implication    | Continue / fix / constrain / pause / Phase 8 backlog.           |
 
-## 7.10 Common mistakes to avoid
+### 7.10 Common mistakes to avoid
 
 | Mistake                                                    | Why it matters                                                                           |
 |------------------------------------------------------------|------------------------------------------------------------------------------------------|
@@ -1074,9 +1080,9 @@ Example — illustrative:
 | Reviewing only bad answers                                 | Positive interactions show what wording and patterns should be reused.                   |
 | Not linking interpretation issues to traces                | The team cannot determine whether the problem is user, product, data or model behaviour. |
 
-# 8 Activity 7: Triage issues, manage backlog and controlled change
+## 8 Activity 7: Triage issues, manage backlog and controlled change
 
-## 8.1 Pilot issue triage and backlog log
+### 8.1 Pilot issue triage and backlog log
 
 | Issue ID | Source                                                                | Description | User / cohort | Question type                       | Evidence link                 | Issue category                                                                                 | Severity                       | Decision                                                                 | Owner | Target phase            | Status |
 |----------|-----------------------------------------------------------------------|-------------|---------------|-------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------|--------------------------------|--------------------------------------------------------------------------|-------|-------------------------|--------|
@@ -1104,7 +1110,7 @@ Suggested issue categories:
 
 - Governance, risk or escalation issue.
 
-## 8.2 Severity and urgency guide
+### 8.2 Severity and urgency guide
 
 Severity should reflect both technical impact and business context.
 
@@ -1127,7 +1133,7 @@ Urgency modifiers:
 | Public / visible pilot moment  | Trust impact may exceed technical severity.                          |
 | Easy safe fix available        | Quick fix may be justified if tested and controlled.                 |
 
-## 8.3 Decision route matrix
+### 8.3 Decision route matrix
 
 | Decision             | Use when                                                                              | Evidence required                                    | Typical owner                 |
 |----------------------|---------------------------------------------------------------------------------------|------------------------------------------------------|-------------------------------|
@@ -1140,7 +1146,7 @@ Urgency modifiers:
 | Redesign             | Issue reveals structural workflow, data, semantic, orchestration or support weakness. | Root-cause evidence and impact assessment.           | Decision forum.               |
 | Stop                 | Value, risk or operating model is not credible enough to continue.                    | Pilot evidence pack and sponsor decision.            | Sponsor / decision forum.     |
 
-## 8.4 Root-cause classification guide
+### 8.4 Root-cause classification guide
 
 | Symptom                         | Possible root causes to test                                                                   |
 |---------------------------------|------------------------------------------------------------------------------------------------|
@@ -1154,7 +1160,7 @@ Urgency modifiers:
 | Positive feedback but risky use | Over-trust, wrong decision context, sponsor bias, unclear pilot limitation.                    |
 | Repeated hot fixes              | Structural product, data, semantic, access or workflow issue being patched rather than solved. |
 
-## 8.5 Continue / constrain / pause / restart decision record
+### 8.5 Continue / constrain / pause / restart decision record
 
 | Field                   | Decision                                                         |
 |-------------------------|------------------------------------------------------------------|
@@ -1187,7 +1193,7 @@ Example — illustrative:
 | Owner                   | Product owner                                                                                     |
 | Review date             |                                                                                                   |
 
-## 8.6 Hot-fix and change classification guide
+### 8.6 Hot-fix and change classification guide
 
 | Item type                     | Definition                                                                | Typical route                                    |
 |-------------------------------|---------------------------------------------------------------------------|--------------------------------------------------|
@@ -1207,7 +1213,7 @@ Example — illustrative:
 | Later enhancement             | Useful but not required for pilot or production readiness.                | Add to future roadmap.                           |
 | Stop / redesign signal        | Issue challenges value, architecture, workflow fit or operating model.    | Escalate to decision forum.                      |
 
-## 8.7 Hot-fix decision checklist
+### 8.7 Hot-fix decision checklist
 
 | Question                                                                                                | Yes / no | Notes |
 |---------------------------------------------------------------------------------------------------------|----------|-------|
@@ -1223,7 +1229,7 @@ Example — illustrative:
 
 Recommended decision values: Release / Release with caveat / Defer / Constrain / Pause / Escalate.
 
-## 8.8 Controlled change / release record
+### 8.8 Controlled change / release record
 
 | Field                            | Description                                                                             |
 |----------------------------------|-----------------------------------------------------------------------------------------|
@@ -1258,7 +1264,7 @@ Example — illustrative:
 | Release owner                   | Product owner.                                                                            |
 | Post-release review date        | Next pilot review meeting.                                                                |
 
-## 8.9 Regression check template
+### 8.9 Regression check template
 
 | Regression area       | Check                                                             | Required for                                    |
 |-----------------------|-------------------------------------------------------------------|-------------------------------------------------|
@@ -1271,7 +1277,7 @@ Example — illustrative:
 | Traceability          | Logs still capture question, context, query, answer and feedback. | UI, orchestration, logging or release changes.  |
 | User experience       | Change does not confuse users or contradict guidance.             | UI, wording, caveat or answer-format changes.   |
 
-## 8.10 User and support change note template
+### 8.10 User and support change note template
 
 Use this when a change affects user-visible behaviour.
 
@@ -1290,13 +1296,13 @@ Example — illustrative:
 
 We have updated how current-month revenue answers are displayed. Current-month values are now labelled as provisional month-to-date figures and the caveat appears next to the number. This change was made because some users interpreted current-month values as final monthly results. Please continue to verify provisional figures before using them in reporting-cycle decisions.
 
-## 8.11 Pilot change log
+### 8.11 Pilot change log
 
 | Change ID | Date | Change summary | Change type                                        | Owner | Tests completed | Users informed? | Status                                    |
 |-----------|------|----------------|----------------------------------------------------|-------|-----------------|-----------------|-------------------------------------------|
 |           |      |                | Hot fix / quick win / constraint / material change |       |                 | Yes / no / N/A  | Draft / released / rolled back / deferred |
 
-## 8.12 Phase 8 carry-forward and backlog separation
+### 8.12 Phase 8 carry-forward and backlog separation
 
 | Backlog item | Source evidence                                            | Why not fully resolved in Phase 7                                    | Production-readiness implication | Owner | Priority            | Required before go-live? |
 |--------------|------------------------------------------------------------|----------------------------------------------------------------------|----------------------------------|-------|---------------------|--------------------------|
@@ -1310,7 +1316,7 @@ Example — illustrative:
 | Support trace view is limited                | Build team can support small pilot.   | Broader release requires redacted trace dashboard for support. | Technical owner | High     |
 | Margin demand frequent but unsupported       | Metric not approved.                  | Future scope requires semantic definition and validation.      | Semantic owner  | Medium   |
 
-## 8.13 Triage and change review agenda
+### 8.13 Triage and change review agenda
 
 - Review new high-severity issues and pause triggers.
 
@@ -1332,7 +1338,7 @@ Example — illustrative:
 
 - Update pilot backlog and Phase 8 implications.
 
-## 8.14 Example triage and change cases — illustrative
+### 8.14 Example triage and change cases — illustrative
 
 | Case                                                               | Classification                    | Decision                                   | Rationale                                                                    |
 |--------------------------------------------------------------------|-----------------------------------|--------------------------------------------|------------------------------------------------------------------------------|
@@ -1344,7 +1350,7 @@ Example — illustrative:
 | Low usage from target users.                                       | Adoption / workflow fit           | Extend and interview users                 | Insufficient evidence; may be timing, onboarding or value issue.             |
 | Hot fix changes refusal wording.                                   | Controlled change                 | Release with regression test and user note | Behaviour change affects user understanding and support guidance.            |
 
-## 8.15 Common mistakes to avoid
+### 8.15 Common mistakes to avoid
 
 | Mistake                                                       | Why it matters                                                                                 |
 |---------------------------------------------------------------|------------------------------------------------------------------------------------------------|
@@ -1362,9 +1368,9 @@ Example — illustrative:
 | No version history                                            | The team cannot explain which behaviour users saw at which point in the pilot.                 |
 | No rollback route                                             | A failed fix can make the pilot less safe than before.                                         |
 
-# 9 Activity 8: Assess adoption, workflow fit, supportability and Phase 8 implications
+## 9 Activity 8: Assess adoption, workflow fit, supportability and Phase 8 implications
 
-## 9.1 Pilot decision summary template
+### 9.1 Pilot decision summary template
 
 | Area                      | Summary                                                                                    |
 |---------------------------|--------------------------------------------------------------------------------------------|
@@ -1381,7 +1387,7 @@ Example — illustrative:
 | Decision owner            |                                                                                            |
 | Review date               |                                                                                            |
 
-## 9.2 Adoption evidence review
+### 9.2 Adoption evidence review
 
 | Signal                    | Evidence | Interpretation                                         | Caveat |
 |---------------------------|----------|--------------------------------------------------------|--------|
@@ -1401,7 +1407,7 @@ Example — illustrative:
 | Sustained use by regional managers | 8 of 12 target users used the tool weekly for trading review prep. | Strong workflow-fit signal.       | Pilot users were motivated and supported closely.                                 |
 | Requests for margin questions      | 15 unsupported requests across 6 users.                            | Clear demand for scope expansion. | Margin metric not approved; not evidence that production scope should expand now. |
 
-## 9.3 Workflow-fit assessment
+### 9.3 Workflow-fit assessment
 
 | Workflow | User group | Current pain point                                                                        | Pilot evidence | Fit assessment                    | Decision implication              |
 |----------|------------|-------------------------------------------------------------------------------------------|----------------|-----------------------------------|-----------------------------------|
@@ -1421,7 +1427,7 @@ Suggested fit indicators:
 
 - Users ask for workflow integration, not just broader novelty access.
 
-## 9.4 Value evidence template
+### 9.4 Value evidence template
 
 | Value area       | Evidence to capture                                                | Example                                         |
 |------------------|--------------------------------------------------------------------|-------------------------------------------------|
@@ -1432,7 +1438,7 @@ Suggested fit indicators:
 | Analyst leverage | Reduced dependency on repetitive analyst requests.                 | Analyst focuses on exceptions, not simple cuts. |
 | Decision support | Better preparation, faster review or clearer issue identification. | Manager identifies declining segment earlier.   |
 
-## 9.5 Supportability assessment
+### 9.5 Supportability assessment
 
 | Area                  | Evidence                                                      | Assessment                        | Phase 8 implication |
 |-----------------------|---------------------------------------------------------------|-----------------------------------|---------------------|
@@ -1445,7 +1451,7 @@ Suggested fit indicators:
 | Documentation quality | Could users and support self-serve common questions?          |                                   |                     |
 | Incident handling     | Were incidents triaged, owned and resolved?                   |                                   |                     |
 
-## 9.6 Phase 8 production-readiness backlog
+### 9.6 Phase 8 production-readiness backlog
 
 | Backlog item | Source evidence                                            | Why it matters for production | Owner | Priority            | Required before go-live? |
 |--------------|------------------------------------------------------------|-------------------------------|-------|---------------------|--------------------------|
@@ -1477,7 +1483,7 @@ Suggested backlog categories:
 
 - Governance and release decisioning.
 
-## 9.7 Decision recommendation guide
+### 9.7 Decision recommendation guide
 
 | Recommendation           | Use when                                                                                      |
 |--------------------------|-----------------------------------------------------------------------------------------------|
@@ -1489,7 +1495,7 @@ Suggested backlog categories:
 | Redesign                 | Workflow, data, semantic, orchestration, access or support assumptions are structurally weak. |
 | Stop                     | The value case, risk profile or operating model is not credible enough to continue.           |
 
-## 9.8 Decision wording examples — illustrative
+### 9.8 Decision wording examples — illustrative
 
 Proceed to Phase 8
 
@@ -1511,7 +1517,7 @@ Stop
 
 The pilot should stop for this use case. Usage remained low after onboarding and follow-up, users did not connect the MVP to a recurring workflow, and the support and semantic effort required is not justified by the observed value. A dashboard or analyst workflow improvement should be reconsidered.
 
-## 9.9 Pilot caveat statement template
+### 9.9 Pilot caveat statement template
 
 Use this where the evidence is useful but not fully representative.
 
@@ -1521,7 +1527,7 @@ Example — illustrative:
 
 Pilot findings should be interpreted with caution because usage was concentrated among motivated sales operations users and the commercial sponsor. The pilot provides useful evidence on workflow value and high-intent usage, but under-tests normal sales-manager onboarding, low-trust users and broader support load. These caveats should be reflected in the Phase 8 scope and decision.
 
-## 9.10 Common mistakes to avoid
+### 9.10 Common mistakes to avoid
 
 | Mistake                                           | Why it matters                                                                              |
 |---------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -1533,3 +1539,8 @@ Pilot findings should be interpreted with caution because usage was concentrated
 | Expanding scope because users ask for more        | Demand is useful evidence, but new scope still needs semantic, access and validation work.  |
 | Forgetting evidence caveats                       | Phase 8 may overestimate readiness if pilot cohort, timing or workflow coverage was narrow. |
 | Ending with a feature backlog only                | The pilot should produce a production-readiness decision, not just product requests.        |
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

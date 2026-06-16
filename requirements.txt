@@ -1,0 +1,16 @@
+# Python dependencies for the Talk-to-Data reference implementation (src/).
+#
+# NOTE: the PDF build (scripts/) needs NO Python packages — its dependencies are
+# system tools (pandoc, wkhtmltopdf, mermaid-cli), installed/checked via `make env`.
+#
+# Starter set for the Azure / OpenAI / SQL prototype — adjust to the real code.
+openai>=1.30
+azure-identity>=1.16
+pyodbc>=5.1            # Azure SQL Database (requires the system ODBC driver)
+SQLAlchemy>=2.0
+python-dotenv>=1.0
+pandas>=2.2
+
+# Dev tooling
+pytest>=8.0
+ruff>=0.5

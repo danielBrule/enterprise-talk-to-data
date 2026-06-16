@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 3: Governed Data Foundation
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -37,7 +43,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 3 turns the answerable questions from Phase 2 into governed data foundations that a Talk-to-Data system can safely query.
 
@@ -55,7 +61,7 @@ Phase 3 should also prepare the foundation artefacts for downstream orchestratio
 
 The main output is a **governed foundation pack**: approved queryable assets, metric and dimension implementations, join and filter rules, security controls, quality checks, metadata, ownership records, known limitations and expected foundation run-cost implications. For a POC, this supports safe learning and helps size the effort required for MVP, pilot or production. For MVP, pilot or production, it provides the controlled foundation required for reliable conversational analytics.
 
-# 2 Phase overview
+## 2 Phase overview
 
 Phase 3 builds the governed data foundation for the scoped Talk-to-Data use case. It turns Phase 2 answerability decisions into controlled, queryable assets that the T2D can safely use.
 
@@ -65,7 +71,7 @@ The key discipline is to avoid building the assistant directly on raw or loosely
 
 For a POC, this foundation may be narrow and partly temporary. For an MVP, pilot or production path, it must be stronger, repeatable and owned.
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 3 is to implement the controlled data foundation required for the agreed T2D scope. It should confirm and implement:
 
@@ -81,7 +87,7 @@ The objective of Phase 3 is to implement the controlled data foundation required
 
 The output is a **governed foundation pack** that can be used by architecture, orchestration, prototype / MVP build, evaluation and security validation.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 3 should remain bounded to the use case, users, questions and delivery maturity agreed in earlier phases. It implements the governed queryable foundation for the current scope; it should not become a broader data-platform transformation.
 
@@ -91,7 +97,7 @@ The test for inclusion is simple: if an item is required for the system to query
 
 Phase 3 should not hide unresolved ambiguity inside a prompt, view or model. If a metric, join, filter or source remains materially contested, the team should narrow, remediate, defer or exclude it.
 
-## 2.3 Expected duration and level of effort
+### 2.3 Expected duration and level of effort
 
 For a narrow POC, Phase 3 may be completed quickly if the required sources and logic already exist. The work may involve a small number of curated assets, clear caveats and lightweight controls to assess feasibility and estimate the effort required for MVP, pilot or production.
 
@@ -99,7 +105,7 @@ For an MVP or pilot, the work is usually more substantial. The foundation needs 
 
 The phase should not be judged by the number of assets created. A small, well-controlled foundation with clear change control and predictable run cost is more valuable than a broad foundation that leaves the assistant to improvise definitions, joins, access behaviour or expensive queries.
 
-## 2.4 Main participants and decision owners
+### 2.4 Main participants and decision owners
 
 Phase 3 requires close collaboration between data, business, semantic, security and architecture roles. It should not be treated as a purely engineering activity.
 
@@ -116,13 +122,13 @@ Phase 3 requires close collaboration between data, business, semantic, security 
 | Evaluation owner                    | Ensures the assets support golden questions and regression testing.                                                                                    |
 | Operating owner                     | Confirms how assets, rules, incidents and change requests will be maintained as usage grows.                                                           |
 
-# 3 Foundation decision and delivery implications
+## 3 Foundation decision and delivery implications
 
 Phase 3 should end with a clear decision on whether the governed foundation is fit for the intended next step. The decision should be based on what has been implemented, tested, controlled and owned, not only on what was assumed during framing or readiness assessment.
 
 A proceed decision does not mean the full T2D product is ready to launch. It means the foundation is controlled enough for the next stage: POC learning, MVP build, pilot validation or production hardening.
 
-## 3.1 Possible Phase 3 outcomes
+### 3.1 Possible Phase 3 outcomes
 
 | Outcome   | Meaning                                                                               | Typical trigger                                                                                                                   |
 |-----------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
@@ -132,7 +138,7 @@ A proceed decision does not mean the full T2D product is ready to launch. It mea
 | Defer     | Move some assets, questions, metrics or domains to a later release.                   | The item may be valuable, but it is not required or not ready for the current POC, MVP or pilot.                                  |
 | Stop      | Do not continue this use case as a T2D delivery candidate.                            | The foundation cannot support trusted answers within viable cost, effort, risk or ownership constraints.                          |
 
-## 3.2 Minimum conditions to proceed
+### 3.2 Minimum conditions to proceed
 
 The team should proceed only when it can answer yes to the following confidence tests:
 
@@ -154,7 +160,7 @@ The team should proceed only when it can answer yes to the following confidence 
 
 The evidence bar should match the delivery stage: lightweight for bounded POC learning, materially stronger for MVP, pilot or production.
 
-## 3.3 Common reasons to narrow, remediate, defer or pause
+### 3.3 Common reasons to narrow, remediate, defer or pause
 
 The team should avoid moving forward unchanged where any of the following apply:
 
@@ -174,13 +180,13 @@ The team should avoid moving forward unchanged where any of the following apply:
 
 The interface working is not evidence the foundation is ready. A model that improvises metric logic, picks arbitrary joins or papers over missing filters can produce plausible answers that break under scrutiny. That is more dangerous than an obvious failure.
 
-## 3.4 How Phase 3 shapes later phases
+### 3.4 How Phase 3 shapes later phases
 
 Phase 3 shapes later phases by defining what the assistant may query, which business logic has been implemented, which joins and filters are allowed, which caveats and security controls apply, and which limitations remain unresolved.
 
 These outputs become practical inputs for orchestration design, MVP build, evaluation, security validation, adoption and operations. The detailed handover is consolidated in [Section 7.2](#handover-to-later-phases).
 
-# 4 Governed data foundation activities overview
+## 4 Governed data foundation activities overview
 
 Phase 3 is organised around practical build activities. They are connected workstreams, not a rigid sequence. In a narrow POC, activities may be simplified or combined. For an MVP, pilot or production path, each activity needs stronger evidence, implementation control and ownership.
 
@@ -188,7 +194,7 @@ The logic is simple: confirm what the assistant may use, implement the governed 
 
 The foundation should favour governed, reusable queryable assets over raw table access or model-generated business logic. This may mean curated views, transformation models, semantic-layer objects, materialised tables, controlled APIs or a hybrid pattern, chosen for control, performance, cost, security, maintainability and reuse.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 | Activity                                                  | Main question                                                                             | Typical output                                                                                     |
 |-----------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
@@ -203,7 +209,7 @@ The foundation should favour governed, reusable queryable assets over raw table 
 | 9\. Add quality, performance, freshness and cost controls | Can the foundation be trusted and afforded in use?                                        | Quality, freshness, reconciliation, performance and cost assumptions.                              |
 | 10\. Package foundation for handover                      | Is the foundation usable by later phases?                                                 | Documentation, metadata, owners, known limitations and backlog.                                    |
 
-## 4.2 Cross-activity controls: tests, logs, cost and evidence
+### 4.2 Cross-activity controls: tests, logs, cost and evidence
 
 Phase 3 activities should produce evidence, not just assets. Automated tests, deployment logs, validation results, cost indicators, alerts and approval records should be captured consistently enough for later phases to understand what was built, what was tested, what failed, what was accepted and what remains unresolved.
 
@@ -211,7 +217,7 @@ For a POC, this evidence may be lightweight. For MVP, pilot or production, it sh
 
 The purpose is traceability and control. When an answer, asset, failure or cost is challenged later, the team should be able to see the implementation, evidence, owner and decision route.
 
-## 4.3 Activity logic
+### 4.3 Activity logic
 
 The activities should reduce the amount of judgement left to the model at runtime. The assistant should not be expected to infer metric definitions, choose arbitrary joins, guess exclusions, bypass access rules or explain caveats from scattered documentation.
 
@@ -219,7 +225,7 @@ Where possible, Phase 3 should encode these rules into governed assets. Document
 
 The work should remain proportionate. A POC foundation may be deliberately narrow and temporary if its limits are visible. An MVP or pilot foundation should be repeatable, testable, versioned and owned.
 
-## 4.4 Practitioner note
+### 4.4 Practitioner note
 
 The foundation does not need to be large to be valuable. It needs to be controlled, repeatable and able to scale.
 
@@ -229,13 +235,13 @@ Scalability should be designed into the foundation early. Reusable metadata temp
 
 The balance is project-dependent. Too much engineering too early can slow learning; too little control can create foundations that cannot be trusted or scaled. This is where delivery experience and judgement matter: the team should build enough structure to protect quality, security and future scale, without turning a focused first release into an enterprise transformation.
 
-# 5 Core foundation build activities
+## 5 Core foundation build activities
 
 This chapter describes the core activities used to build the governed foundation. The activities should remain proportionate to the delivery stage. A POC may use lightweight controls to support learning and sizing. An MVP, pilot or production path requires stronger implementation discipline, security controls, quality checks, versioning and ownership.
 
 Each activity should produce enough test evidence, logs, cost visibility and ownership records for the delivery stage. These controls are defined in [Section 4.2](#cross-activity-controls-tests-logs-cost-and-evidence) and should not be treated as optional administration.
 
-## 5.1 Confirm foundation build scope
+### 5.1 Confirm foundation build scope
 
 **Purpose:** Confirm what will actually be built in Phase 3.
 
@@ -279,7 +285,7 @@ Each activity should produce enough test evidence, logs, cost visibility and own
 
 - The team does not know who can approve, clarify or fix key sources, definitions, caveats or quality issues.
 
-## 5.2 Confirm implementation pattern and technology route
+### 5.2 Confirm implementation pattern and technology route
 
 **Purpose:** Decide how the governed foundation will be implemented.
 
@@ -339,7 +345,7 @@ Phase 3 should normally work within the enterprise’s existing data and analyti
 
 An early informal architecture steer may be enough to start controlled foundation work, provided the formal approval route, open conditions and decision owner are documented..
 
-## 5.3 Build curated queryable assets
+### 5.3 Build curated queryable assets
 
 **Purpose:** Create the controlled data assets the assistant is allowed to query.
 
@@ -389,7 +395,7 @@ Practitioner note: The controlled query surface should be as simple as the use c
 
 Except for deliberately lightweight POCs, foundation assets (incl. environments) should be created and deployed through code where practical, with tests and isolated environments for safe change.
 
-## 5.4 Implement metric logic
+### 5.4 Implement metric logic
 
 **Purpose:** Make approved metrics usable by the assistant.
 
@@ -441,7 +447,7 @@ Metric logic becomes real when it is implemented. A definition that looked agree
 
 Metric logic should be expected to evolve. For MVP or pilot, the metric registry should be versioned and linked to implemented logic so changes can be reviewed, tested and traced.
 
-## 5.5 Implement dimensions and hierarchies
+### 5.5 Implement dimensions and hierarchies
 
 **Purpose:** Make filtering, grouping and drill-down behaviour clear.
 
@@ -497,7 +503,7 @@ Practitioner note: Dimensions are not harmless labels. A user may be allowed to 
 
 The team should identify which dimensions affect row-level access, masking, aggregation thresholds or inference risk, and either control or exclude them. If a dimension allows users to isolate a sensitive group, account, person or commercially restricted segment, it needs explicit control or exclusion.
 
-## 5.6 Implement join, grain and aggregation rules
+### 5.6 Implement join, grain and aggregation rules
 
 **Purpose:** Defines how assets can be combined, at what level of detail, and how results can be aggregated.
 
@@ -549,7 +555,7 @@ Many wrong T2D answers will not come from the model misunderstanding the questio
 
 Join and aggregation rules are also security controls. A poorly controlled join can expose data a user should not see, bypass row-level restrictions, or allow sensitive information to
 
-## 5.7 Implement standard filters and caveats
+### 5.7 Implement standard filters and caveats
 
 **Purpose:** Ensures that standard exclusions, time windows, default filters and known caveats are implemented in the governed foundation.
 
@@ -603,7 +609,7 @@ Filters and caveats are often where a technically correct query becomes a wrong 
 
 Clarification rules will never be exhaustive. The goal is to define the most common ambiguity patterns, such as unclear time periods, ambiguous business terms, missing filters or sensitive drill-downs, and give the assistant clear default behaviours: apply the approved default, ask a clarification question, surface a caveat, suppress the answer or escalate.
 
-## 5.8 Implement security and exposure controls
+### 5.8 Implement security and exposure controls
 
 **Purpose:** Control what users can see, query or infer.
 
@@ -671,7 +677,7 @@ Practitioner note: T2D security should not create a parallel access model unless
 
 T2D security is broader than dashboard access. Users may infer restricted information through repeated questions, narrow filters, small-group aggregations or unsafe joins, even when direct column access is blocked.
 
-## 5.9 Add quality, performance, freshness and cost controls
+### 5.9 Add quality, performance, freshness and cost controls
 
 **Purpose:** Make sure the foundation can be trusted, refreshed and afforded in use.
 
@@ -733,7 +739,7 @@ Cost assessment will be approximate at this stage because usage patterns, query 
 
 A practical approach is to estimate a few scenarios, such as narrow POC usage, expected MVP usage and higher-volume pilot usage, separating infrastructure costs from support costs.
 
-## 5.10 Package foundation for handover
+### 5.10 Package foundation for handover
 
 **Purpose:** Make the foundation usable beyond the build team.
 
@@ -789,13 +795,13 @@ See annex for a governed foundation handover checklist covering registers, evide
 
 The foundation is not finished when the assets deploy. It is finished when another team can understand, test, use, govern and operate it.
 
-# 6 Governed foundation decision pack
+## 6 Governed foundation decision pack
 
 Phase 3 should not end with a collection of disconnected assets, notes and technical artefacts. It should end with a consolidated foundation pack that shows what has been built, what is approved, what is tested, what is caveated, what remains unresolved and who owns each material item.
 
 The output should be proportionate to the delivery stage. For a POC, it may be lightweight and focused on learning, feasibility and MVP sizing. For an MVP, pilot or production path, the outputs should be more formal, versioned, tested and suitable for handover.
 
-## 6.1 Governed foundation pack
+### 6.1 Governed foundation pack
 
 | Field                                             | Purpose                                                                                                       |
 |---------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
@@ -814,7 +820,7 @@ The output should be proportionate to the delivery stage. For a POC, it may be l
 
 The pack should clearly identify the metadata contract required for Phase 4 orchestration, including which artefacts are structured enough for retrieval, validation, query generation and answer explanation.
 
-## 6.2 Foundation pack quality test
+### 6.2 Foundation pack quality test
 
 Before Phase 3 exits, the team should test whether the consolidated outputs are usable by later phases.
 
@@ -833,19 +839,19 @@ Before Phase 3 exits, the team should test whether the consolidated outputs are 
 
 A good Phase 3 output is not necessarily large. It is clear, controlled, testable and usable. If later phases cannot understand what the assistant may query, which rules apply, what was tested, what risks remain or who owns changes, Phase 3 has not finished.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 3 should exit only when the governed foundation is controlled enough for the intended next step. The handover should confirm what has been built, what has been tested, what remains limited, and which risks or remediation items still need ownership.
 
 A Phase 3 exit does not mean the full T2D product is ready for launch. It means the foundation is ready to be used by the next delivery phases.
 
-## 7.1 Required exit outputs
+### 7.1 Required exit outputs
 
 The required exit output is the governed foundation decision pack described in Section 6, completed to the standard required for the delivery stage.
 
 The exit decision should confirm whether the foundation can proceed, narrow, remediate, defer or stop. It should also identify which risks, limitations, remediation items and ownership gaps remain open.
 
-## 7.2 Handover to later phases
+### 7.2 Handover to later phases
 
 | Later phase                           | What Phase 3 should hand over                                                                                         |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
@@ -857,7 +863,7 @@ The exit decision should confirm whether the foundation can proceed, narrow, rem
 | Operations                            | Owners, contacts, logs, alerts, quality checks, cost tracking, support route and change-control process.              |
 | Orchestration-ready metadata          | Phase 4 can identify which artefacts are runtime-ready and which remain manual, incomplete or unsuitable.             |
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 | Risk / failure mode                                       | Why it matters                                                                                                   | Likely response                                                                                            |
 |-----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
@@ -873,3 +879,8 @@ The exit decision should confirm whether the foundation can proceed, narrow, rem
 | Manual build steps create fragile foundations             | Assets may be hard to reproduce, test, review or roll back.                                                      | Use scripted deployment, CI/CD, automated tests and code-based environments where practical.               |
 | Ownership is unclear after build                          | Issues, changes and failures may not be resolved once the implementation team moves on.                          | Assign owners, operational contacts, support routes and change-control paths before exit.                  |
 | The foundation is too broad for the delivery stage        | Trying to support too many domains, questions or users may weaken control and delay learning.                    | Narrow the scope to the smallest controlled foundation that supports the next decision.                    |
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

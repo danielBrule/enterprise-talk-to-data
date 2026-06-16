@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 5: Prototype / MVP Build
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -38,7 +44,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 5 turns the Phase 4 orchestration design into a bounded working MVP. If Phase 4 defines the intended question-to-answer flow, Phase 5 tests that flow against reality.
 
@@ -59,13 +65,13 @@ By the end of Phase 5, stakeholders should be able to decide whether the MVP pro
 The main output is a working MVP and an evidence pack covering the implemented flow, AI/model choices, validation behaviour, logs and traces, quality and cost findings, known limitations, issue backlog and production-readiness gaps.**  
 **
 
-# 2 Phase overview
+## 2 Phase overview
 
 Phase 5 builds the bounded MVP from the approved Phase 4 orchestration design. It turns the designed question-to-answer flow into a working system that can be tested with realistic questions, controlled data, defined AI/model choices, validation checks, logging and user feedback.
 
 The key discipline is to build an observable and testable MVP, not a polished demo. Phase 5 should make the approved flow real enough to test, but still bounded enough to remain safe, explainable and correctable.
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 5 is to build a bounded MVP and produce the evidence needed for formal validation, controlled user testing and production-readiness planning. It should confirm:
 
@@ -83,7 +89,7 @@ The objective of Phase 5 is to build a bounded MVP and produce the evidence need
 
 - **Production-readiness gaps:** what remains to be strengthened during validation, pilot and production-readiness phases.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 5 should remain bounded to the approved users, questions, data assets, metadata sources, tools and orchestration design. It should implement enough of the system to test the intended flow without becoming a broad product build or uncontrolled expansion exercise.
 
@@ -91,13 +97,13 @@ In scope are the MVP application flow, AI/model calls, retrieval components, que
 
 The test for inclusion is simple: if an item is required to test the MVP safely, diagnose failures, support Phase 6 validation and remediation or prepare for Phase 7 user testing, it belongs in Phase 5. Issues exposed during build should be fixed, constrained, deferred or routed back rather than hidden in prompts or manual workarounds.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Phase 5 does not approve the system for production. A working MVP shows that the approved design can operate in a bounded way; it does not prove that the service is ready for broad release.
 
 It also does not replace formal validation, redesign the governed foundation or deliver the full product experience. Issues with answer quality, security, access exposure, resilience, cost, scalability, Phase 3 artefacts or Phase 4 design assumptions should be tested, refined or routed into later phases rather than patched around during the build.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 The effort depends on delivery intent:
 
@@ -105,7 +111,7 @@ The effort depends on delivery intent:
 
 - For an MVP, Phase 5 should produce a first usable version of the capability, with enough deployment discipline, versioning, validation, logging, cost/latency capture, feedback and quality monitoring to support Phase 6 validation and remediation and Phase 7 user testing. The phase is complete when the MVP can run the approved flow end-to-end, expose its limitations and provide enough evidence to proceed to formal validation.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 Phase 5 is a build phase, but it should not be treated as an engineering-only activity. The MVP will only be useful if product, data, AI, security, evaluation and operating stakeholders help decide what is implemented, tested, constrained and carried forward.
 
@@ -124,7 +130,7 @@ Phase 5 is a build phase, but it should not be treated as an engineering-only ac
 
 The key point is accountability. Phase 5 should not end with a working MVP that no one can explain, test, secure, support or improve.
 
-# 3 Readiness decision and delivery implications
+## 3 Readiness decision and delivery implications
 
 Phase 5 should not end with a statement that the MVP “works”. It should end with a clear decision on whether the implemented system provides enough evidence to move into formal validation.
 
@@ -134,7 +140,7 @@ A proceed decision does not mean the system is production-ready. It means the MV
 
 For a POC, Phase 5 may be the final delivery stage if the objective is structured learning and feasibility assessment. If the output will be used by real users for controlled testing, decision support or pilot activity, it should proceed through formal validation before use.
 
-## 3.1 Possible Phase 5 outcomes
+### 3.1 Possible Phase 5 outcomes
 
 | Outcome                  | Meaning                                                                                       |
 |--------------------------|-----------------------------------------------------------------------------------------------|
@@ -146,7 +152,7 @@ For a POC, Phase 5 may be the final delivery stage if the objective is structure
 | Pause                    | Value, risk, cost, usability or ownership is not credible enough to continue.                 |
 | Close POC                | The POC has produced enough learning to stop, redesign or decide whether to invest in an MVP. |
 
-## 3.2 Minimum conditions to proceed
+### 3.2 Minimum conditions to proceed
 
 Phase 5 should proceed to formal validation only when the team can confirm:
 
@@ -164,7 +170,7 @@ Phase 5 should proceed to formal validation only when the team can confirm:
 
 - **Governance is credible:** owners, change controls, issue routes, limitations and next actions are clear enough to support Phase 6 validation.
 
-## 3.3 Common reasons to remediate, redesign or pause
+### 3.3 Common reasons to remediate, redesign or pause
 
 The team should avoid moving into validation where any of the following apply:
 
@@ -184,7 +190,7 @@ The team should avoid moving into validation where any of the following apply:
 
 - **Ownership is unclear:** no one owns defects, model behaviour, metadata fixes, quality issues or support.
 
-## 3.4 How Phase 5 shapes later phases
+### 3.4 How Phase 5 shapes later phases
 
 Phase 5 provides the evidence base for formal validation, pilot planning and production-readiness work. Its outputs should not be treated as a demo record; they should become the test evidence, issue backlog and delivery constraints for later phases.
 
@@ -196,13 +202,13 @@ Phase 5 provides the evidence base for formal validation, pilot planning and pro
 
 A strong Phase 5 does not remove the need for validation. It makes validation possible.
 
-# 4 MVP build activities overview
+## 4 MVP build activities overview
 
 Phase 5 translates the approved design into an implemented MVP. The activities are ordered from scope confirmation and build setup through AI/model implementation, data and metadata integration, query control, answer generation, interface, testing and evidence packaging. Governance runs across the sequence: decisions, changes, risks, model choices, validation gaps and production-readiness issues should be visible, owned and traceable throughout the build.
 
 The activities should not be treated as a rigid waterfall. Build work will normally iterate as retrieval, prompts, validation, query execution, answer quality, cost, latency and logging issues are discovered. The important point is that changes should be visible, tested and governed rather than patched informally.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 | Activity                                                  | Main question                                                                                    | Main output                                                                                |
 |-----------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
@@ -217,19 +223,19 @@ The activities should not be treated as a rigid waterfall. Build work will norma
 | 9\. Build lightweight UI and feedback capture             | Can users test the flow without a full product UI?                                               | Interaction shell, answer display and feedback capture.                                    |
 | 10\. Tune, test and package evidence                      | Are prompts, retrieval, model routing, validation and answers good enough for formal validation? | Test results, tuned behaviour, logs, traces, limitations, issue backlog and handover pack. |
 
-## 4.2 Activity logic
+### 4.2 Activity logic
 
 The build should follow the approved Phase 4 design, but not assume that the design is correct. Phase 5 is where retrieval quality, model choices, validation rules, metadata structure, query cost, answer format and failure behaviour are tested against implementation reality.
 
 The MVP should therefore be built around observable steps. The team should be able to see which metadata was retrieved, which model or rule was used, what query was generated, which validations passed or failed, what was executed, how the answer was produced and what limitations remain.
 
-## 4.3 Practitioner note
+### 4.3 Practitioner note
 
 Phase 5 should not optimise for a smooth demo. It should optimise for a system that can be tested, challenged and improved. A brittle MVP with a good interface is less valuable than a narrower MVP that exposes its assumptions, logs its behaviour and makes the next delivery decision clear.
 
-# 5 Core build activities
+## 5 Core build activities
 
-## 5.1 Confirm MVP scope and build plan
+### 5.1 Confirm MVP scope and build plan
 
 **Purpose**: Confirm what Phase 5 will build, test and exclude, and turn the approved Phase 4 design into a practical MVP build plan.
 
@@ -272,7 +278,7 @@ Phase 5 should not optimise for a smooth demo. It should optimise for a system t
 
 This activity should be straightforward if Phases 1 to 4 were completed properly, but it is still important. A short alignment meeting with product, data, AI, security, evaluation and operating stakeholders should be enough to confirm the MVP scope, technology choices, exclusions and evidence expectations. The build backlog should then be shaped jointly by the product owner and engineering lead so that delivery priorities remain aligned with validation needs.
 
-## 5.2 Confirm MVP governance, ownership and decision rights
+### 5.2 Confirm MVP governance, ownership and decision rights
 
 **Purpose**: Confirm how the ownership defined in earlier phases applies to the MVP build: who owns each component, who validates outputs, who approves changes and who decides whether defects or limitations block Phase 6 validation[^1]*.*
 
@@ -316,7 +322,7 @@ This activity should be straightforward if Phases 1 to 4 were completed properly
 
 This activity is often overlooked because it can feel administrative during build, but it is critical for later validation, pilot and production readiness. Governance creates clear ownership, and clear ownership keeps senior stakeholders engaged when trade-offs, defects, risks and limitations need decisions rather than informal workarounds.
 
-## 5.3 Set up environment, CI/CD and test harness
+### 5.3 Set up environment, CI/CD and test harness
 
 **Purpose:** Create the technical scaffolding needed to build, test, trace and change the system safely. For a POC this may be minimal; for an MVP it should be strong enough to support validation, user testing and later handover.
 
@@ -359,7 +365,7 @@ Retrofitting version control, deployment discipline, logging, tracing, secrets m
 
 Where practical, developers should be able to create a small local or isolated environment through a documented script, configuration or infrastructure template.
 
-## 5.4 Connect approved data, metadata and tools
+### 5.4 Connect approved data, metadata and tools
 
 **Purpose:** Connect the MVP to the approved data assets, metadata sources and tools required to run the Phase 4 flow. The aim is to prove controlled runtime access, not to broaden the data estate.
 
@@ -401,7 +407,7 @@ Where practical, developers should be able to create a small local or isolated e
 
 Access metadata may define the user’s security level, role, region entitlement or permitted dimensions, but it should drive an enforced policy before execution. The MVP should test that generated queries, semantic-layer requests or API calls are constrained by those entitlements before restricted results reach the model or answer layer. Metadata should inform access; policy should enforce it.
 
-## 5.5 Implement metadata retrieval and grounding
+### 5.5 Implement metadata retrieval and grounding
 
 **Purpose:** Build the retrieval path that provides the model with the governed context it needs to answer safely. The aim is to test whether approved metrics, dimensions, joins, filters, caveats, examples and access rules can be found and applied at runtime.
 
@@ -441,7 +447,7 @@ Access metadata may define the user’s security level, role, region entitlement
 
 This activity should be straightforward if Phase 3 produced usable metadata artefacts and Phase 4 defined the retrieval pattern. Weak retrieval can quietly break the MVP by grounding the model in the wrong metric, source, join, filter or caveat.
 
-## 5.6 Implement AI/model routing and clarification
+### 5.6 Implement AI/model routing and clarification
 
 **Purpose:** Implement how the MVP decides which AI/model pattern, rule or tool path should handle each request, and when the system should clarify instead of proceeding.
 
@@ -483,7 +489,7 @@ This activity should not become model shopping. Model choice should be task-led:
 
 Routing, access, validation and refusal should remain controlled by explicit rules and governed logic rather than unconstrained model judgement.
 
-## 5.7 Implement query generation, validation and execution
+### 5.7 Implement query generation, validation and execution
 
 **Purpose:** Implement the path that turns a grounded user question into a bounded, validated and executable query. The aim is not only to generate SQL, but to prove that generated queries stay within approved scope, access rules, cost limits and validation controls.
 
@@ -526,7 +532,7 @@ Routing, access, validation and refusal should remain controlled by explicit rul
 
 This activity is where many T2D prototypes look impressive but become unsafe. The model may generate syntactically valid SQL, but that does not mean the query is correct, authorised, affordable or safe to run. For an MVP, query execution should be read-only, rule-validated, bounded by limits and measured for server-side performance before it is trusted for validation or pilot use.
 
-## 5.8 Implement result interpretation and answer generation
+### 5.8 Implement result interpretation and answer generation
 
 **Purpose:** Implement how query results are turned into clear, grounded and caveated answers. The aim is to make the answer useful to the user without losing the source, calculation, assumptions, limitations or safe-failure behaviour.
 
@@ -566,7 +572,7 @@ This activity is where many T2D prototypes look impressive but become unsafe. Th
 
 Answer generation should be tested with questions that tempt the model to overreach, such as “why did revenue fall?”, “what should we do next?” or “are we performing well?”. Unless the retrieved evidence includes approved causal logic, benchmarks or recommendations, the MVP should return the result, caveat the limitation and explain that the available data does not support a cause, judgement or recommendation. This behaviour should be tested and logged, not left to prompt wording alone.
 
-## 5.9 Build lightweight UI and feedback capture
+### 5.9 Build lightweight UI and feedback capture
 
 **Purpose:** Build the minimum user-facing interface needed to test the MVP flow, answer presentation and feedback route. The aim is not to design the final product experience, but to make the system usable enough for validation and controlled user testing.
 
@@ -606,7 +612,7 @@ Answer generation should be tested with questions that tempt the model to overre
 
 The Phase 5 UI should be designed with the target users, but it should remain deliberately lightweight. The interface should fit the usage context: a web UI or embedded app may suit desk-based users, while mobile or field users may need a different interaction pattern, including voice where appropriate. Security should remain central: the UI must not expose restricted data, hidden prompts, raw traces or query details to users who are not entitled to see them.
 
-## 5.10 Tune, test and package evidence
+### 5.10 Tune, test and package evidence
 
 **Purpose:** Improve the MVP until it is good enough to enter formal validation, and package the evidence needed for Phase 6. The aim is controlled tuning, not informal prompt patching.
 
@@ -646,11 +652,11 @@ The Phase 5 UI should be designed with the target users, but it should remain de
 
 The final Phase 5 activity should make the MVP better, not just document what happened. Tuning is valid when it is controlled, tested and recorded. It becomes dangerous when prompt changes, model switches or validation relaxations are made informally to make a demo pass. Phase 6 should receive an MVP whose behaviour can be reproduced, challenged and validated.
 
-# 6 MVP evidence decision pack
+## 6 MVP evidence decision pack
 
 Phase 5 should end with a working MVP and a clear evidence pack. The output should not be a demo narrative; it should show what was built, how it behaves, what was tested, what changed during tuning, and what remains unresolved before validation, pilot or production.
 
-## 6.1 MVP evidence pack
+### 6.1 MVP evidence pack
 
 | Output                              | Purpose                                                                                                                        |
 |-------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -663,7 +669,7 @@ Phase 5 should end with a working MVP and a clear evidence pack. The output shou
 | Known limitations and issue backlog | Captures defects, accepted limitations, deferred items and production-readiness gaps.                                          |
 | Governance record                   | Confirms owners, decision rights, approval route, change log and Phase 6 handover ownership.                                   |
 
-## 6.2 Evidence pack quality test
+### 6.2 Evidence pack quality test
 
 The Phase 5 outputs should be tested before handover. A useful evidence pack should be:
 
@@ -678,17 +684,17 @@ The Phase 5 outputs should be tested before handover. A useful evidence pack sho
 
 If these tests fail, Phase 5 may have produced a working MVP, but not enough evidence to support formal validation.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 5 should close only when the MVP is usable, observable and evidenced enough to enter formal validation. The handover should make clear what was built, what was tested, what remains weak and what must be validated before controlled user testing.
 
-## 7.1 Required exit outputs
+### 7.1 Required exit outputs
 
 The required exit output is the MVP evidence decision pack described in Section 6, completed to the standard required for the delivery stage.
 
 The exit decision should confirm whether the MVP can proceed to Phase 6 validation, proceed with constraints, remediate build, refine design, refine foundation, close the POC or pause. It should also identify the main constraints, accepted limitations and required next actions.
 
-## 7.2 Handover to later phases
+### 7.2 Handover to later phases
 
 | Later phase                                     | What Phase 5 should hand over                                                                                                                                               |
 |-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -698,14 +704,19 @@ The exit decision should confirm whether the MVP can proceed to Phase 6 validati
 
 A POC may close at Phase 5 if its purpose was only structured learning. An MVP intended for user testing, decision support or pilot use should not bypass Phase 6 validation.
 
-## 7.3 Exit decision wording
+### 7.3 Exit decision wording
 
 Suggested wording for the Phase 5 exit decision:
 
 Phase 5 is complete. The MVP has / has not produced enough evidence to proceed to Phase 6 validation. The agreed decision is \[proceed / proceed with constraints / remediate build / refine design / refine foundation / close POC / pause\]. The main constraints, accepted limitations and required next actions are \[summary\].
 
-## 7.4 Practitioner note
+### 7.4 Practitioner note
 
 A working MVP should not be confused with a validated product. Phase 5 proves that the system can be built and tested in a bounded way; Phase 6 proves whether it is accurate, safe and controlled enough to place in front of users.
 
 [^1]: *For a POC, this activity may be lightweight. For an MVP intended to enter validation and user testing, governance should be documented clearly enough to support formal testing, controlled change, issue ownership and later production readiness*
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

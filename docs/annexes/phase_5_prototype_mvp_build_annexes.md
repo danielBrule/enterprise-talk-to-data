@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 5 Annexes: Prototype / MVP Build
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 How to use this annex](#1-how-to-use-this-annex)
@@ -89,13 +95,13 @@
 
 ---
 
-# 1 How to use this annex
+## 1 How to use this annex
 
 These annexes provide optional working templates for Phase 5. They are not all mandatory outputs. Teams should select the artefacts that match the delivery intent, risk level and maturity of the MVP. For a POC, several templates may be simplified. For an MVP intended for validation and user testing, the evidence, governance, access, query-control and tuning records should be treated more seriously.
 
-# 2 Activity 1: Confirm MVP scope and build plan
+## 2 Activity 1: Confirm MVP scope and build plan
 
-## 2.1 MVP scope confirmation template
+### 2.1 MVP scope confirmation template
 
 | Item                        | Description                                                                                     |
 |-----------------------------|-------------------------------------------------------------------------------------------------|
@@ -117,7 +123,7 @@ These annexes provide optional working templates for Phase 5. They are not all m
 | Build owner                 | Person or group accountable for delivery                                                        |
 | Last updated                | Date of latest scope confirmation                                                               |
 
-## 2.2 Example: included and excluded question list
+### 2.2 Example: included and excluded question list
 
 | Priority question                | Included?           | Reason                     | Required assets                                         | Required AI/model steps                      | Caveat / limitation                   | Owner              |
 |----------------------------------|---------------------|----------------------------|---------------------------------------------------------|----------------------------------------------|---------------------------------------|--------------------|
@@ -135,7 +141,7 @@ Suggested status values:
 | Defer               | Potentially useful later, but not needed for the current MVP.       |
 | Exclude             | Not suitable for this scope or delivery stage.                      |
 
-## 2.3 MVP technology stack checklist
+### 2.3 MVP technology stack checklist
 
 | Area                        | Decision to confirm                                                      | Selected option | Temporary substitution? | Owner |
 |-----------------------------|--------------------------------------------------------------------------|-----------------|-------------------------|-------|
@@ -158,7 +164,7 @@ Suggested status values:
 
 Practical note: temporary substitutions are acceptable for a POC or MVP, but they should be labelled clearly. A temporary spreadsheet, local vector store, manual approval route or simplified UI should not be mistaken for the future production design.
 
-## 2.4 Build backlog template
+### 2.4 Build backlog template
 
 | Backlog item                    | Area                 | Description                                                                  | Priority | Owner                        | Dependency                     | Acceptance evidence          |
 |---------------------------------|----------------------|------------------------------------------------------------------------------|----------|------------------------------|--------------------------------|------------------------------|
@@ -183,7 +189,7 @@ Suggested backlog areas:
 | Governance      | Decision log, change route, issue ownership                        |
 | Handover        | Evidence pack, backlog, production-readiness gaps                  |
 
-## 2.5 Acceptance criteria checklist
+### 2.5 Acceptance criteria checklist
 
 | Area              | Acceptance question                                                                | Status | Evidence |
 |-------------------|------------------------------------------------------------------------------------|--------|----------|
@@ -204,7 +210,7 @@ Suggested backlog areas:
 
 Suggested status values: Not started / In progress / Ready / Ready with caveat / Blocked / Not applicable.
 
-## 2.6 Prototype simplification log
+### 2.6 Prototype simplification log
 
 | Simplification               | Why accepted            | Risk                                | Valid for POC only? | Blocks validation? | Owner                 | Next action                              |
 |------------------------------|-------------------------|-------------------------------------|---------------------|--------------------|-----------------------|------------------------------------------|
@@ -216,7 +222,7 @@ Suggested status values: Not started / In progress / Ready / Ready with caveat /
 
 The simplification log should distinguish acceptable MVP shortcuts from issues that must be fixed before validation, pilot or production. The main risk is not taking shortcuts; it is forgetting that they were shortcuts.
 
-## 2.7 Dependency and blocker log
+### 2.7 Dependency and blocker log
 
 | Dependency / blocker               | Area          | Impact                             | Owner                | Required decision or action     | Target date | Status |
 |------------------------------------|---------------|------------------------------------|----------------------|---------------------------------|-------------|--------|
@@ -226,7 +232,7 @@ The simplification log should distinguish acceptable MVP shortcuts from issues t
 | Logging destination unclear        | Observability | Weak traceability                  | Platform owner       | Confirm log store and retention |             |        |
 | Query cost threshold not agreed    | Cost control  | Risk of expensive execution        | Product / data owner | Define MVP cost threshold       |             |        |
 
-## 2.8 Alignment meeting agenda
+### 2.8 Alignment meeting agenda
 
 Purpose: confirm that the MVP scope, technology choices, exclusions, ownership and evidence expectations are understood before implementation starts.
 
@@ -256,9 +262,9 @@ Expected meeting outputs:
 | Confirmed issue and decision route       | Product owner / operating owner    |
 | Initial build backlog                    | Product owner and engineering lead |
 
-# 3 Activity 2: Confirm MVP governance, ownership and decision rights
+## 3 Activity 2: Confirm MVP governance, ownership and decision rights
 
-## 3.1 MVP governance register
+### 3.1 MVP governance register
 
 Purpose: create a single register showing who owns, validates, approves and accepts key MVP build decisions.
 
@@ -282,7 +288,7 @@ Purpose: create a single register showing who owns, validates, approves and acce
 
 Suggested status values: Not assigned / Assigned / Confirmed / In review / Blocked / Not applicable.
 
-## 3.2 Decision and approval route
+### 3.2 Decision and approval route
 
 | Change type              | Example                                                   | Approval owner                     | Evidence required                                     | Must be approved before change? |
 |--------------------------|-----------------------------------------------------------|------------------------------------|-------------------------------------------------------|---------------------------------|
@@ -298,7 +304,7 @@ Suggested status values: Not assigned / Assigned / Confirmed / In review / Block
 | Logging change           | Change prompt, query, result or trace retention           | Security / operating owner         | Retention and exposure review                         | Yes                             |
 | Accepted limitation      | Allow a known limitation into Phase 6 validation          | Product owner / evaluation owner   | Risk note, owner and next action                      | Yes                             |
 
-## 3.3 Change log
+### 3.3 Change log
 
 | Change ID | Date | Change type | Description | Reason | Owner | Approved by | Impact | Evidence link / reference |
 |-----------|------|-------------|-------------|--------|-------|-------------|--------|---------------------------|
@@ -306,7 +312,7 @@ Suggested status values: Not assigned / Assigned / Confirmed / In review / Block
 
 Suggested change types: Scope / Metadata / Prompt / Model / Routing / Validation / Tool / Access / Logging / UI / Test / Handover.
 
-## 3.4 Risk acceptance log
+### 3.4 Risk acceptance log
 
 | Risk / limitation | Area | Why accepted for MVP | Impact if wrong | Valid for POC only? | Blocks Phase 6? | Blocks pilot? | Owner | Next action |
 |-------------------|------|----------------------|-----------------|---------------------|-----------------|---------------|-------|-------------|
@@ -322,7 +328,7 @@ Suggested decision values:
 | Must remediate                | Must be fixed before the next phase.                                 |
 | Defer                         | Not required for current scope, but should remain in backlog.        |
 
-## 3.5 Example: MVP governance register entry
+### 3.5 Example: MVP governance register entry
 
 This is an illustrative example only. It shows the level of detail expected, not a required format.
 
@@ -333,7 +339,7 @@ This is an illustrative example only. It shows the level of detail expected, not
 | Query validation | Queries must be blocked if they use non-approved tables, missing mandatory filters or exceed cost threshold   | Data engineer           | Security / governance lead | Validation rule list, failed-query examples    | Confirmed |
 | Phase 6 handover | Evidence pack must include test cases, traces, answer examples, failed tests and unresolved limitations       | Evaluation owner        | Product owner              | Evidence pack checklist                        | Assigned  |
 
-## 3.6 Governance meeting agenda
+### 3.6 Governance meeting agenda
 
 Purpose: confirm ownership, decision rights, validation responsibilities and issue routes before implementation decisions start accumulating.
 
@@ -363,9 +369,9 @@ Expected meeting outputs:
 | Confirmed Phase 6 handover owner        | Evaluation owner                  |
 | Initial production governance gap list  | Operating owner / governance lead |
 
-# 4 Activity 3: Set up environment, CI/CD and test harness
+## 4 Activity 3: Set up environment, CI/CD and test harness
 
-## 4.1 MVP environment setup checklist
+### 4.1 MVP environment setup checklist
 
 | Area                    | Decision / setup item                                                             | Owner | Status | Notes |
 |-------------------------|-----------------------------------------------------------------------------------|-------|--------|-------|
@@ -382,7 +388,7 @@ Expected meeting outputs:
 
 Practical note: for a POC, this may be lightweight. For an MVP, developers should be able to create a small local or isolated environment through a documented script, container or infrastructure template so they can work independently and reproduce issues.
 
-## 4.2 Version-control and deployment checklist
+### 4.2 Version-control and deployment checklist
 
 | Area                      | What should be versioned or controlled                                             | Required for MVP?       | Notes |
 |---------------------------|------------------------------------------------------------------------------------|-------------------------|-------|
@@ -398,7 +404,7 @@ Practical note: for a POC, this may be lightweight. For an MVP, developers shoul
 
 Suggested tooling examples: Git, GitHub, GitLab, Azure DevOps, Bitbucket, GitHub Actions, GitLab CI, Azure Pipelines, Jenkins or equivalent. The specific tool matters less than having a controlled way to version, review, test and deploy changes.
 
-## 4.3 Delivery tracking setup
+### 4.3 Delivery tracking setup
 
 | Tracking area             | What to capture                                                            | Example tool route                  |
 |---------------------------|----------------------------------------------------------------------------|-------------------------------------|
@@ -410,7 +416,7 @@ Suggested tooling examples: Git, GitHub, GitLab, Azure DevOps, Bitbucket, GitHub
 | Cost / latency issues     | Expensive model calls, slow queries, high response time                    | Issue board linked to observability |
 | Production-readiness gaps | Items not blocking MVP but required before pilot or production             | Hardening backlog                   |
 
-## 4.4 Example tools that may be used
+### 4.4 Example tools that may be used
 
 This is an illustrative list only. The tools should be selected based on the organisation’s existing platform, security requirements, team skills and delivery stage.
 
@@ -431,7 +437,7 @@ This is an illustrative list only. The tools should be selected based on the org
 | Metadata / catalogue           | DataHub, OpenMetadata, Collibra, Alation, Microsoft Purview               |
 | Dashboarding                   | Power BI, Tableau, Looker, Grafana, Metabase                              |
 
-## 4.5 Test harness checklist
+### 4.5 Test harness checklist
 
 | Test type               | Purpose                                                                    | Example evidence                            |
 |-------------------------|----------------------------------------------------------------------------|---------------------------------------------|
@@ -445,7 +451,7 @@ This is an illustrative list only. The tools should be selected based on the org
 | Regression test         | Confirms previous working cases still pass after changes                   | Test run results                            |
 | Cost / latency test     | Captures response time and major cost drivers                              | Cost/latency summary                        |
 
-## 4.6 Logging and tracing checklist
+### 4.6 Logging and tracing checklist
 
 | Step to trace       | What to capture                                                 | Notes                                     |
 |---------------------|-----------------------------------------------------------------|-------------------------------------------|
@@ -460,7 +466,7 @@ This is an illustrative list only. The tools should be selected based on the org
 | Error / refusal     | Error, refusal reason or escalation route                       | Important for safe-failure analysis.      |
 | Feedback            | Tester feedback, correction or issue link                       | May be lightweight before pilot.          |
 
-## 4.7 Cost and latency capture template
+### 4.7 Cost and latency capture template
 
 | Interaction ID | Question type | Model calls | Retrieval time | Query execution time | Answer generation time | Total latency | Query cost estimate | Model cost estimate | Notes |
 |----------------|---------------|-------------|----------------|----------------------|------------------------|---------------|---------------------|---------------------|-------|
@@ -476,7 +482,7 @@ Suggested summary views:
 | Query execution cost by question | Highlights expensive queries before pilot.                                             |
 | Failure rate by step             | Shows whether problems are in retrieval, generation, validation, execution or answers. |
 
-## 4.8 Example: lightweight MVP environment pattern
+### 4.8 Example: lightweight MVP environment pattern
 
 This is an illustrative example only. It shows a possible MVP setup, not a required architecture.
 
@@ -493,9 +499,9 @@ This is an illustrative example only. It shows a possible MVP setup, not a requi
 | Delivery tracking | Jira, Azure DevOps or GitHub Issues for build items, defects and production gaps      |
 | Dashboard         | Basic view of errors, latency, query cost, model calls and test pass/fail status      |
 
-# 5 Activity 4: Connect approved data, metadata and tools
+## 5 Activity 4: Connect approved data, metadata and tools
 
-## 5.1 Approved connection register
+### 5.1 Approved connection register
 
 | Connection | Type                                      | Purpose | Owner | Access method | Environment      | Status | Notes |
 |------------|-------------------------------------------|---------|-------|---------------|------------------|--------|-------|
@@ -513,7 +519,7 @@ Suggested connection types:
 | Logging / tracing     | Trace store, application logs, model-call logs                        |
 | Feedback capture      | Issue form, feedback table, lightweight UI capture                    |
 
-## 5.2 Access boundary checklist
+### 5.2 Access boundary checklist
 
 | Boundary area           | Question to confirm                                                           | Status | Evidence |
 |-------------------------|-------------------------------------------------------------------------------|--------|----------|
@@ -528,7 +534,7 @@ Suggested connection types:
 | Logging exclusions      | Are sensitive prompts, results or fields excluded or redacted where needed?   |        |          |
 | Failure behaviour       | What happens when access is denied or metadata is missing?                    |        |          |
 
-## 5.3 Access enforcement pattern register
+### 5.3 Access enforcement pattern register
 
 | Pattern                      | Where access is enforced                                               | Strength               | Watch-out                                             |
 |------------------------------|------------------------------------------------------------------------|------------------------|-------------------------------------------------------|
@@ -538,7 +544,7 @@ Suggested connection types:
 | Controlled query rewrite     | Policy layer injects approved filters before execution                 | Acceptable if governed | Must be tested, logged and not model-controlled       |
 | Answer-layer filtering only  | System queries broad data and hides restricted results in the response | Weak                   | Avoid except for non-sensitive POC learning           |
 
-## 5.4 Metadata availability checklist
+### 5.4 Metadata availability checklist
 
 | Metadata item             | Required for MVP? | Source | Runtime usable? | Owner | Gap / action |
 |---------------------------|-------------------|--------|-----------------|-------|--------------|
@@ -554,7 +560,7 @@ Suggested connection types:
 | Data freshness / latency  |                   |        |                 |       |              |
 | Source trust status       |                   |        |                 |       |              |
 
-## 5.5 Connection test template
+### 5.5 Connection test template
 
 | Test question | Data asset used | Metadata retrieved | Tool path used                               | Access control applied | Result                | Issue / action |
 |---------------|-----------------|--------------------|----------------------------------------------|------------------------|-----------------------|----------------|
@@ -570,7 +576,7 @@ Test guidance:
 | Metadata gap test               | Confirms the system clarifies, refuses or escalates when metadata is missing.  |
 | Tool failure test               | Confirms the system handles unavailable tools safely.                          |
 
-## 5.6 Example: regional sales access enforcement
+### 5.6 Example: regional sales access enforcement
 
 This is an illustrative example only. It shows the access-control logic, not a required implementation.
 
@@ -599,7 +605,7 @@ GROUP BY region;
 
 The model should not decide which regions the user can access. User entitlement should come from a trusted identity, policy or governed metadata source and be enforced before restricted results reach the model or answer layer.
 
-## 5.7 Tool boundary checklist
+### 5.7 Tool boundary checklist
 
 | Tool                    | Allowed actions                                           | Blocked actions                                             | Required logs                                      | Owner |
 |-------------------------|-----------------------------------------------------------|-------------------------------------------------------------|----------------------------------------------------|-------|
@@ -609,9 +615,9 @@ The model should not decide which regions the user can access. User entitlement 
 | Logging / tracing tool  | Capture required diagnostic events                        | Store unnecessary sensitive data                            | Trace ID, event type, retention status             |       |
 | Feedback / issue tool   | Capture tester feedback and defects                       | Expose restricted data in issue text                        | Issue ID, owner, severity                          |       |
 
-# 6 5. Activity 5: Implement metadata retrieval and grounding
+## 6 5. Activity 5: Implement metadata retrieval and grounding
 
-## 6.1 Retrieval configuration checklist
+### 6.1 Retrieval configuration checklist
 
 | Area               | Decision / configuration                                                      | Owner | Status | Notes |
 |--------------------|-------------------------------------------------------------------------------|-------|--------|-------|
@@ -626,7 +632,7 @@ The model should not decide which regions the user can access. User entitlement 
 | Fallback behaviour | What happens when retrieval is weak, missing or conflicting                   |       |        |       |
 | Logging            | What retrieval inputs, outputs, versions and scores are captured              |       |        |       |
 
-## 6.2 Grounding rules template
+### 6.2 Grounding rules template
 
 | Rule area           | Rule to define                                         | Example decision                                                       |
 |---------------------|--------------------------------------------------------|------------------------------------------------------------------------|
@@ -641,7 +647,7 @@ The model should not decide which regions the user can access. User entitlement 
 | Examples            | How example questions or SQL are used                  | Examples guide structure but cannot override approved rules.           |
 | Missing context     | What happens when required metadata is unavailable     | Clarify, refuse or route to issue backlog.                             |
 
-## 6.3 Retrieval test set template
+### 6.3 Retrieval test set template
 
 | Test question | Expected metadata                                     | Expected behaviour                     | Result                | Issue / action |
 |---------------|-------------------------------------------------------|----------------------------------------|-----------------------|----------------|
@@ -659,7 +665,7 @@ Suggested test types:
 | Conflicting metadata       | Confirms priority rules are applied when sources disagree.             |
 | Missing metadata           | Confirms the system fails safely rather than inventing context.        |
 
-## 6.4 Metadata gap log
+### 6.4 Metadata gap log
 
 | Gap | Affected question | Gap type                                                          | Impact | Owner | Decision                       | Next action |
 |-----|-------------------|-------------------------------------------------------------------|--------|-------|--------------------------------|-------------|
@@ -676,7 +682,7 @@ Suggested gap types:
 | Not runtime-usable | Metadata is documented but not structured enough for retrieval. |
 | Not permitted      | Metadata should not be exposed for the user or scope.           |
 
-## 6.5 Example: retrieval trace for a supported question
+### 6.5 Example: retrieval trace for a supported question
 
 This is an illustrative example only. It shows the level of evidence expected, not a required format.
 
@@ -695,7 +701,7 @@ This is an illustrative example only. It shows the level of evidence expected, n
 | Retrieval status     | Pass                                                          |
 | Logged evidence      | Trace ID, retrieved artefact IDs, versions and ranking scores |
 
-## 6.6 Retrieval quality summary
+### 6.6 Retrieval quality summary
 
 | Measure                     | What it indicates                                       | MVP target / observation |
 |-----------------------------|---------------------------------------------------------|--------------------------|
@@ -709,9 +715,9 @@ This is an illustrative example only. It shows the level of evidence expected, n
 
 Practical note: these measures do not need to become a formal evaluation framework in Phase 5. They are early signals that retrieval is good enough to enter Phase 6 validation.
 
-# 7 Activity 6: Implement AI/model routing and clarification
+## 7 Activity 6: Implement AI/model routing and clarification
 
-## 7.1 Example: model/task selection options based on June 2026 model landscape
+### 7.1 Example: model/task selection options based on June 2026 model landscape
 
 This table is illustrative only. Model availability, pricing and capability change quickly, so teams should confirm current enterprise availability, approved providers, data-handling terms, region support and cost before implementation.
 
@@ -730,7 +736,7 @@ This table is illustrative only. Model availability, pricing and capability chan
 | Refusal / escalation           | Policy rules + model-assisted classification         | Rules / policy engine plus small or medium model                                             | Refusal should be controlled and explainable.                                                       | Do not make policy decisions purely model-led.                              |
 | Sensitive / private deployment | Private or self-hosted model where required          | Mistral Large 3 / Ministral 3, Llama-family models, Qwen-family models, private cloud models | May support data residency, privacy or platform-control needs.                                      | Higher operating burden and more evaluation required.                       |
 
-## 7.2 Routing rules template
+### 7.2 Routing rules template
 
 | Routing area     | Rule to define                                                                                             | Owner | Evidence |
 |------------------|------------------------------------------------------------------------------------------------------------|-------|----------|
@@ -742,7 +748,7 @@ This table is illustrative only. Model availability, pricing and capability chan
 | Fallback path    | What happens when routing confidence is low or context is missing?                                         |       |          |
 | Logging          | What routing decision, model choice and fallback reason must be recorded?                                  |       |          |
 
-## 7.3 Clarification trigger checklist
+### 7.3 Clarification trigger checklist
 
 | Trigger                   | Clarification needed? | Example clarification                                                           |
 |---------------------------|-----------------------|---------------------------------------------------------------------------------|
@@ -755,7 +761,7 @@ This table is illustrative only. Model availability, pricing and capability chan
 | Out-of-scope question     | Refuse / route        | “That question is outside the current MVP scope.”                               |
 | Unsafe request            | Refuse                | “I cannot provide that output because it may expose restricted information.”    |
 
-## 7.4 Routing and clarification test template
+### 7.4 Routing and clarification test template
 
 | Test question | Expected route                                         | Expected model / rule | Expected behaviour                   | Result                | Issue / action |
 |---------------|--------------------------------------------------------|-----------------------|--------------------------------------|-----------------------|----------------|
@@ -774,7 +780,7 @@ Suggested test types:
 | Follow-up question        | Confirms context inheritance or reset behaviour.          |
 | Out-of-scope request      | Confirms unsupported requests are blocked or routed.      |
 
-## 7.5 Model comparison log
+### 7.5 Model comparison log
 
 | Task                  | Model / rule tested | Quality result | Latency | Cost signal | Failure mode | Decision              |
 |-----------------------|---------------------|----------------|---------|-------------|--------------|-----------------------|
@@ -795,7 +801,7 @@ Decision guidance:
 | Reject              | Quality, cost, latency or safety is not acceptable.              |
 | Escalate            | Requires architecture, security, product or evaluation decision. |
 
-## 7.6 Example: routing decision record
+### 7.6 Example: routing decision record
 
 This is an illustrative example only. It shows the level of evidence expected, not a required format.
 
@@ -812,9 +818,9 @@ This is an illustrative example only. It shows the level of evidence expected, n
 | Validation owner       | Evaluation owner and analytics engineer                                                |
 | Review point           | Reassess after Phase 6 formal validation                                               |
 
-# 8 Activity 7: Implement query generation, validation and execution
+## 8 Activity 7: Implement query generation, validation and execution
 
-## 8.1 Query generation configuration checklist
+### 8.1 Query generation configuration checklist
 
 | Area                   | Decision / configuration                                                 | Owner | Status | Notes |
 |------------------------|--------------------------------------------------------------------------|-------|--------|-------|
@@ -830,7 +836,7 @@ This is an illustrative example only. It shows the level of evidence expected, n
 | Blocked actions        | Write, update, delete, merge, drop, export or unrestricted query actions |       |        |       |
 | Logging                | Which query, validation and execution details are retained               |       |        |       |
 
-## 8.2 Rule-based validation checklist
+### 8.2 Rule-based validation checklist
 
 | Validation check              | Purpose                                                                 | Required for MVP? | Evidence |
 |-------------------------------|-------------------------------------------------------------------------|-------------------|----------|
@@ -847,7 +853,7 @@ This is an illustrative example only. It shows the level of evidence expected, n
 | Aggregation / inference check | Reduces small-cohort or restricted-drilldown exposure                   | Recommended       |          |
 | Dry-run check                 | Estimates execution plan, scanned data or syntax before full execution  | Recommended       |          |
 
-## 8.3 Execution guardrail register
+### 8.3 Execution guardrail register
 
 | Guardrail                | Example decision                                                   | Owner | Evidence |
 |--------------------------|--------------------------------------------------------------------|-------|----------|
@@ -862,7 +868,7 @@ This is an illustrative example only. It shows the level of evidence expected, n
 | Restricted exports       | Large extracts or raw-data exports blocked                         |       |          |
 | Result-shape limit       | Maximum rows, columns or cells passed to answer generation         |       |          |
 
-## 8.4 Query test case template
+### 8.4 Query test case template
 
 | Test question | Expected query behaviour                       | Validation result     | Execution result                | Issue / action |
 |---------------|------------------------------------------------|-----------------------|---------------------------------|----------------|
@@ -883,7 +889,7 @@ Suggested test types:
 | Write/edit request         | Confirms non-read-only actions are blocked.                          |
 | Ambiguous question         | Confirms clarification happens before query generation or execution. |
 
-## 8.5 Query and execution evidence log
+### 8.5 Query and execution evidence log
 
 | Trace ID | Question | Generated query version | Validation outcome    | Execution status                | Runtime | Rows returned | Cost / scan signal | Issue link |
 |----------|----------|-------------------------|-----------------------|---------------------------------|---------|---------------|--------------------|------------|
@@ -901,7 +907,7 @@ Evidence to retain:
 | Cost or scan estimate   | Shows whether the query pattern is viable.                          |
 | Error or refusal reason | Supports debugging and validation evidence.                         |
 
-## 8.6 Example: blocked unsafe query
+### 8.6 Example: blocked unsafe query
 
 This is an illustrative example only. It shows the type of validation evidence expected.
 
@@ -915,7 +921,7 @@ This is an illustrative example only. It shows the type of validation evidence e
 | Evidence retained        | Trace ID, generated query, failed validation checks, refusal reason. |
 | Owner                    | Security / governance lead and evaluation owner.                     |
 
-## 8.7 Example: access-constrained query
+### 8.7 Example: access-constrained query
 
 This is an illustrative example only. It shows access enforcement before execution.
 
@@ -943,7 +949,7 @@ LIMIT 100;
 | Validation result   | Passed.                                                           |
 | Execution evidence  | Runtime, row count and cost signal captured.                      |
 
-## 8.8 Query performance summary
+### 8.8 Query performance summary
 
 | Question type                   | Average runtime | Slowest runtime | Average rows returned | Cost / scan signal | Main issue |
 |---------------------------------|-----------------|-----------------|-----------------------|--------------------|------------|
@@ -962,9 +968,9 @@ Suggested review questions:
 | Which result sets are too large?                           | Identifies answer-generation and exposure risks.               |
 | Which failures require clarification rather than blocking? | Improves user experience without weakening controls.           |
 
-# 9 Activity 8: Implement result interpretation and answer generation
+## 9 Activity 8: Implement result interpretation and answer generation
 
-## 9.1 Answer format rules template
+### 9.1 Answer format rules template
 
 | Answer element     | Rule to define                                                        | Owner | Required for MVP?  |
 |--------------------|-----------------------------------------------------------------------|-------|--------------------|
@@ -981,7 +987,7 @@ Suggested review questions:
 | Partial result     | How incomplete data or failed sub-queries are explained               |       | Yes                |
 | Recommendation     | Whether recommendations are allowed, and under what evidence standard |       | Usually no for MVP |
 
-## 9.2 Evidence boundary rules
+### 9.2 Evidence boundary rules
 
 | Rule area               | Rule                                                                                                         |
 |-------------------------|--------------------------------------------------------------------------------------------------------------|
@@ -994,7 +1000,7 @@ Suggested review questions:
 | Access boundary         | The answer should not mention, compare or infer restricted data outside the user’s entitlement.              |
 | Caveat boundary         | Mandatory caveats should not be dropped to make the answer shorter or more fluent.                           |
 
-## 9.3 How to test answer overreach
+### 9.3 How to test answer overreach
 
 The purpose of this test is to check whether the answer model stays within the available evidence or fills gaps with fluent but unsupported language.
 
@@ -1021,7 +1027,7 @@ Suggested overreach test questions:
 | Which region is underperforming and why?  | Benchmark plus causality           | Provide the metric by region if allowed, but avoid underperformance judgement or cause without benchmark and driver evidence. |
 | Compare my region with all other regions. | Access or inference risk           | Apply entitlement rules; refuse or limit comparison if it would expose restricted regions.                                    |
 
-## 9.4 Answer-quality review template
+### 9.4 Answer-quality review template
 
 | Test question | Answer status                     | Unsupported claim? | Missing caveat? | Source visible? | Reviewer decision     | Issue / action |
 |---------------|-----------------------------------|--------------------|-----------------|-----------------|-----------------------|----------------|
@@ -1040,7 +1046,7 @@ Suggested reviewer checks:
 | Overreach    | Does the answer avoid unsupported causes, advice, benchmarks or confidence? |
 | Safe failure | Does the system clarify, refuse or escalate when evidence is insufficient?  |
 
-## 9.5 Answer issue log
+### 9.5 Answer issue log
 
 | Issue                      | Example symptom                                                          | Severity | Owner | Decision             | Next action |
 |----------------------------|--------------------------------------------------------------------------|----------|-------|----------------------|-------------|
@@ -1052,7 +1058,7 @@ Suggested reviewer checks:
 | Overconfident wording      | Answer says “definitely” or gives confidence without defined scale       | Medium   |       | Fix / accept / defer |             |
 | Access leakage             | Answer compares user’s region against restricted regions                 | High     |       | Fix / accept / defer |             |
 
-## 9.6 Example: safe answer when causal evidence is missing
+### 9.6 Example: safe answer when causal evidence is missing
 
 This is an illustrative example only. It shows the expected answer style, not a required wording.
 
@@ -1064,7 +1070,7 @@ This is an illustrative example only. It shows the expected answer style, not a 
 | Unsafe answer      | “Revenue fell because demand decreased.”                                                                                                                                                                                                                            |
 | Safer answer       | “Net revenue fell from £4.2m in April to £3.8m in May. This result uses the approved net revenue definition and May is marked as provisional. The available data shows the movement, but it does not include enough approved driver evidence to explain the cause.” |
 
-## 9.7 Example: answer format for a supported metric question
+### 9.7 Example: answer format for a supported metric question
 
 This is an illustrative example only. It shows one possible MVP answer format.
 
@@ -1078,7 +1084,7 @@ This is an illustrative example only. It shows one possible MVP answer format.
 | Caveat         | “May data is provisional and excludes cancelled invoices.”                                     |
 | Follow-up      | “You can ask for the trend by month or a breakdown by product if available in this MVP scope.” |
 
-## 9.8 Empty, partial and failed result handling
+### 9.8 Empty, partial and failed result handling
 
 | Situation        | Required behaviour                                                                            |
 |------------------|-----------------------------------------------------------------------------------------------|
@@ -1090,9 +1096,9 @@ This is an illustrative example only. It shows one possible MVP answer format.
 | Missing metadata | Clarify, refuse or route to backlog rather than guessing.                                     |
 | Caveated data    | Present the answer with the mandatory caveat.                                                 |
 
-# 10 Activity 9: Build lightweight UI and feedback capture
+## 10 Activity 9: Build lightweight UI and feedback capture
 
-## 10.1 UI option checklist
+### 10.1 UI option checklist
 
 | UI option                      | Where it fits                                | Strengths                                                           | Watch-outs                                            |
 |--------------------------------|----------------------------------------------|---------------------------------------------------------------------|-------------------------------------------------------|
@@ -1104,7 +1110,7 @@ This is an illustrative example only. It shows one possible MVP answer format.
 | Voice interface                | Mobile, hands-free or operational contexts   | Useful where typing is impractical                                  | Harder to validate ambiguity, privacy and audit trail |
 | API-only interface             | Technical POC or backend validation          | Useful for orchestration testing                                    | Weak for user-facing behaviour and trust testing      |
 
-## 10.2 Example: technology options for lightweight UI
+### 10.2 Example: technology options for lightweight UI
 
 This is an illustrative list only. The selected technology should reflect the organisation’s approved stack, security constraints, user context and team skills.
 
@@ -1119,7 +1125,7 @@ This is an illustrative list only. The selected technology should reflect the or
 | Voice layer                  | Browser speech APIs, Azure Speech, Google Speech-to-Text, Amazon Transcribe | Voice interaction where justified by user context |
 | API testing shell            | Swagger UI, Postman, simple internal console                                | Backend or technical validation before UI testing |
 
-## 10.3 Answer display checklist
+### 10.3 Answer display checklist
 
 | Display element             | Purpose                                                              | Required for MVP?                 |
 |-----------------------------|----------------------------------------------------------------------|-----------------------------------|
@@ -1135,7 +1141,7 @@ This is an illustrative list only. The selected technology should reflect the or
 | Feedback control            | Lets testers flag wrong, unclear, missing or useful answers          | Yes                               |
 | Trace or issue reference    | Links feedback to technical evidence                                 | Yes for MVP / recommended for POC |
 
-## 10.4 Feedback capture template
+### 10.4 Feedback capture template
 
 | Feedback item   | Description                                                                  |
 |-----------------|------------------------------------------------------------------------------|
@@ -1149,7 +1155,7 @@ This is an illustrative list only. The selected technology should reflect the or
 | Owner           | Person responsible for triage                                                |
 | Next action     | Fix / retest / defer / exclude / clarify scope                               |
 
-## 10.5 UI security checklist
+### 10.5 UI security checklist
 
 | Security point    | Question to confirm                                                                | Status |
 |-------------------|------------------------------------------------------------------------------------|--------|
@@ -1163,7 +1169,7 @@ This is an illustrative list only. The selected technology should reflect the or
 | Export / copy     | Are download, copy or export behaviours allowed and controlled?                    |        |
 | Device context    | Are mobile, shared-device or voice-use risks considered?                           |        |
 
-## 10.6 Example: lightweight web UI layout
+### 10.6 Example: lightweight web UI layout
 
 This is an illustrative example only. It shows the type of interface structure that may be sufficient for MVP testing.
 
@@ -1177,7 +1183,7 @@ This is an illustrative example only. It shows the type of interface structure t
 | Feedback panel      | “Useful / wrong / unclear / missing caveat” plus comment box                |
 | Technical reference | Trace ID or issue link for evaluators, not necessarily visible to all users |
 
-## 10.7 Example: feedback-to-trace link
+### 10.7 Example: feedback-to-trace link
 
 This is an illustrative example only. It shows how user feedback can be connected to technical evidence.
 
@@ -1193,9 +1199,9 @@ This is an illustrative example only. It shows how user feedback can be connecte
 | Owner                | Analytics engineer                                       |
 | Next action          | Review query filter and entitlement mapping, then retest |
 
-# 11 Activity 10: Tune, test and package evidence
+## 11 Activity 10: Tune, test and package evidence
 
-## 11.1 Tuning workflow
+### 11.1 Tuning workflow
 
 The purpose of tuning is to improve MVP behaviour using evidence from tests, not to patch individual demos. Changes should be recorded, retested and linked to a clear issue or failure mode.
 
@@ -1210,7 +1216,7 @@ The purpose of tuning is to improve MVP behaviour using evidence from tests, not
 | 7\. Decide outcome          | Accept, retest, revert, defer or escalate.                                                                         | Decision log                            |
 | 8\. Package evidence        | Add final result to the Phase 6 evidence pack.                                                                     | Handover reference                      |
 
-## 11.2 Concrete tuning levers
+### 11.2 Concrete tuning levers
 
 | Problem observed               | Likely cause                          | Tuning lever               | Example action                                                    |
 |--------------------------------|---------------------------------------|----------------------------|-------------------------------------------------------------------|
@@ -1226,7 +1232,7 @@ The purpose of tuning is to improve MVP behaviour using evidence from tests, not
 | Cost too high                  | Model too strong or context too large | Model/context tuning       | Use smaller model for retrieval/ranking and reduce prompt context |
 | Latency too high               | Too many model/tool calls             | Flow tuning                | Cache safe metadata, reduce calls, route simple tasks to rules    |
 
-## 11.3 Model tuning and routing options
+### 11.3 Model tuning and routing options
 
 In Phase 5, “model tuning” usually means tuning **how the model is used**, not fine-tuning the model weights. Fine-tuning should normally be considered only when repeated, stable patterns exist and there is enough high-quality training and regression data.
 
@@ -1242,7 +1248,7 @@ In Phase 5, “model tuning” usually means tuning **how the model is used**, n
 | Output-format tuning | Answers are unclear or inconsistent                    | Use structured answer format and mandatory fields                  | Over-structured answers can reduce usability     |
 | Fine-tuning          | Stable repeated task with sufficient examples          | Train or adapt a task-specific model                               | Requires data, governance and regression testing |
 
-## 11.4 Prompt tuning checklist
+### 11.4 Prompt tuning checklist
 
 | Area                | Question to check                                                                              | Status |
 |---------------------|------------------------------------------------------------------------------------------------|--------|
@@ -1257,7 +1263,7 @@ In Phase 5, “model tuning” usually means tuning **how the model is used**, n
 | SQL constraints     | For query generation, does it require approved assets, joins, filters and read-only behaviour? |        |
 | Versioning          | Is the prompt versioned and linked to test results?                                            |        |
 
-## 11.5 Tuning record template
+### 11.5 Tuning record template
 
 | Tuning ID | Date | Issue addressed | Change type                                                                  | Change made | Owner | Evidence before | Evidence after | Decision                         |
 |-----------|------|-----------------|------------------------------------------------------------------------------|-------------|-------|-----------------|----------------|----------------------------------|
@@ -1273,7 +1279,7 @@ Suggested decision values:
 | Defer    | Issue is real but not blocking for Phase 6.                      |
 | Escalate | Requires product, architecture, security or governance decision. |
 
-## 11.6 Regression check template
+### 11.6 Regression check template
 
 | Test case                  | Previously passed? | Result after change            | Regression? | Action |
 |----------------------------|--------------------|--------------------------------|-------------|--------|
@@ -1284,7 +1290,7 @@ Suggested decision values:
 | Mandatory caveat case      |                    | Caveat shown / missing         | Yes / no    |        |
 | High-cost query case       |                    | Blocked / executed / timed out | Yes / no    |        |
 
-## 11.7 Issue classification and triage
+### 11.7 Issue classification and triage
 
 | Classification           | Meaning                                    | Typical owner                    | Typical response              |
 |--------------------------|--------------------------------------------|----------------------------------|-------------------------------|
@@ -1296,7 +1302,7 @@ Suggested decision values:
 | Phase 4 redesign         | Orchestration assumption is wrong          | AI / solution architect          | Route back to design decision |
 | Out of scope             | Not part of approved MVP                   | Product owner                    | Defer or exclude              |
 
-## 11.8 Phase 6 evidence pack checklist
+### 11.8 Phase 6 evidence pack checklist
 
 | Evidence item                                      | Included? | Notes |
 |----------------------------------------------------|-----------|-------|
@@ -1314,7 +1320,7 @@ Suggested decision values:
 | Production-readiness gaps                          |           |       |
 | Governance decisions and approvals                 |           |       |
 
-## 11.9 Example: controlled prompt tuning record
+### 11.9 Example: controlled prompt tuning record
 
 This is an illustrative example only. It shows the level of evidence expected, not a required format.
 
@@ -1332,7 +1338,7 @@ This is an illustrative example only. It shows the level of evidence expected, n
 | Owner                 | AI / solution architect                                                                    |
 | Reviewer              | Evaluation owner / business SME                                                            |
 
-## 11.10 Example: model routing tuning record
+### 11.10 Example: model routing tuning record
 
 This is an illustrative example only. It shows how routing changes can be documented.
 
@@ -1348,7 +1354,7 @@ This is an illustrative example only. It shows how routing changes can be docume
 | Owner             | AI / solution architect                                                                                            |
 | Reviewer          | Product owner / evaluation owner                                                                                   |
 
-## 11.11 10.5. Versioning approach for MVP tuning
+### 11.11 10.5. Versioning approach for MVP tuning
 
 Versioning should make MVP behaviour reproducible. The team should be able to explain which prompt, model, retrieval configuration, metadata version, validation rules and code version produced a given answer.
 
@@ -1389,3 +1395,8 @@ Minimum evidence to retain for each material tuning change:
 | Active version after change | Makes later validation reproducible.                                                      |
 
 Practical note: the tool does not matter as much as the discipline. A small MVP can use Git plus a simple change log. A more mature MVP may use a prompt registry, model gateway, experiment tracker and evaluation harness. What matters is that Phase 6 can reproduce which version of the system produced each answer.
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*

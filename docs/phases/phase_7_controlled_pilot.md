@@ -1,3 +1,9 @@
+# Talk-to-Data Delivery Blueprint — Phase 7: Controlled Pilot & User Testing
+
+*Daniel Brule · Talk-to-Data Delivery Blueprint · v1.0 · June 2026*
+
+---
+
 **Table of contents**
 
 - [1 Executive summary](#1-executive-summary)
@@ -39,7 +45,7 @@
 
 ---
 
-# 1 Executive summary
+## 1 Executive summary
 
 Phase 7 tests the validated Talk-to-Data MVP with a controlled group of real users, inside the pilot boundary approved in Phase 6.
 
@@ -57,7 +63,7 @@ By the end of Phase 7, stakeholders should be able to decide whether the capabil
 
 The main output is a pilot learning pack: trace-linked feedback, adoption and trust signals, support and access findings, usage and risk patterns, issue taxonomy, controlled-change record, pilot backlog, pause or restart decisions, and the gaps that must be addressed before production readiness.
 
-# 2 Phase overview
+## 2 Phase overview
 
 Phase 7 runs the validated T2D MVP with a controlled group of real users inside the pilot boundary approved at the end of Phase 6. It tests controlled real-world use: whether users can use the MVP responsibly, whether it helps real workflows, whether trust is calibrated correctly, and whether the team can support, monitor and improve the capability under pilot conditions.
 
@@ -65,7 +71,7 @@ Phase 7 is not another validation cycle. The MVP should already have passed the 
 
 The pilot should remain inside the approved boundary: users, data, questions, answer types, caveats, access rules, usage limits, monitoring, escalation routes and pause conditions. Iteration is allowed, but only through controlled change. Quick wins may be released during the pilot if they are low-risk, tested and communicated. Material changes should be reviewed and retested before affected usage continues.
 
-## 2.1 Objective
+### 2.1 Objective
 
 The objective of Phase 7 is to determine whether the validated MVP can be used safely, usefully and supportably by real pilot users. It should assess:
 
@@ -83,13 +89,13 @@ The objective of Phase 7 is to determine whether the validated MVP can be used s
 
 The output is a pilot learning pack supporting a decision to proceed to production readiness, proceed with constraints, extend the pilot, narrow scope, remediate, pause or stop.
 
-## 2.2 Scope of the phase
+### 2.2 Scope of the phase
 
 Phase 7 should remain bounded to the MVP and pilot constraints approved at the end of Phase 6. In scope are approved pilot users, supported and excluded questions, proportionate user documentation and guidance, monitored usage, feedback linked to traces, access lifecycle testing, support handling, controlled fixes, adoption assessment, workflow-fit assessment and Phase 8 production-readiness implications.
 
 It is not broad release, open beta or uncontrolled adoption. Pilot users may ask natural questions, including questions outside the approved scope. The system should recognise when a question is unsupported and respond by clarifying, refusing, redirecting or explaining the current boundary. Unsupported demand should be logged as future scope evidence, not silently absorbed into the pilot.
 
-## 2.3 What this phase does not do
+### 2.3 What this phase does not do
 
 Phase 7 does not approve the system for production. It produces evidence for Phase 8 production-readiness assessment.
 
@@ -97,7 +103,7 @@ Phase 7 should not re-run Phase 6 validation from scratch. Access controls, leak
 
 It also does not rebuild the data foundation, redesign the architecture or define the final operating model. Material issues may trigger remediation, redesign or Phase 8 backlog items, but the pilot itself should not become an uncontrolled rebuild with users attached.
 
-## 2.4 Expected duration and level of effort
+### 2.4 Expected duration and level of effort
 
 The duration of Phase 7 depends on pilot scope, workflow frequency, risk level and evidence required.
 
@@ -107,7 +113,7 @@ For low-frequency workflows, elapsed time is less important than coverage of a m
 
 Phase 7 should be measured by evidence sufficiency, not by a fixed number of days. The pilot may end early if a clear stop or pause signal emerges. It may be extended where usage is too low, behaviour is inconclusive, timing is unrepresentative or material fixes need retesting.
 
-## 2.5 Main participants and decision owners
+### 2.5 Main participants and decision owners
 
 Phase 7 requires business, product, data, AI, support, operations, security and governance participation. It should not be treated as a UX test run by the product team alone.
 
@@ -115,11 +121,11 @@ At minimum, named owners should cover pilot scope, business usefulness, user fee
 
 Every material pilot issue should have an owner, severity, decision route and implication for the pilot boundary or Phase 8 backlog.
 
-# 3 Pilot learning decision and delivery implications
+## 3 Pilot learning decision and delivery implications
 
 Phase 7 should end with a delivery decision based on controlled real-use evidence, not a general statement that the pilot was useful. Usage volume and satisfaction are useful signals, but they are not enough. A popular pilot may still be unsafe or unsupported. A quiet pilot may reveal poor workflow fit, weak onboarding, low trust or the wrong user cohort.
 
-## 3.1 Possible Phase 7 outcomes
+### 3.1 Possible Phase 7 outcomes
 
 Phase 7 should end with one of the following outcomes.
 
@@ -134,7 +140,7 @@ Phase 7 should end with one of the following outcomes.
 
 A proceed decision does not mean the system is production-ready. It means the pilot evidence justifies moving into Phase 8, where production controls, release governance, support model, resilience, monitoring thresholds, incident process, access administration, documentation, run cost, ownership and go-live decisioning are confirmed.
 
-## 3.2 Minimum conditions to proceed to Phase 8
+### 3.2 Minimum conditions to proceed to Phase 8
 
 Proceed to Phase 8 only when the pilot has produced enough evidence across value, risk and operability.
 
@@ -156,7 +162,7 @@ Minimum conditions should include:
 
 If these conditions are not met, the right answer may be to extend, narrow, pause, remediate or redesign before deciding whether Phase 8 is justified.
 
-## 3.3 Common reasons to extend, narrow, pause or stop
+### 3.3 Common reasons to extend, narrow, pause or stop
 
 Phase 7 should not treat continuation as the default. The pilot should be actively managed through continue, constrain, pause, restart or stop decisions.
 
@@ -170,7 +176,7 @@ Redesign or stop where the problem is structural: weak business value, poor work
 
 A temporary pause should not be treated as failure. Pausing affected usage while fixing and retesting material issues is often the responsible decision.
 
-## 3.4 How Phase 7 shapes later phases
+### 3.4 How Phase 7 shapes later phases
 
 Phase 7 provides the evidence base for Phase 8 production readiness. It should explain what the pilot proved, what it disproved and what remains uncertain.
 
@@ -178,13 +184,13 @@ The handover should shape production scope, exclusions, operating model, user en
 
 The practical test is simple: Phase 8 should start with a clear production-readiness backlog, not rediscover pilot findings from meeting notes.
 
-# 4 Controlled pilot activities overview
+## 4 Controlled pilot activities overview
 
 Phase 7 should run as a controlled learning loop, not a loose user trial. The pilot should expose the MVP to real users and workflows while keeping the approved Phase 6 boundary visible and enforceable.
 
 The activities test four dimensions together: user behaviour, supportability, technology behaviour and process readiness. A pilot that only captures user feedback will miss whether access lifecycle works, support can diagnose issues, monitoring is usable, fixes can be controlled and Phase 8 can use the evidence.
 
-## 4.1 Activity sequence
+### 4.1 Activity sequence
 
 The activities should follow a practical sequence, although several will overlap during the pilot.
 
@@ -199,7 +205,7 @@ The activities should follow a practical sequence, although several will overlap
 | 7    | Triage issues, manage backlog and controlled change                    | Classify issues, decide actions, manage hot fixes and prevent scope drift.                    |
 | 8    | Assess adoption, workflow fit, supportability and Phase 8 implications | Decide what the pilot proves.                                                                 |
 
-## 4.2 Pilot control model
+### 4.2 Pilot control model
 
 The pilot needs an explicit control model. Users may ask natural questions, including outside-scope questions, but the system and team should not silently expand the pilot to answer them.
 
@@ -207,7 +213,7 @@ The control model should define the approved boundary, change route, monitoring 
 
 Low-risk quick wins and hot fixes may be released during the pilot if they are tested, logged, communicated and remain inside the approved boundary. Material changes to data, access, supported question types, model behaviour, validation rules or answer logic should be reviewed and retested before affected usage continues.
 
-## 4.3 Activity logic
+### 4.3 Activity logic
 
 The activity logic is iterative:
 
@@ -225,15 +231,15 @@ The activity logic is iterative:
 
 A controlled pilot is not frozen, but it should never become informal production or uncontrolled rebuild.
 
-## 4.4 Practitioner note
+### 4.4 Practitioner note
 
 A pilot is not successful only because users like the tool. It is successful when it shows whether the MVP creates real workflow value, can be used responsibly, can be supported realistically and can be improved safely.
 
 Ideally, users understand caveats, stay within intended use, challenge surprising answers and use the system in the workflow it was designed for. If not, the finding is valuable: misunderstanding caveats, asking unsupported questions, over-trusting fluent answers, creating unexpected support load or revealing workflow mismatch are exactly the signals Phase 7 should surface before production.
 
-# 5 Core pilot activities
+## 5 Core pilot activities
 
-## 5.1 Confirm pilot operating plan, cohort and control boundary
+### 5.1 Confirm pilot operating plan, cohort and control boundary
 
 **Purpose:** Confirm that the pilot can start with a clear user cohort, operating model, control boundary and decision route.
 
@@ -278,7 +284,7 @@ Ideally, users understand caveats, stay within intended use, challenge surprisin
 **Practitioner note:**  
 This should be a quick confirmation task, not a new planning phase. Most of the scope, users, controls and constraints should already have been approved in Phase 6. If Activity 1 requires major debate, missing ownership or material redesign, the pilot is probably not ready to start.
 
-## 5.2 Prepare user, support and operator guidance
+### 5.2 Prepare user, support and operator guidance
 
 **Purpose:** Ensure users, support teams and operators understand how the pilot should be used, supported and controlled.
 
@@ -325,7 +331,7 @@ This should be a quick confirmation task, not a new planning phase. Most of the 
 **Practitioner note:**  
 Documentation should be proportionate, not heavy by default. A small expert pilot may only need a quick-start note and a lightweight support route. A broader business pilot needs clearer user guidance, support instructions and operator documentation. If the pilot depends on the build team explaining every issue live, the operating model is not being properly tested.
 
-## 5.3 Test pilot access, onboarding, role changes and offboarding
+### 5.3 Test pilot access, onboarding, role changes and offboarding
 
 **Purpose:** Confirm that pilot access and user lifecycle changes work correctly within expected operational timelines.
 
@@ -372,7 +378,7 @@ Documentation should be proportionate, not heavy by default. A small expert pilo
 
 **Note 2:** Where access changes are tested, the team needs enough traceability to confirm the effect: who asked the question, under which role or permission, what data boundary was applied, and what query or tool call was generated. For sensitive data, this may require restricted access to logs or redacted traces rather than broad visibility.
 
-## 5.4 Run controlled pilot usage and monitored sessions
+### 5.4 Run controlled pilot usage and monitored sessions
 
 **Purpose:** Observe how real users use the MVP inside the approved pilot boundary.
 
@@ -419,7 +425,7 @@ Documentation should be proportionate, not heavy by default. A small expert pilo
 
 **Note 2:** A diverse pool of realistic users is often hard to secure. A pilot made only of sponsors, champions or highly motivated users may still be useful, and sometimes it is the only practical option, but the evidence should be caveated. The pilot output should state clearly whether findings reflect normal users, expert users, friendly users or a narrow champion group.
 
-## 5.5 Capture feedback and monitor pilot signals
+### 5.5 Capture feedback and monitor pilot signals
 
 **Purpose:** Turn pilot usage, feedback, monitoring and support signals into diagnosable evidence linked to real system behaviour.
 
@@ -491,7 +497,7 @@ Monitoring should not become vanity reporting. Usage counts and satisfaction sco
 
 A practical approach is to follow up with users who show distinctive behaviour: unusually high usage, low usage, repeated unsupported questions, repeated refusals, high feedback volume or no feedback despite heavy use.
 
-## 5.6 Review answer quality, caveat understanding and user interpretation
+### 5.6 Review answer quality, caveat understanding and user interpretation
 
 **Purpose:** Assess whether real pilot answers are correct, understood and safely acted on.
 
@@ -536,7 +542,7 @@ A practical approach is to follow up with users who show distinctive behaviour: 
 **Practitioner note:**  
 A correct answer can still fail if users misunderstand it. In T2D, quality is not only whether the number matches the data; it is whether the user understands what the answer means, what it does not mean, and whether it is safe to use in the workflow. Some interactions cannot be judged from traces alone. Where the user intent, interpretation or decision impact is unclear, the team should follow up through a short interview rather than guessing from logs.
 
-## 5.7 Triage issues, manage backlog and controlled change
+### 5.7 Triage issues, manage backlog and controlled change
 
 **Purpose:** Classify pilot issues, decide the right action and manage improvements without allowing scope drift or untested behaviour changes.
 
@@ -610,7 +616,7 @@ A pilot should be able to improve while it runs, but changes must remain visible
 
 Hot fixes should trigger the relevant regression checks. The risk is not fixing issues quickly; the risk is releasing untracked fixes that change behaviour, hide evidence or expand scope without approval.
 
-## 5.8 Assess adoption, workflow fit, supportability and Phase 8 implications
+### 5.8 Assess adoption, workflow fit, supportability and Phase 8 implications
 
 **Purpose:** Decide what the pilot proves about value, real-world use, supportability and production-readiness needs.
 
@@ -655,13 +661,13 @@ Hot fixes should trigger the relevant regression checks. The risk is not fixing 
 **Practitioner note:**  
 The strongest pilot signal is not excitement; it is representative users coming back because the MVP helps their real work and asking for more scope, better integration or broader access. That is strong evidence of value pull, but it is not production readiness. Phase 7 should separate value evidence from hardening needs: a tool users want more of may still need stronger access lifecycle, monitoring, documentation, support, cost control and governance before release.
 
-# 6 Consolidated Phase 7 outputs
+## 6 Consolidated Phase 7 outputs
 
 Phase 7 should produce a small set of decision-useful outputs, not a large archive of pilot notes. The purpose is to show what happened in controlled real use, what the team learned, what must change before production readiness, and whether the MVP should proceed, continue with constraints, pause, narrow, redesign or stop.
 
 The outputs should be traceable enough to support a senior decision. Positive user comments, usage charts and issue lists are useful only if they are connected to real users, workflows, question types, traces, support evidence and risk decisions.
 
-## 6.1 Pilot learning pack
+### 6.1 Pilot learning pack
 
 The main output of Phase 7 is the pilot learning pack. It should consolidate the evidence needed to decide whether the MVP is ready for Phase 8 production-readiness assessment.
 
@@ -683,7 +689,7 @@ The pilot learning pack should include:
 
 The pack should make evidence limitations explicit. A pilot run mainly with champions may still be valuable, but it should not be presented as proof of broad adoption. A pilot with low usage may still be useful if it explains why users did not adopt the tool. A pilot with strong value pull may still need substantial production hardening.
 
-## 6.2 Output quality test
+### 6.2 Output quality test
 
 Before Phase 7 outputs are used for decision-making, the team should check whether they are clear, evidence-based and decision-ready.
 
@@ -702,7 +708,7 @@ Before Phase 7 outputs are used for decision-making, the team should check wheth
 
 If the answer to several of these questions is no, the phase may have generated activity but not decision evidence.
 
-## 6.3 Minimum output set by pilot type
+### 6.3 Minimum output set by pilot type
 
 The output set should be proportionate to the pilot’s intent and risk.
 
@@ -715,17 +721,17 @@ The output set should be proportionate to the pilot’s intent and risk.
 
 The output standard should rise when the pilot touches sensitive data, senior decision workflows, broad user groups, regulated reporting, financial metrics or high-cost usage patterns.
 
-## 6.4 Practitioner note
+### 6.4 Practitioner note
 
 The consolidated outputs should tell a clear story: who used the MVP, for what workflow, what happened, what was useful, what failed, what was misunderstood, what support could handle, what technology needs hardening, and what Phase 8 must decide. Anything else belongs in the annexes or backlog, not the main decision pack.
 
-# 7 Exit criteria and handover
+## 7 Exit criteria and handover
 
 Phase 7 should end with a clear decision and a usable handover to Phase 8. The objective is not to prove production readiness, but to decide whether the MVP has enough real-use evidence to enter production readiness and controlled-release preparation, under which constraints, with which backlog, and with which issues requiring fix, acceptance, monitoring, redesign or deferral.
 
 The handover should explain what the pilot proved, what it did not prove, what remains uncertain and what must be fixed, accepted, constrained or deferred before broader release. It should not hand over a generic feature backlog without value, risk, supportability and governance context.
 
-## 7.1 Required exit outputs
+### 7.1 Required exit outputs
 
 The required exit output is the pilot learning decision pack described in Section 6, completed to the standard required by pilot scale and risk.
 
@@ -733,7 +739,7 @@ The exit decision should confirm whether the MVP can proceed to Phase 8, proceed
 
 The evidence does not need to be perfect, but it must be honest. If users were mostly champions, if usage was low, if support was handled by the build team or if access lifecycle was only manually tested, the exit pack should say so.
 
-## 7.2 Handover to Phase 8
+### 7.2 Handover to Phase 8
 
 The Phase 8 handover should focus on production-readiness implications, not general product ideas. It should make clear what needs to be hardened, approved, funded, supported or constrained before any broader release.
 
@@ -757,7 +763,7 @@ The handover should cover:
 
 Any issue accepted during the pilot should be reclassified before Phase 8. “Accepted for pilot” does not mean “acceptable for production”. Phase 8 should decide whether each accepted issue becomes a blocker, a constraint, a monitored residual risk or a later enhancement.
 
-## 7.3 Exit decision wording
+### 7.3 Exit decision wording
 
 Phase 7 should close with explicit decision wording. The wording should be precise enough for a sponsor, product owner, security lead, operating owner and Phase 8 team to understand what is being approved.
 
@@ -777,7 +783,7 @@ Alternative decisions should be equally explicit:
 
 - **Stop:** state why value, risk or operability does not justify continuation.
 
-# 8 Key risks and failure modes
+## 8 Key risks and failure modes
 
 Phase 7 reduces uncertainty by exposing the MVP to controlled real use. It does not remove risk. The main risks in this phase come from confusing pilot enthusiasm with readiness, allowing the boundary to drift, missing weak trust signals, or failing to turn real-use evidence into production-readiness decisions.
 
@@ -794,3 +800,8 @@ Phase 7 reduces uncertainty by exposing the MVP to controlled real use. It does 
 | Controlled change breaks down     | Hot fixes change behaviour, caveats, refusals, access or cost without test evidence or communication. | Require regression checks, version history and user/support communication.                |
 | Backlog loses decision structure  | Blockers, pilot fixes, Phase 8 items and later enhancements are mixed together.                       | Classify backlog by decision route and production-readiness implication.                  |
 | Pause conditions are not used     | The team sees risk but keeps running because stopping feels politically difficult.                    | Empower pause authority and treat temporary pause as controlled delivery, not failure.    |
+
+---
+
+*Talk-to-Data Delivery Blueprint · v1.0 · June 2026*  
+*Daniel Brule · [LinkedIn](https://www.linkedin.com/in/danielbrule/) · [Repository](https://github.com/danielBrule/enterprise-talk-to-data-blueprint)*
