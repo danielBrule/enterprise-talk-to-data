@@ -1,0 +1,13 @@
+name: sentiment
+description: "A category about the tone and polarity of reader comments, measured as average sentiment scores."
+related_views:
+  - analytics.vw_article_engagement
+  - analytics.vw_keyword_engagement
+  - analytics.vw_top_contributors
+business_meaning: |
+  Sentiment helps quantify whether engagement is positive, neutral, or negative. It is used to assess community mood, content reception, and potential issues.
+key_terms:
+  - avg_comment_sentiment
+  - avg_sentiment
+limitations: |
+  Average sentiment can obscure extreme opinions, and comment sentiment may reflect reactive feelings rather than the core article or keyword intent."

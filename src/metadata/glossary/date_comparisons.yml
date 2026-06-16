@@ -1,0 +1,14 @@
+name: date comparisons
+description: "A category for comparing metrics over time, using publication, insertion, or ingestion attempt dates to analyze trends."
+related_views:
+  - analytics.vw_article_engagement
+  - analytics.vw_ingestion_errors
+business_meaning: |
+  Date comparisons allow teams to track how engagement and error patterns evolve over time, identify seasonality,
+  and measure the impact of content or pipeline changes.
+key_terms:
+  - publication_date
+  - insert_date
+  - attempted_at
+limitations: |
+  Time-based comparisons depend on consistent timestamp capture and may be affected by late-arriving or backfilled data."

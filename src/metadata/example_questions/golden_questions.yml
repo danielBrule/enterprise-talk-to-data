@@ -1,0 +1,651 @@
+- natural_language_question: "Which articles have the highest comment volume and what is their average comment sentiment?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, comment_count, avg_comment_sentiment
+    FROM analytics.vw_article_engagement
+    ORDER BY comment_count DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - comment_count
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "How many keywords are associated with articles published after 2025-01-01?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, publication_date, keyword_count
+    FROM analytics.vw_article_engagement
+    WHERE publication_date >= '2025-01-01';
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - publication_date
+      - keyword_count
+    row_count: list
+
+- natural_language_question: "Show low-engagement articles with fewer than 5 comments and average sentiment below 0.2."
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, comment_count, avg_comment_sentiment
+    FROM analytics.vw_article_engagement
+    WHERE comment_count < 5
+      AND avg_comment_sentiment < 0.2;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - comment_count
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "Which keywords appear in the most articles and have the highest average comment sentiment?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT keyword_id, full_keyword, article_count, avg_comment_sentiment
+    FROM analytics.vw_keyword_engagement
+    ORDER BY article_count DESC, avg_comment_sentiment DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - keyword_id
+      - full_keyword
+      - article_count
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "For the keyword 'climate change', how many unique contributors commented on related articles?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT keyword_id, full_keyword, contributor_count
+    FROM analytics.vw_keyword_engagement
+    WHERE full_keyword = 'climate change';
+  expected_result_shape:
+    columns:
+      - keyword_id
+      - full_keyword
+      - contributor_count
+    row_count: single
+
+- natural_language_question: "Who are the top contributors by comment count?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, comment_count, avg_sentiment, distinct_article_count
+    FROM analytics.vw_top_contributors
+    ORDER BY comment_count DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - comment_count
+      - avg_sentiment
+      - distinct_article_count
+    row_count: list
+
+- natural_language_question: "Which contributors have the highest average sentiment and at least 20 comments?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, comment_count, avg_sentiment
+    FROM analytics.vw_top_contributors
+    WHERE comment_count >= 20
+    ORDER BY avg_sentiment DESC;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - comment_count
+      - avg_sentiment
+    row_count: list
+
+- natural_language_question: "List the most recent ingestion errors by stage and error type."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, stage, error_type, error_message, attempted_at
+    FROM analytics.vw_ingestion_errors
+    ORDER BY attempted_at DESC
+    FETCH FIRST 20 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - error_id
+      - stage
+      - error_type
+      - error_message
+      - attempted_at
+    row_count: list
+
+- natural_language_question: "Find ingestion errors for a specific data item ID 'article-12345'."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, stage, error_type, error_message, attempted_at
+    FROM analytics.vw_ingestion_errors
+    WHERE data_id = 'article-12345';
+  expected_result_shape:
+    columns:
+      - error_id
+      - stage
+      - error_type
+      - error_message
+      - attempted_at
+    row_count: list
+
+- natural_language_question: "What is the total number of comments across all articles?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT SUM(comment_count) AS total_comments
+    FROM analytics.vw_article_engagement;
+  expected_result_shape:
+    columns:
+      - total_comments
+    row_count: single
+
+- natural_language_question: "Which articles have more than 10 keywords associated?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, keyword_count
+    FROM analytics.vw_article_engagement
+    WHERE keyword_count > 10;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - keyword_count
+    row_count: list
+
+- natural_language_question: "Show articles with the highest total replies."
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, total_replies
+    FROM analytics.vw_article_engagement
+    ORDER BY total_replies DESC
+    FETCH FIRST 5 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - total_replies
+    row_count: list
+
+- natural_language_question: "What is the average sentiment for articles published in 2025?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT AVG(avg_comment_sentiment) AS avg_sentiment_2025
+    FROM analytics.vw_article_engagement
+    WHERE YEAR(publication_date) = 2025;
+  expected_result_shape:
+    columns:
+      - avg_sentiment_2025
+    row_count: single
+
+- natural_language_question: "Which keywords have the lowest average comment sentiment?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT keyword_id, full_keyword, avg_comment_sentiment
+    FROM analytics.vw_keyword_engagement
+    ORDER BY avg_comment_sentiment ASC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - keyword_id
+      - full_keyword
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "How many articles are associated with each keyword?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT full_keyword, article_count
+    FROM analytics.vw_keyword_engagement
+    ORDER BY article_count DESC;
+  expected_result_shape:
+    columns:
+      - full_keyword
+      - article_count
+    row_count: list
+
+- natural_language_question: "Which keywords have more than 100 comments?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT keyword_id, full_keyword, comment_count
+    FROM analytics.vw_keyword_engagement
+    WHERE comment_count > 100;
+  expected_result_shape:
+    columns:
+      - keyword_id
+      - full_keyword
+      - comment_count
+    row_count: list
+
+- natural_language_question: "Show contributors with the most distinct articles commented on."
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, distinct_article_count
+    FROM analytics.vw_top_contributors
+    ORDER BY distinct_article_count DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - distinct_article_count
+    row_count: list
+
+- natural_language_question: "Which contributors have negative average sentiment?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, avg_sentiment
+    FROM analytics.vw_top_contributors
+    WHERE avg_sentiment < 0;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - avg_sentiment
+    row_count: list
+
+- natural_language_question: "What is the total number of replies for top contributors?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, total_replies
+    FROM analytics.vw_top_contributors
+    ORDER BY total_replies DESC;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - total_replies
+    row_count: list
+
+- natural_language_question: "List ingestion errors from the last 7 days."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, stage, error_type, attempted_at
+    FROM analytics.vw_ingestion_errors
+    WHERE attempted_at >= DATEADD(DAY, -7, GETDATE());
+  expected_result_shape:
+    columns:
+      - error_id
+      - stage
+      - error_type
+      - attempted_at
+    row_count: list
+
+- natural_language_question: "Which stages have the most ingestion errors?"
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT stage, COUNT(*) AS error_count
+    FROM analytics.vw_ingestion_errors
+    GROUP BY stage
+    ORDER BY error_count DESC;
+  expected_result_shape:
+    columns:
+      - stage
+      - error_count
+    row_count: list
+
+- natural_language_question: "Show articles with publication date in the last month."
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, publication_date
+    FROM analytics.vw_article_engagement
+    WHERE publication_date >= DATEADD(MONTH, -1, GETDATE());
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - publication_date
+    row_count: list
+
+- natural_language_question: "Which articles have no comments?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title
+    FROM analytics.vw_article_engagement
+    WHERE comment_count = 0;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+    row_count: list
+
+- natural_language_question: "What is the average keyword count per article?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT AVG(keyword_count) AS avg_keywords
+    FROM analytics.vw_article_engagement;
+  expected_result_shape:
+    columns:
+      - avg_keywords
+    row_count: single
+
+- natural_language_question: "Which keywords have the highest contributor count?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT keyword_id, full_keyword, contributor_count
+    FROM analytics.vw_keyword_engagement
+    ORDER BY contributor_count DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - keyword_id
+      - full_keyword
+      - contributor_count
+    row_count: list
+
+- natural_language_question: "Show contributors with comment count between 10 and 50."
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, comment_count, avg_sentiment
+    FROM analytics.vw_top_contributors
+    WHERE comment_count BETWEEN 10 AND 50;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - comment_count
+      - avg_sentiment
+    row_count: list
+
+- natural_language_question: "List all ingestion errors with error type 'validation'."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, data_id, error_message
+    FROM analytics.vw_ingestion_errors
+    WHERE error_type = 'validation';
+  expected_result_shape:
+    columns:
+      - error_id
+      - data_id
+      - error_message
+    row_count: list
+
+- natural_language_question: "Which articles have the highest sentiment variance?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, avg_comment_sentiment
+    FROM analytics.vw_article_engagement
+    ORDER BY ABS(avg_comment_sentiment) DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "How many keywords have no associated comments?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT COUNT(*) AS keywords_no_comments
+    FROM analytics.vw_keyword_engagement
+    WHERE comment_count = 0;
+  expected_result_shape:
+    columns:
+      - keywords_no_comments
+    row_count: single
+
+- natural_language_question: "Show top contributors by total replies."
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, total_replies
+    FROM analytics.vw_top_contributors
+    ORDER BY total_replies DESC
+    FETCH FIRST 5 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - total_replies
+    row_count: list
+
+- natural_language_question: "What are the most common error types in ingestion?"
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_type, COUNT(*) AS count
+    FROM analytics.vw_ingestion_errors
+    GROUP BY error_type
+    ORDER BY count DESC;
+  expected_result_shape:
+    columns:
+      - error_type
+      - count
+    row_count: list
+
+- natural_language_question: "Which articles were inserted in the last week?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, insert_date
+    FROM analytics.vw_article_engagement
+    WHERE insert_date >= DATEADD(WEEK, -1, GETDATE());
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - insert_date
+    row_count: list
+
+- natural_language_question: "Show keywords with average sentiment above 0.5."
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT full_keyword, avg_comment_sentiment
+    FROM analytics.vw_keyword_engagement
+    WHERE avg_comment_sentiment > 0.5;
+  expected_result_shape:
+    columns:
+      - full_keyword
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "Which contributors have commented on more than 20 distinct articles?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, distinct_article_count
+    FROM analytics.vw_top_contributors
+    WHERE distinct_article_count > 20;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - distinct_article_count
+    row_count: list
+
+- natural_language_question: "List ingestion errors with messages containing 'timeout'."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, error_message, attempted_at
+    FROM analytics.vw_ingestion_errors
+    WHERE error_message LIKE '%timeout%';
+  expected_result_shape:
+    columns:
+      - error_id
+      - error_message
+      - attempted_at
+    row_count: list
+
+- natural_language_question: "What is the total keyword count across all articles?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT SUM(keyword_count) AS total_keywords
+    FROM analytics.vw_article_engagement;
+  expected_result_shape:
+    columns:
+      - total_keywords
+    row_count: single
+
+- natural_language_question: "Which keywords have the most comments?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT full_keyword, comment_count
+    FROM analytics.vw_keyword_engagement
+    ORDER BY comment_count DESC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - full_keyword
+      - comment_count
+    row_count: list
+
+- natural_language_question: "Show contributors with average sentiment between 0.1 and 0.3."
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, avg_sentiment
+    FROM analytics.vw_top_contributors
+    WHERE avg_sentiment BETWEEN 0.1 AND 0.3;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - avg_sentiment
+    row_count: list
+
+- natural_language_question: "How many ingestion errors occurred in each stage?"
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT stage, COUNT(*) AS error_count
+    FROM analytics.vw_ingestion_errors
+    GROUP BY stage;
+  expected_result_shape:
+    columns:
+      - stage
+      - error_count
+    row_count: list
+
+- natural_language_question: "Which articles have the oldest publication dates?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, publication_date
+    FROM analytics.vw_article_engagement
+    ORDER BY publication_date ASC
+    FETCH FIRST 5 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - publication_date
+    row_count: list
+
+- natural_language_question: "Show keywords with article count less than 5."
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT full_keyword, article_count
+    FROM analytics.vw_keyword_engagement
+    WHERE article_count < 5;
+  expected_result_shape:
+    columns:
+      - full_keyword
+      - article_count
+    row_count: list
+
+- natural_language_question: "Which contributors have the lowest comment count?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, comment_count
+    FROM analytics.vw_top_contributors
+    ORDER BY comment_count ASC
+    FETCH FIRST 10 ROWS ONLY;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - comment_count
+    row_count: list
+
+- natural_language_question: "List ingestion errors attempted after a specific date."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, attempted_at
+    FROM analytics.vw_ingestion_errors
+    WHERE attempted_at > '2025-01-01';
+  expected_result_shape:
+    columns:
+      - error_id
+      - attempted_at
+    row_count: list
+
+- natural_language_question: "What is the maximum comment count for any article?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT MAX(comment_count) AS max_comments
+    FROM analytics.vw_article_engagement;
+  expected_result_shape:
+    columns:
+      - max_comments
+    row_count: single
+
+- natural_language_question: "Which keywords have contributor count greater than 50?"
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT full_keyword, contributor_count
+    FROM analytics.vw_keyword_engagement
+    WHERE contributor_count > 50;
+  expected_result_shape:
+    columns:
+      - full_keyword
+      - contributor_count
+    row_count: list
+
+- natural_language_question: "Show contributors with total replies less than 10."
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, total_replies
+    FROM analytics.vw_top_contributors
+    WHERE total_replies < 10;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - total_replies
+    row_count: list
+
+- natural_language_question: "How many ingestion errors have error type 'network'?"
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT COUNT(*) AS network_errors
+    FROM analytics.vw_ingestion_errors
+    WHERE error_type = 'network';
+  expected_result_shape:
+    columns:
+      - network_errors
+    row_count: single
+
+- natural_language_question: "Which articles have publication date in 2024?"
+  expected_view: analytics.vw_article_engagement
+  expected_sql: |
+    SELECT article_id, title, publication_date
+    FROM analytics.vw_article_engagement
+    WHERE YEAR(publication_date) = 2024;
+  expected_result_shape:
+    columns:
+      - article_id
+      - title
+      - publication_date
+    row_count: list
+
+- natural_language_question: "Show keywords ordered by average sentiment descending."
+  expected_view: analytics.vw_keyword_engagement
+  expected_sql: |
+    SELECT full_keyword, avg_comment_sentiment
+    FROM analytics.vw_keyword_engagement
+    ORDER BY avg_comment_sentiment DESC;
+  expected_result_shape:
+    columns:
+      - full_keyword
+      - avg_comment_sentiment
+    row_count: list
+
+- natural_language_question: "Which contributors have distinct article count equal to 1?"
+  expected_view: analytics.vw_top_contributors
+  expected_sql: |
+    SELECT contributor_id, distinct_article_count
+    FROM analytics.vw_top_contributors
+    WHERE distinct_article_count = 1;
+  expected_result_shape:
+    columns:
+      - contributor_id
+      - distinct_article_count
+    row_count: list
+
+- natural_language_question: "List ingestion errors with stage 'extraction'."
+  expected_view: analytics.vw_ingestion_errors
+  expected_sql: |
+    SELECT error_id, data_id, error_message
+    FROM analytics.vw_ingestion_errors
+    WHERE stage = 'extraction';
+  expected_result_shape:
+    columns:
+      - error_id
+      - data_id
+      - error_message
+    row_count: list

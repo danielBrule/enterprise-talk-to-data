@@ -1,0 +1,15 @@
+view_name: analytics.vw_keyword_engagement
+description: "Engagement metrics for keywords, including article coverage, comment volume, sentiment, and contributor reach."
+columns:
+  - name: keyword_id
+    description: "Primary keyword identifier from core_keywords."
+  - name: full_keyword
+    description: "The keyword text."
+  - name: article_count
+    description: "Number of distinct articles associated with the keyword."
+  - name: comment_count
+    description: "Total number of comments on articles containing the keyword."
+  - name: avg_comment_sentiment
+    description: "Average sentiment score across comments for articles containing the keyword."
+  - name: contributor_count
+    description: "Number of distinct contributors who commented on articles containing the keyword."

@@ -1,0 +1,19 @@
+view_name: analytics.vw_article_engagement
+description: "Aggregated engagement metrics for articles, including comments, sentiment, replies, and keyword coverage."
+columns:
+  - name: article_id
+    description: "Primary article identifier from core_articles."
+  - name: title
+    description: "Article title."
+  - name: publication_date
+    description: "Original publication date of the article."
+  - name: insert_date
+    description: "Date when the article record was inserted."
+  - name: comment_count
+    description: "Total number of comments associated with the article."
+  - name: avg_comment_sentiment
+    description: "Average sentiment score across article comments."
+  - name: total_replies
+    description: "Total number of replies to comments on the article."
+  - name: keyword_count
+    description: "Number of distinct keywords linked to the article."

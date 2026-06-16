@@ -1,0 +1,70 @@
+view_name: analytics.vw_article_engagement
+category: article engagement
+purpose: "Provides article-level engagement metrics by aggregating comments, sentiment, replies, and keyword coverage for each article."
+business_meaning: |
+  This view enables product and editorial teams to identify articles that generate the most reader interaction
+  and how sentiment trends correlate with engagement. It is useful for prioritizing content refreshes, promotion,
+  and understanding keyword reach.
+columns:
+  - name: article_id
+    description: "Primary article identifier from core_articles."
+  - name: title
+    description: "Article title."
+  - name: publication_date
+    description: "Original publication date of the article."
+  - name: insert_date
+    description: "Date when the article record was inserted into the system."
+  - name: comment_count
+    description: "Total number of comments associated with the article."
+  - name: avg_comment_sentiment
+    description: "Average sentiment score across article comments."
+  - name: total_replies
+    description: "Total number of replies to comments on the article."
+  - name: keyword_count
+    description: "Number of distinct keywords linked to the article."
+limitations:
+  - "Sentiment is averaged at the comment level and may mask variation across highly polarized comments."
+  - "Keyword coverage only counts assigned keywords and does not measure how well keywords reflect article topic quality."
+  - "Articles without comments still appear with zero counts, which may require explicit filtering for engagement-focused queries."
+example_questions:
+  - natural_language_question: "Which articles have the highest comment volume and what is their average comment sentiment?"
+    expected_view: analytics.vw_article_engagement
+    expected_sql: |
+      SELECT article_id, title, comment_count, avg_comment_sentiment
+      FROM analytics.vw_article_engagement
+      ORDER BY comment_count DESC
+      FETCH FIRST 10 ROWS ONLY;
+    expected_result_shape:
+      columns:
+        - article_id
+        - title
+        - comment_count
+        - avg_comment_sentiment
+      row_count: list
+  - natural_language_question: "How many keywords are associated with articles published after 2025-01-01?"
+    expected_view: analytics.vw_article_engagement
+    expected_sql: |
+      SELECT article_id, title, publication_date, keyword_count
+      FROM analytics.vw_article_engagement
+      WHERE publication_date >= '2025-01-01';
+    expected_result_shape:
+      columns:
+        - article_id
+        - title
+        - publication_date
+        - keyword_count
+      row_count: list
+  - natural_language_question: "Show low-engagement articles with fewer than 5 comments and average sentiment below 0.2."
+    expected_view: analytics.vw_article_engagement
+    expected_sql: |
+      SELECT article_id, title, comment_count, avg_comment_sentiment
+      FROM analytics.vw_article_engagement
+      WHERE comment_count < 5
+        AND avg_comment_sentiment < 0.2;
+    expected_result_shape:
+      columns:
+        - article_id
+        - title
+        - comment_count
+        - avg_comment_sentiment
+      row_count: list
