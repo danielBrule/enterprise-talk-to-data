@@ -2,6 +2,7 @@ from openai import AsyncAzureOpenAI
 from typing import List, Dict, Any
 
 from backend.app.core.config import settings
+from backend.app.core.logger import logger
 
 
 class LLMService:
@@ -57,8 +58,7 @@ class LLMService:
         """
         if model is None:
             model = settings.get_azure_openai_deployment(task)
-        print(f"Using model deployment: {model} for task: {task}")
-        print("Azure endpoint:", settings.azure_openai_endpoint)
+        logger.debug("llm.request model=%s task=%s endpoint=%s", model, task, settings.azure_openai_endpoint)
         if not model:
             raise ValueError(
                 "Azure OpenAI model deployment is not configured. Set AZURE_OPENAI_DEPLOYMENT or the task-specific deployment environment variable."

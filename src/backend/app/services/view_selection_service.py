@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 
 from .llm_service import LLMService
 from .metadata_service import get_metrics_metadata
+from ..core.logger import logger
 
 
 class ViewSelectionService:
@@ -71,9 +72,9 @@ Please select the most relevant view(s) that would help answer this question. Co
 
 Return your response as a JSON object with the following structure:
 {{
-  "selected_views": ["view_name1", "view_name2"],
-  "confidence": 0.0,
-  "reason": "Brief explanation of why these views were selected"
+  "selected_views": ["<view_name>"],
+  "confidence": "<float between 0.0 and 1.0>",
+  "reason": "<brief explanation of why these views were selected>"
 }}
 
 Select 1-3 views maximum. If no views are relevant, select the closest match.
@@ -82,17 +83,20 @@ Select 1-3 views maximum. If no views are relevant, select the closest match.
         messages = [
             {
                 "role": "system",
-                "content": "You are a helpful assistant that selects database views for analytics questions. Always respond with valid JSON.",
+                "content": (
+                    "You select the most relevant database views to answer analytics questions. "
+                    "Respond only with valid JSON — no markdown, no explanation outside the JSON."
+                ),
             },
             {"role": "user", "content": prompt},
         ]
 
         # Get LLM response
-        print("Sending prompt to LLM for view selection...")
+        logger.debug("view_selection.request question=%s", question[:80])
         response = await self.llm_service.generate_response(
             messages, task="schema_retrieval"
         )
-        print(f"Received response from LLM: {response}")
+        logger.debug("view_selection.response preview=%s", (response or "")[:120])
         try:
             # Parse the JSON response
             result = json.loads(response.strip())

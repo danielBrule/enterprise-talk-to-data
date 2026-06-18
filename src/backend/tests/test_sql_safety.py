@@ -161,3 +161,17 @@ def test_validate_query_dangerous_keyword_in_string_literal():
     # This is a limitation but safer to reject potentially dangerous patterns
     with pytest.raises(SQLSafetyError, match="Keyword"):
         validate_query("SELECT 'INSERT' FROM analytics.vw_article_engagement LIMIT 50")
+
+
+def test_validate_query_multi_statement_rejected():
+    """Invalid: Multi-statement queries (semicolon before end) are blocked"""
+    with pytest.raises(SQLSafetyError, match="Multi-statement"):
+        validate_query(
+            "SELECT TOP 10 article_id FROM analytics.vw_article_engagement; "
+            "SELECT TOP 5 keyword_id FROM analytics.vw_keyword_engagement"
+        )
+
+
+def test_validate_query_trailing_semicolon_allowed():
+    """Valid: A lone trailing semicolon is permitted (not a multi-statement)"""
+    validate_query("SELECT TOP 10 article_id FROM analytics.vw_article_engagement;")

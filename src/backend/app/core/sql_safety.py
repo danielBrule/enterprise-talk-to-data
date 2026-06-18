@@ -1,6 +1,8 @@
 import re
 from typing import Tuple
 
+from .logger import logger
+
 
 class SQLSafetyError(Exception):
     """Raised when a query violates SQL safety rules."""
@@ -58,7 +60,12 @@ def validate_query(query: str, params: dict | None = None) -> None:
     if not normalized.startswith("SELECT"):
         raise SQLSafetyError("Only SELECT statements are allowed")
 
-    # Rule 2: Check for dangerous keywords
+    # Rule 2a: No multi-statement queries — semicolon must not appear before the final character
+    stripped = query.strip()
+    if ";" in stripped[:-1]:
+        raise SQLSafetyError("Multi-statement queries are not allowed")
+
+    # Rule 2b: Check for dangerous keywords
     for keyword_pattern in DANGEROUS_KEYWORDS:
         if re.search(keyword_pattern, normalized, re.IGNORECASE):
             keyword = re.search(keyword_pattern, normalized, re.IGNORECASE).group(0)
@@ -105,8 +112,7 @@ def validate_query(query: str, params: dict | None = None) -> None:
     if raw_limit_value.startswith(":"):
 
         param_name = raw_limit_value[1:].lower()
-        print(f"Parameter name: {raw_limit_value}")
-        print(f"Params: {params}")
+        logger.debug("sql_safety.param_check param=%s params_keys=%s", raw_limit_value, list((params or {}).keys()))
         if not params or param_name not in params:
             raise SQLSafetyError(
                 f"Missing parameter for {row_limit_clause}: {raw_limit_value}"
