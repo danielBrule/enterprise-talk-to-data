@@ -78,29 +78,6 @@ def test_get_views_metadata_endpoint(monkeypatch):
     assert data[0]["view_name"] == "analytics.vw_article_engagement"
 
 
-def test_select_views_endpoint(monkeypatch):
-    """Test the view selection endpoint."""
-    from backend.app.services.view_selection_service import ViewSelectionService
-
-    async def mock_select_views(self, question):
-        return {
-            "question": question,
-            "selected_views": ["analytics.vw_article_engagement"],
-            "reason": "Question refers to articles and comment volume.",
-        }
-
-    monkeypatch.setattr(ViewSelectionService, "select_views", mock_select_views)
-    response = client.post(
-        "/api/v0/metadata/select-views?question=Which+articles+have+the+most+comments"
-    )
-
-    assert response.status_code == 200
-    data = response.json()
-    assert data["question"] == "Which articles have the most comments"
-    assert "analytics.vw_article_engagement" in data["selected_views"]
-    assert len(data["reason"]) > 0
-
-
 # ── /ask endpoint tests ────────────────────────────────────────────────────────
 
 def test_ask_endpoint_returns_answer(monkeypatch):

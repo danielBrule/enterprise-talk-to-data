@@ -2,7 +2,7 @@ import json
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-import backend.app.services.answer_service as answer_service_module
+import backend.app.stages.answer as answer_service_module
 from backend.app.prompts.answer_generation import PROMPT_VERSION
 
 SAMPLE_RESULTS = [

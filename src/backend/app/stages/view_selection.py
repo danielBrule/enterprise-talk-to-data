@@ -1,10 +1,13 @@
 import json
+import time
 from typing import Dict, Any
 
-from .llm_service import LLMService
-from .metadata_service import get_metrics_metadata
+from ..services.llm_service import LLMService
+from ..services.metadata_service import get_metrics_metadata
 from ..prompts.view_selection import build_view_selection_prompt
 from ..core.logger import logger
+from ..models.pipeline_context import PipelineContext
+from .base import Stage, Refusal, refuse
 
 
 class ViewSelectionService:
@@ -50,7 +53,7 @@ class ViewSelectionService:
         messages = build_view_selection_prompt(question, views_context)
 
         logger.debug("view_selection.request question=%s", question[:80])
-        response = await self.llm_service.generate_response(messages, task="schema_retrieval")
+        response = await self.llm_service.generate_schema_retrieval(messages)
         logger.debug("view_selection.response preview=%s", (response or "")[:120])
 
         try:
@@ -69,3 +72,31 @@ class ViewSelectionService:
                 "confidence": 0.0,
                 "reason": "Failed to parse LLM response",
             }
+
+
+class ViewSelectionStage(Stage):
+    def __init__(self, view_selection_service: ViewSelectionService | None = None):
+        self.view_selection_service = view_selection_service or ViewSelectionService()
+
+    async def run(self, ctx: PipelineContext) -> Refusal | None:
+        t0 = time.perf_counter()
+        result = await self.view_selection_service.select_views(ctx.question)
+        ctx.latency["view_selection_ms"] = (time.perf_counter() - t0) * 1000
+
+        selected_views: list[str] = result.get("selected_views", [])
+        confidence: float = result.get("confidence") or 0.0
+
+        ctx.trace.selected_views = selected_views
+        ctx.trace.view_selection_confidence = confidence
+        ctx.trace.view_selection_reason = result.get("reason")
+        ctx.selected_views = selected_views
+
+        if confidence < 0.4:
+            return refuse(
+                ctx,
+                f"View selection confidence is too low ({confidence:.2f}) — "
+                "the question may be ambiguous or out of scope.",
+            )
+        if not selected_views:
+            return refuse(ctx, "No relevant views could be identified for this question.")
+        return None

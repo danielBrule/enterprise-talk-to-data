@@ -39,7 +39,7 @@ def start_server():
     )
 
 
-def test_endpoints():
+def check_endpoints():
     """Test all API endpoints."""
     base_url = "http://127.0.0.1:8000"
     endpoints = [
@@ -52,10 +52,6 @@ def test_endpoints():
         ("/api/v0/metadata/views", "GET"),
         ("/api/v0/metadata/metrics", "GET"),
         ("/api/v0/metadata/glossary", "GET"),
-        (
-            "/api/v0/metadata/select-views?question=Which+articles+have+the+most+comments",
-            "POST",
-        ),
     ]
 
     print("Testing FastAPI endpoints...")
@@ -85,6 +81,8 @@ def test_endpoints():
             print(f"✗ FAIL: {method} {endpoint} - {e}")
             results.append((endpoint, "ERROR", str(e)))
 
+    return results
+
 
 def main():
     print("Starting FastAPI server for integration testing...")
@@ -98,7 +96,7 @@ def main():
 
     try:
         # Test the endpoints
-        results = test_endpoints()
+        results = check_endpoints()
 
         # Summary
         print("\n" + "=" * 60)

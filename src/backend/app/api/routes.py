@@ -12,7 +12,6 @@ from ..services.metadata_service import (
     get_glossary_metadata,
 )
 from ..services.talk_to_data_pipeline import TalkToDataPipeline
-from ..services.view_selection_service import ViewSelectionService
 from ..validators import (
     ArticleResponse,
     ContributorResponse,
@@ -85,13 +84,6 @@ async def get_metrics():
 async def get_glossary():
     """Get metadata for all glossary terms."""
     return await get_glossary_metadata()
-
-
-@metadata_router.post("/select-views")
-async def select_views(question: str = Query(...)):
-    """Select relevant views for a given question."""
-    service = ViewSelectionService()
-    return await service.select_views(question)
 
 
 @router.post("/ask", response_model=AskResponse, tags=["talk-to-data"])

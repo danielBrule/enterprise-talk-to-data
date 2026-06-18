@@ -2,8 +2,8 @@ import json
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-import backend.app.services.intent_service as intent_service_module
-from backend.app.services.intent_service import IntentResult
+import backend.app.stages.intent as intent_service_module
+from backend.app.stages.intent import IntentResult
 from backend.app.prompts.intent import PROMPT_VERSION
 
 
@@ -60,8 +60,7 @@ async def test_classify_llm_unavailable(monkeypatch):
     service = intent_service_module.IntentService()
     result = await service.classify("Any question")
 
-    # Fallback: assume answerable
-    assert result.answerable is True
+    assert result.answerable is False
     assert result.model_deployment == "none"
     assert "LLM not configured" in result.reason
 

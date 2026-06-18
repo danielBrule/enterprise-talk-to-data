@@ -18,16 +18,15 @@ class LLMService:
                 "Azure OpenAI configuration is incomplete. Please set AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, and AZURE_OPENAI_API_VERSION."
             )
 
-        deployment_for_client = (
-            settings.azure_openai_default_deployment
-            or settings.azure_openai_schema_retrieval_deployment
-            or settings.azure_openai_sql_generation_deployment
-            or settings.azure_openai_summary_deployment
-        )
-
-        if not deployment_for_client:
+        if not all([
+            settings.azure_openai_schema_retrieval_deployment,
+            settings.azure_openai_sql_generation_deployment,
+            settings.azure_openai_summary_deployment,
+        ]):
             raise ValueError(
-                "Azure OpenAI model deployment is not configured. Set AZURE_OPENAI_DEPLOYMENT or one of the task-specific deployment environment variables."
+                "Azure OpenAI task deployments are not fully configured. "
+                "Set AZURE_OPENAI_SCHEMA_RETRIEVAL_DEPLOYMENT, AZURE_OPENAI_SQL_GENERATION_DEPLOYMENT, "
+                "and AZURE_OPENAI_SUMMARY_DEPLOYMENT."
             )
 
         self.client = AsyncAzureOpenAI(

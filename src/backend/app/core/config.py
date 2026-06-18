@@ -43,7 +43,6 @@ class Settings:
 
         self.azure_openai_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "")
         self.azure_openai_api_key = os.getenv("AZURE_OPENAI_API_KEY", "")
-        self.azure_openai_default_deployment = os.getenv("AZURE_OPENAI_DEPLOYMENT", "")
         self.azure_openai_api_version = os.getenv(
             "AZURE_OPENAI_API_VERSION",
             "2024-02-01",
@@ -63,21 +62,12 @@ class Settings:
 
     def get_azure_openai_deployment(self, task: str | None = None) -> str:
         if task == "schema_retrieval":
-            return (
-                self.azure_openai_schema_retrieval_deployment
-                or self.azure_openai_default_deployment
-            )
+            return self.azure_openai_schema_retrieval_deployment
         if task == "sql_generation":
-            return (
-                self.azure_openai_sql_generation_deployment
-                or self.azure_openai_default_deployment
-            )
+            return self.azure_openai_sql_generation_deployment
         if task == "summary":
-            return (
-                self.azure_openai_summary_deployment
-                or self.azure_openai_default_deployment
-            )
-        return self.azure_openai_default_deployment
+            return self.azure_openai_summary_deployment
+        return ""
 
 
 settings = Settings()

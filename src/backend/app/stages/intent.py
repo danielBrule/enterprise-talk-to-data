@@ -1,11 +1,13 @@
 import json
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
-from .llm_service import LLMService
+from ..services.llm_service import LLMService
 from ..prompts.intent import PROMPT_VERSION, build_intent_prompt
 from ..core.config import settings
 from ..core.logger import logger
+from ..models.pipeline_context import PipelineContext
+from .base import Stage, Refusal, refuse
 
 
 @dataclass
@@ -35,8 +37,8 @@ class IntentService:
         if not self.llm_available:
             logger.warning("intent.llm_unavailable question=%s", question[:80])
             return IntentResult(
-                answerable=True,
-                reason="LLM not configured — assuming answerable",
+                answerable=False,
+                reason="LLM not configured — cannot classify intent",
                 domain="unknown",
                 suggested_metrics=[],
                 prompt_version=PROMPT_VERSION,
@@ -74,3 +76,22 @@ class IntentService:
                 model_deployment=deployment,
                 latency_ms=(time.perf_counter() - start) * 1000,
             )
+
+
+class IntentStage(Stage):
+    def __init__(self, intent_service: IntentService | None = None):
+        self.intent_service = intent_service or IntentService()
+
+    async def run(self, ctx: PipelineContext) -> Refusal | None:
+        t0 = time.perf_counter()
+        result = await self.intent_service.classify(ctx.question)
+        ctx.latency["intent_ms"] = (time.perf_counter() - t0) * 1000
+
+        ctx.trace.intent = result.domain
+        ctx.trace.answerable = result.answerable
+        ctx.trace.prompt_versions["intent"] = result.prompt_version
+        ctx.trace.model_deployments["intent"] = result.model_deployment
+
+        if not result.answerable:
+            return refuse(ctx, result.reason)
+        return None

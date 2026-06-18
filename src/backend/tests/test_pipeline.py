@@ -13,15 +13,17 @@ import pytest
 from dataclasses import dataclass
 from unittest.mock import AsyncMock, MagicMock
 
-import backend.app.services.intent_service as intent_module
-import backend.app.services.sql_generation_service as sql_gen_module
-import backend.app.services.answer_service as answer_module
-import backend.app.services.view_selection_service as vs_module
+import backend.app.stages.intent as intent_module
+import backend.app.stages.sql_generation as sql_gen_module
+import backend.app.stages.answer as answer_module
+import backend.app.stages.view_selection as vs_module
 import backend.app.services.talk_to_data_pipeline as pipeline_module
+import backend.app.stages.metadata as metadata_stage_module
+import backend.app.stages.execution as execution_stage_module
 from backend.app.models.talk_to_data import AskRequest
-from backend.app.services.intent_service import IntentResult
-from backend.app.services.sql_generation_service import SQLGenResult
-from backend.app.services.answer_service import AnswerResult
+from backend.app.stages.intent import IntentResult
+from backend.app.stages.sql_generation import SQLGenResult
+from backend.app.stages.answer import AnswerResult
 
 
 SAFE_SQL = (
@@ -93,9 +95,9 @@ async def test_pipeline_happy_path(monkeypatch):
         "confidence": 0.95,
         "reason": "matches article domain",
     })
-    monkeypatch.setattr(pipeline_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
+    monkeypatch.setattr(metadata_stage_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
     pipeline.sql_generation_service.generate = AsyncMock(return_value=_make_sql_result(SAFE_SQL))
-    monkeypatch.setattr(pipeline_module, "execute_query", AsyncMock(return_value=MOCK_ROWS))
+    monkeypatch.setattr(execution_stage_module, "execute_query", AsyncMock(return_value=MOCK_ROWS))
     pipeline.answer_service.generate = AsyncMock(return_value=_make_answer_result())
 
     response = await pipeline.run(AskRequest(question="Which articles have the most comments?"))
@@ -150,11 +152,11 @@ async def test_pipeline_refused_at_sql_validation(monkeypatch):
         "confidence": 0.9,
         "reason": "ok",
     })
-    monkeypatch.setattr(pipeline_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
+    monkeypatch.setattr(metadata_stage_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
     pipeline.sql_generation_service.generate = AsyncMock(return_value=_make_sql_result(UNSAFE_SQL))
     # execute_query should never be called
     mock_exec = AsyncMock(return_value=[])
-    monkeypatch.setattr(pipeline_module, "execute_query", mock_exec)
+    monkeypatch.setattr(execution_stage_module, "execute_query", mock_exec)
 
     response = await pipeline.run(AskRequest(question="Drop all articles"))
 
@@ -178,7 +180,7 @@ async def test_pipeline_refused_when_no_sql_generated(monkeypatch):
         "confidence": 0.5,
         "reason": "ok",
     })
-    monkeypatch.setattr(pipeline_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
+    monkeypatch.setattr(metadata_stage_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
     pipeline.sql_generation_service.generate = AsyncMock(return_value=_make_sql_result(""))
 
     response = await pipeline.run(AskRequest(question="some question"))
@@ -245,9 +247,9 @@ async def test_pipeline_execution_failure_refuses(monkeypatch):
         "confidence": 0.9,
         "reason": "ok",
     })
-    monkeypatch.setattr(pipeline_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
+    monkeypatch.setattr(metadata_stage_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
     pipeline.sql_generation_service.generate = AsyncMock(return_value=_make_sql_result(SAFE_SQL))
-    monkeypatch.setattr(pipeline_module, "execute_query", AsyncMock(side_effect=RuntimeError("DB down")))
+    monkeypatch.setattr(execution_stage_module, "execute_query", AsyncMock(side_effect=RuntimeError("DB down")))
 
     response = await pipeline.run(AskRequest(question="top articles"))
 

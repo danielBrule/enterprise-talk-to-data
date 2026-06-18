@@ -2,7 +2,7 @@ import json
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 
-import backend.app.services.sql_generation_service as sql_gen_module
+import backend.app.stages.sql_generation as sql_gen_module
 from backend.app.prompts.sql_generation import PROMPT_VERSION
 
 SAMPLE_METADATA = {

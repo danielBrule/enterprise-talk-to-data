@@ -5,7 +5,7 @@ import backend.app.services.article_service as article_service
 import backend.app.services.contributor_service as contributor_service
 import backend.app.services.ingestion_error_service as ingestion_error_service
 import backend.app.services.keyword_service as keyword_service
-import backend.app.services.view_selection_service as view_selection_service
+import backend.app.stages.view_selection as view_selection_service
 
 
 def make_conn_mock(result):
@@ -130,7 +130,7 @@ async def test_view_selection_service(monkeypatch):
     # Mock the LLM service
     mock_llm_response = '{"selected_views": ["analytics.vw_article_engagement"], "reason": "Question refers to articles and comment volume."}'
     mock_llm = MagicMock()
-    mock_llm.generate_response = AsyncMock(return_value=mock_llm_response)
+    mock_llm.generate_schema_retrieval = AsyncMock(return_value=mock_llm_response)
     monkeypatch.setattr(
         view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
     )
@@ -211,7 +211,7 @@ async def test_view_selection_with_multiple_views(monkeypatch):
     # Mock LLM to select both views
     mock_llm_response = '{"selected_views": ["analytics.vw_article_engagement", "analytics.vw_keyword_engagement"], "reason": "Question requires both article and keyword data."}'
     mock_llm = MagicMock()
-    mock_llm.generate_response = AsyncMock(return_value=mock_llm_response)
+    mock_llm.generate_schema_retrieval = AsyncMock(return_value=mock_llm_response)
     monkeypatch.setattr(
         view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
     )
@@ -244,7 +244,7 @@ async def test_view_selection_invalid_json_response(monkeypatch):
 
     # Mock LLM to return invalid JSON
     mock_llm = MagicMock()
-    mock_llm.generate_response = AsyncMock(return_value="This is not JSON")
+    mock_llm.generate_schema_retrieval = AsyncMock(return_value="This is not JSON")
     monkeypatch.setattr(
         view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
     )

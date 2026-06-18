@@ -3,10 +3,12 @@ import re
 import time
 from dataclasses import dataclass
 
-from .llm_service import LLMService
+from ..services.llm_service import LLMService
 from ..prompts.sql_generation import PROMPT_VERSION, build_sql_generation_prompt
 from ..core.config import settings
 from ..core.logger import logger
+from ..models.pipeline_context import PipelineContext
+from .base import Stage, Refusal, refuse
 
 
 @dataclass
@@ -51,11 +53,7 @@ class SQLGenerationService:
             parts.append(part)
         return "\n".join(parts)
 
-    async def generate(
-        self,
-        question: str,
-        metadata_context: dict,
-    ) -> SQLGenResult:
+    async def generate(self, question: str, metadata_context: dict) -> SQLGenResult:
         start = time.perf_counter()
         deployment = settings.get_azure_openai_deployment("sql_generation")
 
@@ -73,7 +71,6 @@ class SQLGenerationService:
 
         try:
             raw = await self.llm.generate_sql_generation(messages, temperature=0)
-            # Strip any accidental markdown code fences the model may add
             clean = re.sub(r"```(?:json|sql)?", "", raw).strip().strip("`").strip()
             result = json.loads(clean)
             sql = result.get("sql", "").strip()
@@ -100,3 +97,24 @@ class SQLGenerationService:
                 model_deployment=deployment,
                 latency_ms=(time.perf_counter() - start) * 1000,
             )
+
+
+class SQLGenerationStage(Stage):
+    def __init__(self, sql_generation_service: SQLGenerationService | None = None):
+        self.sql_generation_service = sql_generation_service or SQLGenerationService()
+
+    async def run(self, ctx: PipelineContext) -> Refusal | None:
+        t0 = time.perf_counter()
+        result = await self.sql_generation_service.generate(
+            ctx.question, ctx.metadata_context or {}
+        )
+        ctx.latency["sql_generation_ms"] = (time.perf_counter() - t0) * 1000
+
+        ctx.trace.generated_sql = result.sql
+        ctx.trace.prompt_versions["sql_generation"] = result.prompt_version
+        ctx.trace.model_deployments["sql_generation"] = result.model_deployment
+        ctx.sql = result.sql
+
+        if not result.sql:
+            return refuse(ctx, "SQL generation produced no query — cannot answer this question.")
+        return None
