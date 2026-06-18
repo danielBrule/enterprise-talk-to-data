@@ -75,8 +75,8 @@ async def test_classify_bad_json_falls_back(monkeypatch):
     service = intent_service_module.IntentService()
     result = await service.classify("Any question")
 
-    # Fallback: assume answerable, no crash
-    assert result.answerable is True
+    # Parse failure: refuse, no crash
+    assert result.answerable is False
     assert "parse failed" in result.reason.lower()
 
 

@@ -69,7 +69,7 @@ class AnswerService:
                 latency_ms=(time.perf_counter() - start) * 1000,
             )
         except (json.JSONDecodeError, KeyError) as e:
-            logger.error("answer_service.parse_failed error=%s", str(e))
+            logger.warning("answer_service.parse_failed error=%s", str(e))
             row_count = len(results)
             return AnswerResult(
                 answer=f"Query returned {row_count} row(s). Answer generation failed.",

@@ -66,8 +66,8 @@ class IntentService:
         except (json.JSONDecodeError, KeyError) as e:
             logger.error("intent.parse_failed error=%s", str(e))
             return IntentResult(
-                answerable=True,
-                reason=f"Intent parse failed ({e}) — assuming answerable",
+                answerable=False,
+                reason=f"Intent parse failed ({e}) — cannot determine answerability",
                 domain="unknown",
                 suggested_metrics=[],
                 prompt_version=PROMPT_VERSION,

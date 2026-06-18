@@ -1,8 +1,9 @@
 import json
-from typing import List, Dict, Any
+from typing import Dict, Any
 
 from .llm_service import LLMService
 from .metadata_service import get_metrics_metadata
+from ..prompts.view_selection import build_view_selection_prompt
 from ..core.logger import logger
 
 
@@ -16,102 +17,52 @@ class ViewSelectionService:
             self.llm_available = False
 
     async def select_views(self, question: str) -> Dict[str, Any]:
-        """
-        Select the most relevant views for a given question using LLM.
-
-        Args:
-            question: The natural language question
-
-        Returns:
-            Dict with question, selected_views, and reason
-        """
-        # Get all metrics metadata which includes view information and example questions
         metrics = await get_metrics_metadata()
 
         if not self.llm_available or not metrics:
-            # Fallback: return first view or empty
+            logger.warning("view_selection.llm_unavailable question=%s", question[:80])
             fallback_view = metrics[0]["view_name"] if metrics else ""
             return {
                 "question": question,
                 "selected_views": [fallback_view] if fallback_view else [],
+                "confidence": 0.0,
                 "reason": "LLM not configured or no metadata available",
             }
 
-        # Prepare the context for the LLM
-        views_context = []
-        for metric in metrics:
-            view_info = {
-                "view_name": metric.get("view_name"),
-                "category": metric.get("category"),
-                "purpose": metric.get("purpose"),
-                "business_meaning": metric.get("business_meaning"),
+        views_context = [
+            {
+                "view_name": m.get("view_name"),
+                "category": m.get("category"),
+                "purpose": m.get("purpose"),
+                "business_meaning": m.get("business_meaning"),
                 "columns": [
                     {"name": col["name"], "description": col["description"]}
-                    for col in metric.get("columns", [])
+                    for col in m.get("columns", [])
                 ],
                 "example_questions": [
                     eq["natural_language_question"]
-                    for eq in metric.get("example_questions", [])
+                    for eq in m.get("example_questions", [])
                 ],
             }
-            views_context.append(view_info)
-        # Create the prompt
-        prompt = f"""
-You are an expert at selecting the most relevant database views for natural language questions about analytics data.
-
-Given the question: "{question}"
-
-And the available views with their metadata:
-
-{json.dumps(views_context, indent=2)}
-
-Please select the most relevant view(s) that would help answer this question. Consider:
-- The purpose and business meaning of each view
-- The columns available in each view
-- The example questions that are similar to the given question
-
-Return your response as a JSON object with the following structure:
-{{
-  "selected_views": ["<view_name>"],
-  "confidence": "<float between 0.0 and 1.0>",
-  "reason": "<brief explanation of why these views were selected>"
-}}
-
-Select 1-3 views maximum. If no views are relevant, select the closest match.
-"""
-
-        messages = [
-            {
-                "role": "system",
-                "content": (
-                    "You select the most relevant database views to answer analytics questions. "
-                    "Respond only with valid JSON — no markdown, no explanation outside the JSON."
-                ),
-            },
-            {"role": "user", "content": prompt},
+            for m in metrics
         ]
 
-        # Get LLM response
-        logger.debug("view_selection.request question=%s", question[:80])
-        response = await self.llm_service.generate_response(
-            messages, task="schema_retrieval"
-        )
-        logger.debug("view_selection.response preview=%s", (response or "")[:120])
-        try:
-            # Parse the JSON response
-            result = json.loads(response.strip())
-            selected_views = result.get("selected_views", [])
-            confidence = result.get("confidence", 0.0)
-            reason = result.get("reason", "")
+        messages = build_view_selection_prompt(question, views_context)
 
+        logger.debug("view_selection.request question=%s", question[:80])
+        response = await self.llm_service.generate_response(messages, task="schema_retrieval")
+        logger.debug("view_selection.response preview=%s", (response or "")[:120])
+
+        try:
+            result = json.loads(response.strip())
             return {
                 "question": question,
-                "selected_views": selected_views,
-                "confidence": confidence,
-                "reason": reason,
+                "selected_views": result.get("selected_views", []),
+                "confidence": result.get("confidence", 0.0),
+                "reason": result.get("reason", ""),
             }
-        except json.JSONDecodeError:
-            # Fallback if LLM doesn't return valid JSON
+        except json.JSONDecodeError as e:
+            logger.error("view_selection.parse_failed error=%s", str(e))
             return {
                 "question": question,
                 "selected_views": [],
