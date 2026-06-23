@@ -65,21 +65,6 @@ async def test_list_contributors_uses_connection(monkeypatch):
 
 
 async def test_list_ingestion_errors_uses_connection(monkeypatch):
-    mock_conn = make_conn_mock([{"error_id": 1}])
-    monkeypatch.setattr(ingestion_error_service, "get_connection", lambda: mock_conn)
-
-    results = await ingestion_error_service.list_ingestion_errors(limit=5)
-
-    assert results == [{"error_id": 1}]
-    mock_conn.execute.assert_called_once()
-
-    results = contributor_service.list_contributors(limit=5)
-
-    assert results == [{"contributor_id": "c1"}]
-    mock_conn.execute.assert_called_once()
-
-
-async def test_list_ingestion_errors_uses_connection(monkeypatch):
     mock_execute_query = AsyncMock(return_value=[{"error_id": "e1"}])
 
     monkeypatch.setattr(

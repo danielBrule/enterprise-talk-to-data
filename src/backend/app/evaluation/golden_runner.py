@@ -45,7 +45,7 @@ from ..stages.sql_generation import SQLGenerationService, SQLGenerationStage
 from ..stages.sql_validation import SQLValidationStage
 from ..stages.execution import ExecutionStage
 from ..stages.answer import AnswerService, AnswerStage
-from ..stages.base import build_latency, Refusal, Success
+from ..stages.base import build_latency, Refusal
 
 _GOLDEN_QUESTIONS_PATH = (
     Path(__file__).resolve().parents[3] / "metadata" / "example_questions" / "golden_questions.yml"

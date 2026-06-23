@@ -1,7 +1,6 @@
 ﻿import pytest
-import asyncio
 from sqlalchemy import text
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import MagicMock
 
 import backend.app.db.connection as connection
 

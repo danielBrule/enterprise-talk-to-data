@@ -8,8 +8,6 @@ All LLM calls and DB execution are mocked. Tests verify that:
 - SQL generation returning empty string is refused.
 - The trace captures stage-level artefacts at every failure point.
 """
-import json
-from dataclasses import dataclass
 from unittest.mock import AsyncMock, MagicMock
 
 import backend.app.stages.intent as intent_module

@@ -2,7 +2,6 @@
 from unittest.mock import AsyncMock, MagicMock
 
 import backend.app.stages.intent as intent_service_module
-from backend.app.stages.intent import IntentResult
 from backend.app.prompts.intent import PROMPT_VERSION
 
 

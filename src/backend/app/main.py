@@ -1,7 +1,6 @@
 import time
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 
 from .api.routes import router, metadata_router
 from .core.config import API_VERSION

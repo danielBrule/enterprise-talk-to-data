@@ -5,10 +5,7 @@ All LLM calls are mocked. The metadata loader reads real YAML files from
 the repository (they are not mocked â€” we want to verify the actual metadata
 loads correctly). validate_query is the real deterministic implementation.
 """
-import json
 import pytest
-from dataclasses import dataclass
-from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
 
@@ -17,7 +14,6 @@ import backend.app.stages.sql_generation as sql_gen_module
 import backend.app.stages.view_selection as vs_module
 from backend.app.evaluation.golden_runner import (
     GoldenRunner,
-    GoldenEvalRecord,
     NEGATIVE_SQL_PATTERNS,
 )
 from backend.app.stages.intent import IntentResult
