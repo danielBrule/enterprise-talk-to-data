@@ -184,11 +184,12 @@
 - natural_language_question: "How many articles are associated with each keyword?"
   expected_view: analytics.vw_keyword_engagement
   expected_sql: |
-    SELECT TOP 500 full_keyword, article_count
+    SELECT TOP 500 keyword_id, full_keyword, article_count
     FROM analytics.vw_keyword_engagement
     ORDER BY article_count DESC
   expected_result_shape:
     columns:
+      - keyword_id
       - full_keyword
       - article_count
     row_count: list
@@ -394,11 +395,12 @@
 - natural_language_question: "Show keywords with average sentiment above 0.5."
   expected_view: analytics.vw_keyword_engagement
   expected_sql: |
-    SELECT TOP 500 full_keyword, avg_comment_sentiment
+    SELECT TOP 500 keyword_id, full_keyword, avg_comment_sentiment
     FROM analytics.vw_keyword_engagement
     WHERE avg_comment_sentiment > 0.5
   expected_result_shape:
     columns:
+      - keyword_id
       - full_keyword
       - avg_comment_sentiment
     row_count: list
@@ -441,11 +443,12 @@
 - natural_language_question: "Which keywords have the most comments?"
   expected_view: analytics.vw_keyword_engagement
   expected_sql: |
-    SELECT TOP 10 full_keyword, comment_count
+    SELECT TOP 10 keyword_id, full_keyword, comment_count
     FROM analytics.vw_keyword_engagement
     ORDER BY comment_count DESC
   expected_result_shape:
     columns:
+      - keyword_id
       - full_keyword
       - comment_count
     row_count: list
@@ -490,11 +493,12 @@
 - natural_language_question: "Show keywords with article count less than 5."
   expected_view: analytics.vw_keyword_engagement
   expected_sql: |
-    SELECT TOP 500 full_keyword, article_count
+    SELECT TOP 500 keyword_id, full_keyword, article_count
     FROM analytics.vw_keyword_engagement
     WHERE article_count < 5
   expected_result_shape:
     columns:
+      - keyword_id
       - full_keyword
       - article_count
     row_count: list
@@ -536,11 +540,12 @@
 - natural_language_question: "Which keywords have contributor count greater than 50?"
   expected_view: analytics.vw_keyword_engagement
   expected_sql: |
-    SELECT TOP 500 full_keyword, contributor_count
+    SELECT TOP 500 keyword_id, full_keyword, contributor_count
     FROM analytics.vw_keyword_engagement
     WHERE contributor_count > 50
   expected_result_shape:
     columns:
+      - keyword_id
       - full_keyword
       - contributor_count
     row_count: list
@@ -584,11 +589,12 @@
 - natural_language_question: "Show keywords ordered by average sentiment descending."
   expected_view: analytics.vw_keyword_engagement
   expected_sql: |
-    SELECT TOP 500 full_keyword, avg_comment_sentiment
+    SELECT TOP 500 keyword_id, full_keyword, avg_comment_sentiment
     FROM analytics.vw_keyword_engagement
     ORDER BY avg_comment_sentiment DESC
   expected_result_shape:
     columns:
+      - keyword_id
       - full_keyword
       - avg_comment_sentiment
     row_count: list
