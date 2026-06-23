@@ -1,4 +1,7 @@
-PROMPT_VERSION = "intent_v3"
+from datetime import date
+
+PROMPT_VERSION = "intent_v4"
+
 
 _KNOWN_DOMAINS = (
     "article_engagement (comment volume, avg_comment_sentiment, total_replies, keyword_count, publication_date, insert_date), "
@@ -16,6 +19,7 @@ _KNOWN_VIEWS = (
 
 
 def build_intent_prompt(question: str) -> list[dict]:
+    today = date.today().isoformat()
     system = (
         "You classify whether an analytics question can be answered from a specific set of "
         "database views. Reply only with valid JSON — no markdown, no explanation outside the JSON."
@@ -30,6 +34,7 @@ Rules:
 - If the question requires forecasting future values, causal explanation ("why", "what causes"), \
 external data, or data not covered by the views above, set answerable to false.
 - Date filtering on publication_date or insert_date is supported and should be classified as answerable.
+- Today's date is {today}. Any year or date before today is historical, not a future date.
 - domain must be one of: article_engagement, keyword_engagement, contributor_behaviour, \
 ingestion_errors, or unknown.
 - suggested_metrics should be column names or aggregate expressions from the available views.
