@@ -45,6 +45,9 @@ def _golden_questions_hash() -> str:
 
 
 def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: float) -> None:
+    from backend.app.prompts.intent import build_intent_prompt
+    from backend.app.prompts.sql_generation import build_sql_generation_prompt
+
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
     mlflow.set_experiment(MLFLOW_EXPERIMENT)
     with mlflow.start_run(run_name=f"{eval_run}-{mode}-{commit[:8]}"):
@@ -65,18 +68,38 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "partial_rate": round(report.partial / report.total, 4) if report.total else 0,
             "eval_duration_s": round(duration_s, 1),
         })
-        rows = ["question,status,failure_reasons"]
+
+        # Per-question trace: full details for every question
+        traces = []
         for r in report.records:
-            reasons = "; ".join(r.failure_reasons or [])
-            question = r.question.replace(",", " ")
-            rows.append(f"{question},{r.status},{reasons}")
-        mlflow.log_text("\n".join(rows), "question_results.csv")
+            traces.append({
+                "question": r.question,
+                "case_type": r.case_type,
+                "status": r.status,
+                "expected_view": r.expected_view,
+                "generated_sql": r.generated_sql,
+                "expected_sql": r.expected_sql,
+                "view_match": r.view_match,
+                "validation_pass": r.validation_pass,
+                "metric_present": r.metric_present,
+                "execution_status": r.execution_status,
+                "failure_reasons": r.failure_reasons,
+                "latency_ms": r.latency_ms,
+                "trace_id": r.trace.trace_id if r.trace else None,
+            })
+        mlflow.log_text(json.dumps(traces, indent=2, default=str), "traces.json")
+
+        # Prompt system messages — static per version, useful for diffing across runs
+        intent_system = build_intent_prompt("__placeholder__")[0]["content"]
+        sql_gen_system = build_sql_generation_prompt("__placeholder__", "__views__")[0]["content"]
+        mlflow.log_text(intent_system, "prompts/intent_system.txt")
+        mlflow.log_text(sql_gen_system, "prompts/sql_gen_system.txt")
 
 
-async def _run(mode: str, output: Path | None, limit: int | None, eval_run: str) -> int:
+async def _run(mode: str, output: Path | None, limit: int | None, eval_run: str, concurrency: int) -> int:
     t0 = time.monotonic()
     runner = GoldenRunner()
-    report = await runner.run_all(mode=mode, limit=limit)
+    report = await runner.run_all(mode=mode, limit=limit, concurrency=concurrency)
     duration_s = time.monotonic() - t0
     report.print_summary()
 
@@ -129,8 +152,15 @@ def main() -> None:
         metavar="LABEL",
         help="Short label for this run logged to MLflow (e.g. v12, post-prompt-fix)",
     )
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=5,
+        metavar="N",
+        help="Number of questions to evaluate in parallel (default 5)",
+    )
     args = parser.parse_args()
-    sys.exit(asyncio.run(_run(args.mode, args.output, args.limit, args.eval_run)))
+    sys.exit(asyncio.run(_run(args.mode, args.output, args.limit, args.eval_run, args.concurrency)))
 
 
 if __name__ == "__main__":

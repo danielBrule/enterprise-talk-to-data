@@ -14,7 +14,7 @@ else
     PWSH ?= pwsh
 endif
 
-.PHONY: help env pdf clean-pdf install check start-backend apply-sql-views infra-init infra-apply tests eval mlflow-ui
+.PHONY: help env pdf clean-pdf install check start-backend apply-sql-views apply-sql-indexes infra-init infra-apply tests eval mlflow-ui
 
 help:   ## show this help
 	@echo ""
@@ -38,7 +38,8 @@ help:   ## show this help
 	@echo ""
 	@echo "  SQL"
 	@echo "  ---"
-	@echo "  apply-sql-views  deploy analytics views to the database"
+	@echo "  apply-sql-views    deploy analytics views to the database"
+	@echo "  apply-sql-indexes  apply performance indexes (idempotent)"
 	@echo ""
 	@echo "  Infrastructure  (src/infra/terraform)"
 	@echo "  --------------------------------------"
@@ -73,8 +74,8 @@ check: install  ## syntax-check all Python files under src/backend/
 tests: install  ## run pytest against src/backend/tests/
 	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; $$env:PYTHONPATH = 'src'; poetry run pytest src/backend/tests/ -v"
 
-eval: install  ## run golden evaluation — MODE=fast|full (default fast), OUTPUT=path, LIMIT=N, RUN=label
-	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; $$env:PYTHONPATH = 'src'; poetry run python -m backend.evaluation_runner --mode $(or $(MODE),fast) $(if $(OUTPUT),--output $(OUTPUT),) $(if $(LIMIT),--limit $(LIMIT),) $(if $(RUN),--eval-run $(RUN),)"
+eval: install  ## run golden evaluation — MODE=fast|full (default fast), OUTPUT=path, LIMIT=N, RUN=label, CONCURRENCY=N (default 5)
+	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; $$env:PYTHONPATH = 'src'; poetry run python -m backend.evaluation_runner --mode $(or $(MODE),fast) $(if $(OUTPUT),--output $(OUTPUT),) $(if $(LIMIT),--limit $(LIMIT),) $(if $(RUN),--eval-run $(RUN),) $(if $(CONCURRENCY),--concurrency $(CONCURRENCY),)"
 
 mlflow-ui:  ## launch MLflow UI at http://localhost:5000 (no install needed)
 	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; poetry run mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns"
@@ -86,6 +87,9 @@ start-backend: install  ## start the FastAPI backend server
 
 apply-sql-views: install  ## deploy analytics views to the database
 	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; $$env:PYTHONPATH = 'src'; poetry run python src/backend/db/deploy_views.py"
+
+apply-sql-indexes: install  ## apply performance indexes (idempotent, safe to re-run)
+	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; $$env:PYTHONPATH = 'src'; poetry run python src/backend/db/deploy_indexes.py"
 
 # ── Infrastructure ────────────────────────────────────────────────────────────
 

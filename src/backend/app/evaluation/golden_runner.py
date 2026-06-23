@@ -429,27 +429,17 @@ class GoldenRunner:
             records.append(record)
         return records
 
-    async def run_all(self, mode: str = "fast", limit: int | None = None) -> EvaluationReport:
-        questions = self._load_golden_questions()
-        if limit is not None:
-            questions = questions[:limit]
-        records: list[GoldenEvalRecord] = []
-
-        logger.info("golden_runner.start mode=%s total_positive=%d", mode, len(questions))
-
-        for i, q in enumerate(questions):
-            if i > 0:
-                await asyncio.sleep(2)
+    async def _run_question_safe(self, q: dict, mode: str, sem: asyncio.Semaphore) -> GoldenEvalRecord:
+        async with sem:
             try:
-                rec = await self.run_question(q, mode=mode)
+                return await self.run_question(q, mode=mode)
             except Exception as exc:
                 if "429" in str(exc) or "too_many_requests" in str(exc).lower():
                     logger.warning("golden_runner.rate_limited q=%s — sleeping 60s", q.get("natural_language_question", "?")[:60])
                     await asyncio.sleep(60)
                     try:
-                        rec = await self.run_question(q, mode=mode)
+                        return await self.run_question(q, mode=mode)
                     except Exception as retry_exc:
-                        exc = retry_exc
                         logger.exception("golden_runner.question_error q=%s", q.get("natural_language_question", "?"))
                         rec = GoldenEvalRecord(
                             question=q.get("natural_language_question", "unknown"),
@@ -458,21 +448,21 @@ class GoldenRunner:
                             status="error",
                         )
                         rec.failure_reasons.append(str(retry_exc))
-                else:
-                    logger.exception("golden_runner.question_error q=%s", q.get("natural_language_question", "?"))
-                    rec = GoldenEvalRecord(
-                        question=q.get("natural_language_question", "unknown"),
-                        expected_view=q.get("expected_view", ""),
-                        expected_sql=q.get("expected_sql", ""),
-                        status="error",
-                    )
-                    rec.failure_reasons.append(str(exc))
-            records.append(rec)
+                        return rec
+                logger.exception("golden_runner.question_error q=%s", q.get("natural_language_question", "?"))
+                rec = GoldenEvalRecord(
+                    question=q.get("natural_language_question", "unknown"),
+                    expected_view=q.get("expected_view", ""),
+                    expected_sql=q.get("expected_sql", ""),
+                    status="error",
+                )
+                rec.failure_reasons.append(str(exc))
+                return rec
 
-        for neg in NEGATIVE_QUESTIONS:
-            await asyncio.sleep(2)
+    async def _run_negative_safe(self, neg: dict, sem: asyncio.Semaphore) -> GoldenEvalRecord:
+        async with sem:
             try:
-                rec = await self.run_negative_question(neg)
+                return await self.run_negative_question(neg)
             except Exception as exc:
                 logger.exception("golden_runner.negative_error q=%s", neg["question"])
                 rec = GoldenEvalRecord(
@@ -483,8 +473,24 @@ class GoldenRunner:
                     status="error",
                 )
                 rec.failure_reasons.append(str(exc))
-            records.append(rec)
+                return rec
 
+    async def run_all(self, mode: str = "fast", limit: int | None = None, concurrency: int = 5) -> EvaluationReport:
+        questions = self._load_golden_questions()
+        if limit is not None:
+            questions = questions[:limit]
+
+        logger.info("golden_runner.start mode=%s total_positive=%d concurrency=%d", mode, len(questions), concurrency)
+
+        sem = asyncio.Semaphore(concurrency)
+        positive_records = await asyncio.gather(
+            *[self._run_question_safe(q, mode, sem) for q in questions]
+        )
+        negative_records = await asyncio.gather(
+            *[self._run_negative_safe(neg, sem) for neg in NEGATIVE_QUESTIONS]
+        )
+
+        records: list[GoldenEvalRecord] = [*positive_records, *negative_records]
         records.extend(self.run_negative_sql_checks())
 
         counts: dict[str, int] = {"pass": 0, "partial": 0, "fail": 0, "error": 0}
