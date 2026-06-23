@@ -1,9 +1,9 @@
-PROMPT_VERSION = "intent_v2"
+PROMPT_VERSION = "intent_v3"
 
 _KNOWN_DOMAINS = (
     "article_engagement (comment volume, avg_comment_sentiment, total_replies, keyword_count, publication_date, insert_date), "
     "keyword_engagement (keyword article count, comment count, contributor reach), "
-    "contributor_behaviour (comment count, sentiment, article breadth, reply count), "
+    "contributor_behaviour (comment count, sentiment, distinct_article_count, article breadth, reply count), "
     "ingestion_errors (pipeline stage failures, error types, timing)"
 )
 
