@@ -94,11 +94,12 @@
 - natural_language_question: "List the most recent ingestion errors by stage and error type."
   expected_view: analytics.vw_ingestion_errors
   expected_sql: |
-    SELECT TOP 10 stage, error_type, error_message, attempted_at
+    SELECT TOP 20 error_id, stage, error_type, error_message, attempted_at
     FROM analytics.vw_ingestion_errors
     ORDER BY attempted_at DESC
   expected_result_shape:
     columns:
+      - error_id
       - stage
       - error_type
       - error_message
