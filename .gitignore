@@ -14,3 +14,4 @@ src/infra/terraform/.terraform.lock.hcl
 # OS
 .DS_Store
 Thumbs.db
+output.txt

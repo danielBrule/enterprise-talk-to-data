@@ -1,6 +1,6 @@
 from datetime import date
 
-PROMPT_VERSION = "intent_v4"
+PROMPT_VERSION = "intent_v5"
 
 
 _KNOWN_DOMAINS = (
@@ -18,12 +18,21 @@ _KNOWN_VIEWS = (
 )
 
 
-def build_intent_prompt(question: str) -> list[dict]:
+def build_intent_prompt(question: str, aliases: dict[str, list[str]] | None = None) -> list[dict]:
     today = date.today().isoformat()
     system = (
         "You classify whether an analytics question can be answered from a specific set of "
         "database views. Reply only with valid JSON — no markdown, no explanation outside the JSON."
     )
+
+    alias_lines = ""
+    if aliases:
+        parts = []
+        for view_name, terms in aliases.items():
+            quoted = ", ".join(f'"{t}"' for t in terms)
+            parts.append(f"{quoted} → {view_name}")
+        alias_lines = "\n- Domain vocabulary: " + "; ".join(parts) + "."
+
     user = f"""Classify this question: "{question}"
 
 Available analytics domains: {_KNOWN_DOMAINS}
@@ -37,7 +46,7 @@ external data, or data not covered by the views above, set answerable to false.
 - Today's date is {today}. Any year or date before today is historical, not a future date.
 - domain must be one of: article_engagement, keyword_engagement, contributor_behaviour, \
 ingestion_errors, or unknown.
-- suggested_metrics should be column names or aggregate expressions from the available views.
+- suggested_metrics should be column names or aggregate expressions from the available views.{alias_lines}
 
 Respond with exactly this JSON:
 {{

@@ -3,6 +3,7 @@ import time
 from dataclasses import dataclass
 
 from ..services.llm_service import LLMService
+from ..services.metadata_service import get_view_aliases
 from ..prompts.intent import PROMPT_VERSION, build_intent_prompt
 from ..core.config import settings
 from ..core.logger import logger
@@ -46,7 +47,8 @@ class IntentService:
                 latency_ms=(time.perf_counter() - start) * 1000,
             )
 
-        messages = build_intent_prompt(question)
+        aliases = await get_view_aliases()
+        messages = build_intent_prompt(question, aliases=aliases)
         try:
             raw = await self.llm.generate_schema_retrieval(messages, temperature=0)
             result = json.loads(raw.strip())

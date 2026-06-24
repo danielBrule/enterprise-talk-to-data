@@ -1,5 +1,6 @@
 view_name: analytics.vw_top_contributors
 description: "Summary of top comment contributors, including participation, sentiment, and reply counts."
+aliases: [users, readers, commenters]
 columns:
   - name: contributor_id
     description: "Identifier of the comment contributor."

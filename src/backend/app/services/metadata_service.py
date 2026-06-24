@@ -63,6 +63,16 @@ async def get_glossary_metadata() -> list[dict[str, Any]]:
     return glossary
 
 
+async def get_view_aliases() -> dict[str, list[str]]:
+    """Return aliases for each view, keyed by view_name. Only views with aliases are included."""
+    schema_views = await get_views_metadata()
+    return {
+        v["view_name"]: v["aliases"]
+        for v in schema_views
+        if "view_name" in v and v.get("aliases")
+    }
+
+
 async def get_context_for_views(view_names: list[str]) -> dict[str, dict[str, Any]]:
     """
     Return merged schema and metric metadata for the specified views, keyed by view name.
