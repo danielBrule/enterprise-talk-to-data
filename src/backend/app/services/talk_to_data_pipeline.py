@@ -17,6 +17,7 @@ from ..stages.sql_validation import SQLValidationStage
 from ..stages.execution import ExecutionStage
 from ..core.config import settings
 from ..core.input_safety import validate_user_input, InputSafetyError
+from ..core.logger import logger
 from ..services.llm_service import APITimeoutError
 from ..stages.answer import AnswerService, AnswerStage
 
@@ -113,11 +114,21 @@ class TalkToDataPipeline:
             return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
 
     async def _run_stages(self, ctx: PipelineContext) -> AskResponse:
+        budget = settings.max_tokens_per_request
         for stage in self.stages:
             outcome = await stage.run(ctx)
             if isinstance(outcome, Refusal):
                 return AskResponse(refused=True, refusal_reason=outcome.reason, trace=outcome.trace)
             if isinstance(outcome, Success):
                 return AskResponse(answer=outcome.answer, caveats=outcome.caveats, refused=False, trace=outcome.trace)
+
+            if budget > 0:
+                used = sum(u.get("total_tokens", 0) for u in ctx.trace.token_usage.values())
+                if used > budget:
+                    reason = f"Request exceeded the {budget}-token budget ({used} tokens used)."
+                    logger.warning("cost.budget_exceeded total_tokens=%s limit=%s", used, budget)
+                    ctx.trace.refusal_reason = reason
+                    ctx.trace.execution_status = "refused"
+                    return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
 
         raise RuntimeError("pipeline exited without a response — AnswerStage must always return Success")

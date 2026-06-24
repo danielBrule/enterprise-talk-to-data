@@ -252,6 +252,43 @@ async def test_pipeline_timeout_returns_refusal(monkeypatch):
     assert response.trace.execution_status == "failed"
 
 
+async def test_pipeline_token_budget_exceeded(monkeypatch):
+    monkeypatch.setattr(pipeline_module.settings, "max_tokens_per_request", 5)
+    pipeline = _build_pipeline(monkeypatch)
+
+    pipeline.intent_service.classify = AsyncMock(return_value=IntentResult(
+        answerable=True,
+        reason="test",
+        domain="article_engagement",
+        suggested_metrics=[],
+        prompt_version="intent_v1",
+        model_deployment="test-deploy",
+        latency_ms=1.0,
+        token_usage={"prompt_tokens": 4, "completion_tokens": 3, "total_tokens": 7},
+    ))
+
+    response = await pipeline.run(AskRequest(question="top articles"))
+
+    assert response.refused is True
+    assert "token" in response.refusal_reason.lower()
+    assert "7" in response.refusal_reason       # used tokens mentioned
+    assert "5" in response.refusal_reason       # budget mentioned
+    assert response.trace.execution_status == "refused"
+
+
+async def test_pipeline_token_budget_disabled_when_zero(monkeypatch):
+    monkeypatch.setattr(pipeline_module.settings, "max_tokens_per_request", 0)
+    pipeline = _build_pipeline(monkeypatch)
+
+    # Even with absurdly high token_usage the pipeline should not refuse for budget reasons
+    pipeline.intent_service.classify = AsyncMock(return_value=_make_intent(False))
+
+    response = await pipeline.run(AskRequest(question="What will engagement be next year?"))
+
+    assert response.refused is True
+    assert response.refusal_reason == "Out of scope"    # intent refusal, not budget
+
+
 async def test_pipeline_execution_failure_refuses(monkeypatch):
     pipeline = _build_pipeline(monkeypatch)
 

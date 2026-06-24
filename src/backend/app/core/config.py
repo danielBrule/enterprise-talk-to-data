@@ -68,6 +68,10 @@ class Settings:
         # ── Input safety ──────────────────────────────────────────────────────
         self.max_question_length: int = int(os.getenv("MAX_QUESTION_LENGTH", "1000"))
 
+        # ── Cost control ──────────────────────────────────────────────────────
+        # 0 = disabled. Set to a positive integer to enforce a per-request token budget.
+        self.max_tokens_per_request: int = int(os.getenv("MAX_TOKENS_PER_REQUEST", "10000"))
+
     def get_azure_openai_deployment(self, task: str | None = None) -> str:
         # No default fallback — each task must be explicitly configured via its own env var.
         # An empty string here surfaces as a ValueError in LLMService.generate_response.
