@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock
 import backend.app.stages.answer as answer_service_module
 from backend.app.prompts.answer_generation import PROMPT_VERSION
 
-_MOCK_USAGE = {"prompt_tokens": 30, "completion_tokens": 50, "total_tokens": 80}
+_MOCK_USAGE = {"prompt_tokens": 30, "completion_tokens": 50, "total_tokens": 80, "model_name": "gpt-4o"}
 
 SAMPLE_RESULTS = [
     {"article_id": 1, "title": "Article One", "comment_count": 100},

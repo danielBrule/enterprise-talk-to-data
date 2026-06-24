@@ -73,6 +73,7 @@ class LLMService:
             "prompt_tokens": usage.prompt_tokens if usage else 0,
             "completion_tokens": usage.completion_tokens if usage else 0,
             "total_tokens": usage.total_tokens if usage else 0,
+            "model_name": getattr(response, "model", None) or model,
         }
         return content, token_usage
 

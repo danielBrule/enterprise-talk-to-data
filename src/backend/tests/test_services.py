@@ -105,7 +105,7 @@ async def test_view_selection_service(monkeypatch):
     )
 
     # Mock the LLM service
-    _mock_usage = {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15}
+    _mock_usage = {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15, "model_name": "gpt-4o"}
     mock_llm_response = '{"selected_views": ["analytics.vw_article_engagement"], "reason": "Question refers to articles and comment volume."}'
     mock_llm = MagicMock()
     mock_llm.generate_schema_retrieval = AsyncMock(return_value=(mock_llm_response, _mock_usage))
@@ -188,7 +188,7 @@ async def test_view_selection_with_multiple_views(monkeypatch):
     # Mock LLM to select both views
     mock_llm_response = '{"selected_views": ["analytics.vw_article_engagement", "analytics.vw_keyword_engagement"], "reason": "Question requires both article and keyword data."}'
     mock_llm = MagicMock()
-    mock_llm.generate_schema_retrieval = AsyncMock(return_value=(mock_llm_response, {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15}))
+    mock_llm.generate_schema_retrieval = AsyncMock(return_value=(mock_llm_response, {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15, "model_name": "gpt-4o"}))
     monkeypatch.setattr(
         view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
     )
@@ -220,7 +220,7 @@ async def test_view_selection_invalid_json_response(monkeypatch):
 
     # Mock LLM to return invalid JSON
     mock_llm = MagicMock()
-    mock_llm.generate_schema_retrieval = AsyncMock(return_value=("This is not JSON", {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15}))
+    mock_llm.generate_schema_retrieval = AsyncMock(return_value=("This is not JSON", {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15, "model_name": "gpt-4o"}))
     monkeypatch.setattr(
         view_selection_service, "LLMService", MagicMock(return_value=mock_llm)
     )

@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock
 import backend.app.stages.intent as intent_service_module
 from backend.app.prompts.intent import PROMPT_VERSION
 
-_MOCK_USAGE = {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15}
+_MOCK_USAGE = {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15, "model_name": "gpt-4o"}
 
 
 async def test_classify_answerable(monkeypatch):

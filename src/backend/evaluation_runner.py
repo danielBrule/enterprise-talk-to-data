@@ -44,6 +44,20 @@ def _golden_questions_hash() -> str:
     return hashlib.md5(content).hexdigest()[:8]
 
 
+def _extract_model_names(report) -> dict[str, str]:
+    """Return per-stage model name from the first record that has each stage populated."""
+    stage_models: dict[str, str] = {}
+    for r in report.records:
+        if not r.trace:
+            continue
+        for stage, usage in r.trace.token_usage.items():
+            if stage not in stage_models and usage.get("model_name"):
+                stage_models[stage] = usage["model_name"]
+        if len(stage_models) >= 4:
+            break
+    return stage_models
+
+
 def _aggregate_token_usage(report) -> dict[str, dict[str, int]]:
     """Sum token usage across all records, broken down by stage."""
     stage_totals: dict[str, dict[str, int]] = {}
@@ -65,11 +79,7 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
     mlflow.set_experiment(MLFLOW_EXPERIMENT)
     with mlflow.start_run(run_name=f"{eval_run}-{mode}-{commit[:8]}"):
-        # Extract model deployment names from the first record that has them
-        model_deployments = next(
-            (r.trace.model_deployments for r in report.records if r.trace and r.trace.model_deployments),
-            {},
-        )
+        stage_models = _extract_model_names(report)
         mlflow.log_params({
             "mode": mode,
             "git_commit": commit[:8],
@@ -77,10 +87,10 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "sql_gen_version": SQL_GEN_VERSION,
             "golden_questions_hash": _golden_questions_hash(),
             "eval_run": eval_run,
-            "model_intent": model_deployments.get("intent", "unknown"),
-            "model_view_selection": model_deployments.get("view_selection", "unknown"),
-            "model_sql_gen": model_deployments.get("sql_generation", "unknown"),
-            "model_answer": model_deployments.get("answer_generation", "unknown"),
+            "model_intent": stage_models.get("intent", "unknown"),
+            "model_view_selection": stage_models.get("view_selection", "unknown"),
+            "model_sql_gen": stage_models.get("sql_generation", "unknown"),
+            "model_answer": stage_models.get("answer_generation", "unknown"),
         })
 
         # Aggregate token usage across all records

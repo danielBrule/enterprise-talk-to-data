@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock
 import backend.app.stages.sql_generation as sql_gen_module
 from backend.app.prompts.sql_generation import PROMPT_VERSION
 
-_MOCK_USAGE = {"prompt_tokens": 20, "completion_tokens": 10, "total_tokens": 30}
+_MOCK_USAGE = {"prompt_tokens": 20, "completion_tokens": 10, "total_tokens": 30, "model_name": "gpt-4o"}
 
 SAMPLE_METADATA = {
     "analytics.vw_article_engagement": {
