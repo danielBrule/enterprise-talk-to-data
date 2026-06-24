@@ -72,6 +72,16 @@ class Settings:
         # 0 = disabled. Set to a positive integer to enforce a per-request token budget.
         self.max_tokens_per_request: int = int(os.getenv("MAX_TOKENS_PER_REQUEST", "10000"))
 
+        # ── Trace store ───────────────────────────────────────────────────────
+        # Path for the JSONL trace file (relative to the working directory, i.e. repo root).
+        # In production, replace TraceStore._write() with an Azure SQL or App Insights call;
+        # this path setting becomes irrelevant once the backend is swapped.
+        self.trace_file: str = os.getenv("TRACE_FILE", "traces/pipeline_traces.jsonl")
+        # When true, SHA-256-hashes the question and drops user_context before writing.
+        # Default false: this system handles internal analytics queries with no personal data.
+        # Enable in domains where questions could carry PII (HR, finance, customer data).
+        self.trace_anonymize: bool = os.getenv("TRACE_ANONYMIZE", "false").lower() == "true"
+
     def get_azure_openai_deployment(self, task: str | None = None) -> str:
         # No default fallback — each task must be explicitly configured via its own env var.
         # An empty string here surfaces as a ValueError in LLMService.generate_response.

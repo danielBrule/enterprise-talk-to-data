@@ -71,9 +71,10 @@ handled uniformly.
 | 15 | **Model name captured from API response** — the actual model version (e.g. `gpt-4.1-mini-2025-04-14`) is stored, not the deployment alias | ✅ | `app/services/llm_service.py` |
 | 16 | **MLflow experiment tracking** — every golden eval run logs pass/fail per question, token usage per stage, model names and pipeline latency | ✅ | `evaluation_runner.py` |
 | 17 | **Structured logging** — security events (`security.injection_attempt`), timeout events (`llm.timeout`), budget events (`cost.budget_exceeded`) use structured key=value format | ✅ | `app/core/input_safety.py`, `llm_service.py`, `talk_to_data_pipeline.py` |
-| 18 | **Trace store** — every pipeline run appended to `traces/pipeline_traces.jsonl` for offline analysis | 🔜 | planned |
-| 19 | **Trace viewer endpoint** — `GET /traces` surfaces recent runs without needing MLflow | 🔜 | planned |
-| 20 | **Health check endpoint** — `GET /health` reports DB connectivity, LLM reachability and config validity | 🔜 | planned |
+| 18 | **Trace store** — every pipeline run (answered or refused) appended to `traces/pipeline_traces.jsonl`. Interface is a single `_write()` method so the backend can be swapped for Azure SQL or Application Insights without touching the pipeline. In production: Azure SQL for queryable analytics; Application Insights for real-time operational monitoring — both are complementary, not alternatives. | ✅ | `app/core/trace_store.py` | `TRACE_FILE` |
+| 19 | **PII filter on trace writes** — `PiiFilter` runs before every trace write: when enabled, SHA-256-hashes the question (non-reversible, but stable for duplicate detection) and drops `user_context`. Disabled by default (internal analytics domain, no personal data in questions). In a domain with PII in queries (HR, finance), extend `PiiFilter.apply()` with Microsoft Presidio or Azure AI Language before the hash step. | ✅ | `app/core/pii_filter.py` | `TRACE_ANONYMIZE` (default `false`) |
+| 20 | **Trace viewer endpoint** — `GET /traces` surfaces recent runs without needing MLflow | 🔜 | planned |
+| 21 | **Health check endpoint** — `GET /health` reports DB connectivity, LLM reachability and config validity | 🔜 | planned |
 
 ---
 
@@ -81,16 +82,16 @@ handled uniformly.
 
 | # | Practice | Status | File |
 |---|---|---|---|
-| 21 | **Intent classification** — question classified as in-scope / out-of-scope against the domain vocabulary before any data access | ✅ | `app/stages/intent.py` |
-| 22 | **View selection with confidence threshold** — questions with view-selection confidence < 0.4 are refused rather than guessed | ✅ | `app/stages/view_selection.py` |
-| 23 | **Metadata grounding** — SQL is generated from approved view definitions (column names, types, grain, limitations), not inferred from the user's wording | ✅ | `app/stages/metadata.py`, `app/stages/sql_generation.py` |
-| 24 | **Domain vocabulary aliases** — alternative names for metrics are loaded from view metadata so intent classification understands synonyms | ✅ | `app/stages/intent.py`, `src/metadata/metrics/` |
-| 25 | **Answer caveats from metadata** — answer stage injects the `limitations` declared in view YAML as explicit caveats | ✅ | `app/stages/answer.py` |
-| 26 | **Data quality caveats** — freshness / NULL rate / row count health injected as caveats at answer time | 🔜 | planned |
-| 27 | **Persona-based access control** — role-to-view mapping; views outside a user's role are excluded from view selection | 🔜 | planned |
-| 28 | **Access enforcement at execution** — access context validated in the execution stage; query refused if it references views the user cannot see | 🔜 | planned |
-| 29 | **Approved join register** — cross-view joins blocked unless declared in a central join allowlist | 🔜 | planned |
-| 30 | **Clarification stage** — ambiguous questions returned with a clarifying question rather than a low-confidence guess | 🔜 | planned |
+| 22 | **Intent classification** — question classified as in-scope / out-of-scope against the domain vocabulary before any data access | ✅ | `app/stages/intent.py` |
+| 23 | **View selection with confidence threshold** — questions with view-selection confidence < 0.4 are refused rather than guessed | ✅ | `app/stages/view_selection.py` |
+| 24 | **Metadata grounding** — SQL is generated from approved view definitions (column names, types, grain, limitations), not inferred from the user's wording | ✅ | `app/stages/metadata.py`, `app/stages/sql_generation.py` |
+| 25 | **Domain vocabulary aliases** — alternative names for metrics are loaded from view metadata so intent classification understands synonyms | ✅ | `app/stages/intent.py`, `src/metadata/metrics/` |
+| 26 | **Answer caveats from metadata** — answer stage injects the `limitations` declared in view YAML as explicit caveats | ✅ | `app/stages/answer.py` |
+| 27 | **Data quality caveats** — freshness / NULL rate / row count health injected as caveats at answer time | 🔜 | planned |
+| 28 | **Persona-based access control** — role-to-view mapping; views outside a user's role are excluded from view selection | 🔜 | planned |
+| 29 | **Access enforcement at execution** — access context validated in the execution stage; query refused if it references views the user cannot see | 🔜 | planned |
+| 30 | **Approved join register** — cross-view joins blocked unless declared in a central join allowlist | 🔜 | planned |
+| 31 | **Clarification stage** — ambiguous questions returned with a clarifying question rather than a low-confidence guess | 🔜 | planned |
 
 ---
 

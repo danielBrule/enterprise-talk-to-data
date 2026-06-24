@@ -18,6 +18,7 @@ from ..stages.execution import ExecutionStage
 from ..core.config import settings
 from ..core.input_safety import validate_user_input, InputSafetyError
 from ..core.logger import logger
+from ..core.trace_store import TraceStore
 from ..services.llm_service import APITimeoutError
 from ..stages.answer import AnswerService, AnswerStage
 
@@ -70,12 +71,15 @@ class TalkToDataPipeline:
         view_selection_service: ViewSelectionService | None = None,
         sql_generation_service: SQLGenerationService | None = None,
         answer_service: AnswerService | None = None,
+        trace_store: TraceStore | None = None,
     ):
         # Exposed as attributes so tests can inject mocks via pipeline.<service>.method = AsyncMock(...)
         self.intent_service = intent_service or IntentService()
         self.view_selection_service = view_selection_service or ViewSelectionService()
         self.sql_generation_service = sql_generation_service or SQLGenerationService()
         self.answer_service = answer_service or AnswerService()
+        # Injectable so tests can pass a MagicMock() and avoid writing to disk.
+        self._trace_store = trace_store or TraceStore()
 
         self.stages: "list[Stage]" = [
             IntentStage(self.intent_service),
@@ -97,21 +101,27 @@ class TalkToDataPipeline:
         )
 
         try:
-            validate_user_input(request.question)
-        except InputSafetyError as e:
-            reason = str(e)
-            ctx.trace.refusal_reason = reason
-            ctx.trace.execution_status = "refused"
-            return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
+            try:
+                validate_user_input(request.question)
+            except InputSafetyError as e:
+                reason = str(e)
+                ctx.trace.refusal_reason = reason
+                ctx.trace.execution_status = "refused"
+                return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
 
-        timeout = settings.pipeline_timeout_seconds
-        try:
-            return await asyncio.wait_for(self._run_stages(ctx), timeout=timeout)
-        except (asyncio.TimeoutError, APITimeoutError):
-            reason = f"Request timed out after {timeout}s — please try a simpler question."
-            ctx.trace.refusal_reason = reason
-            ctx.trace.execution_status = "failed"
-            return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
+            timeout = settings.pipeline_timeout_seconds
+            try:
+                return await asyncio.wait_for(self._run_stages(ctx), timeout=timeout)
+            except (asyncio.TimeoutError, APITimeoutError):
+                reason = f"Request timed out after {timeout}s — please try a simpler question."
+                ctx.trace.refusal_reason = reason
+                ctx.trace.execution_status = "failed"
+                return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
+        finally:
+            # Append the trace on every code path: answered, refused, and timed out.
+            # Python's finally guarantee fires this even when the try block contains
+            # a return statement, so a single call here covers all exit points.
+            self._trace_store.append(ctx.trace)
 
     async def _run_stages(self, ctx: PipelineContext) -> AskResponse:
         budget = settings.max_tokens_per_request

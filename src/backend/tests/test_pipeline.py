@@ -75,11 +75,11 @@ def _make_answer_result() -> AnswerResult:
 
 
 def _build_pipeline(monkeypatch):
-    """Build a pipeline with all LLM services mocked out."""
-    # Prevent real LLM construction in each service
+    """Build a pipeline with all LLM services and the trace store mocked out."""
     for mod in [intent_module, sql_gen_module, answer_module, vs_module]:
         monkeypatch.setattr(mod, "LLMService", MagicMock(side_effect=ValueError("no config")))
-    return pipeline_module.TalkToDataPipeline()
+    # Inject a no-op trace store so tests never write to disk.
+    return pipeline_module.TalkToDataPipeline(trace_store=MagicMock())
 
 
 async def test_pipeline_happy_path(monkeypatch):

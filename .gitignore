@@ -11,6 +11,9 @@ src/infra/terraform/terraform.tfstate.backup
 src/infra/terraform/.terraform.lock.hcl
 **/*.tfvars
 
+# Trace store — runtime output, not committed
+traces/
+
 # OS
 .DS_Store
 Thumbs.db
