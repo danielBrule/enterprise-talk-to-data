@@ -118,6 +118,10 @@ curl -X POST http://localhost:8000/api/v0/ask \
   -d '{"question": "Which articles had the most comments last week?"}'
 ```
 
+## Production practices
+
+[`PRODUCTION_PRACTICES.md`](PRODUCTION_PRACTICES.md) maps every safety, resilience, cost-control and governance mechanism to the file that implements it and the env var that controls it.
+
 ## Testing
 
 ```powershell
