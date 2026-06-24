@@ -203,14 +203,32 @@ def _extract_filter_terms(sql_upper: str) -> list[str]:
     return [t for t in tokens if t not in _SQL_WORDS]
 
 
+_NO_RESULT_PHRASES = ("no ", "none", "zero", "empty", "0 ")
+
+
 def _check_answer_quality(answer: str, rows: list[dict]) -> bool:
-    """Return True if the answer mentions at least one value from the result rows."""
-    if not answer or not rows:
+    """Return True if the answer reflects the query result.
+
+    Empty result sets pass when the answer conveys "no results."
+    Non-empty sets pass when at least one row value appears in the answer
+    (numbers normalized to strip comma/period formatting).
+    """
+    if not answer:
         return False
     answer_lower = answer.lower()
+    if not rows:
+        return any(phrase in answer_lower for phrase in _NO_RESULT_PHRASES)
+    # Strip formatting characters so "2,666,366" matches value 2666366
+    answer_stripped = answer_lower.replace(",", "").replace(".", "")
     for row in rows:
         for value in row.values():
-            if value is not None and str(value).lower() in answer_lower:
+            if value is None:
+                continue
+            raw = str(value).lower()
+            if raw in answer_lower:
+                return True
+            normalized = raw.replace(",", "").replace(".", "")
+            if normalized and normalized in answer_stripped:
                 return True
     return False
 
