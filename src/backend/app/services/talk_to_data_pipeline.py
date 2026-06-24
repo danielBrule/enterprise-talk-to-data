@@ -16,6 +16,7 @@ from ..stages.sql_generation import SQLGenerationService, SQLGenerationStage
 from ..stages.sql_validation import SQLValidationStage
 from ..stages.execution import ExecutionStage
 from ..core.config import settings
+from ..core.input_safety import validate_user_input, InputSafetyError
 from ..services.llm_service import APITimeoutError
 from ..stages.answer import AnswerService, AnswerStage
 
@@ -93,6 +94,15 @@ class TalkToDataPipeline:
             latency={},
             pipeline_start=time.perf_counter(),
         )
+
+        try:
+            validate_user_input(request.question)
+        except InputSafetyError as e:
+            reason = str(e)
+            ctx.trace.refusal_reason = reason
+            ctx.trace.execution_status = "refused"
+            return AskResponse(refused=True, refusal_reason=reason, trace=ctx.trace)
+
         timeout = settings.pipeline_timeout_seconds
         try:
             return await asyncio.wait_for(self._run_stages(ctx), timeout=timeout)

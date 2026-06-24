@@ -65,6 +65,9 @@ class Settings:
         self.llm_timeout_seconds: int = int(os.getenv("LLM_TIMEOUT_SECONDS", "60"))
         self.pipeline_timeout_seconds: int = int(os.getenv("PIPELINE_TIMEOUT_SECONDS", "120"))
 
+        # ── Input safety ──────────────────────────────────────────────────────
+        self.max_question_length: int = int(os.getenv("MAX_QUESTION_LENGTH", "1000"))
+
     def get_azure_openai_deployment(self, task: str | None = None) -> str:
         # No default fallback — each task must be explicitly configured via its own env var.
         # An empty string here surfaces as a ValueError in LLMService.generate_response.
