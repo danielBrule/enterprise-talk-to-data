@@ -154,3 +154,60 @@ def test_trace_store_no_anonymization_by_default(tmp_path):
     record = json.loads((tmp_path / "traces.jsonl").read_text(encoding="utf-8").strip())
     assert record["question"] == "top articles by comments"
     assert record["user_context"] == "role=editor"
+
+
+# ── read_recent ───────────────────────────────────────────────────────────────
+
+def test_read_recent_returns_empty_when_file_missing(tmp_path):
+    store = TraceStore(path=str(tmp_path / "nonexistent.jsonl"), anonymize=False)
+    assert store.read_recent(limit=10) == []
+
+
+def test_read_recent_returns_newest_first(tmp_path):
+    path = tmp_path / "traces.jsonl"
+    store = TraceStore(path=str(path), anonymize=False)
+    store.append(_trace("question A"))
+    store.append(_trace("question B"))
+    store.append(_trace("question C"))
+
+    records = store.read_recent(limit=10)
+
+    assert len(records) == 3
+    assert records[0]["question"] == "question C"
+    assert records[1]["question"] == "question B"
+    assert records[2]["question"] == "question A"
+
+
+def test_read_recent_respects_limit(tmp_path):
+    store = TraceStore(path=str(tmp_path / "traces.jsonl"), anonymize=False)
+    for i in range(5):
+        store.append(_trace(f"question {i}"))
+
+    records = store.read_recent(limit=2)
+
+    assert len(records) == 2
+    assert records[0]["question"] == "question 4"
+    assert records[1]["question"] == "question 3"
+
+
+def test_read_recent_skips_invalid_json_lines(tmp_path):
+    path = tmp_path / "traces.jsonl"
+    path.write_text(
+        '{"question": "ok one"}\nNOT_JSON\n{"question": "ok two"}\n',
+        encoding="utf-8",
+    )
+    store = TraceStore(path=str(path), anonymize=False)
+
+    records = store.read_recent(limit=10)
+
+    assert len(records) == 2
+    questions = [r["question"] for r in records]
+    assert "ok two" in questions
+    assert "ok one" in questions
+
+
+def test_read_recent_empty_file(tmp_path):
+    path = tmp_path / "traces.jsonl"
+    path.write_text("", encoding="utf-8")
+    store = TraceStore(path=str(path), anonymize=False)
+    assert store.read_recent(limit=10) == []

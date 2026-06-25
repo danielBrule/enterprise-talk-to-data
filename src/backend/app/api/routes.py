@@ -4,7 +4,9 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query
 
 from ..core.auth import AuthError, DemoAuthService, ResolvedUser
 from ..core.config import API_PREFIX, API_VERSION
+from ..core.trace_store import TraceStore
 from ..models.talk_to_data import AskRequest, AskResponse
+from ..models.trace import RecentTraceItem
 from ..services.article_service import get_article, list_articles
 from ..services.contributor_service import get_contributor, list_contributors
 from ..services.ingestion_error_service import list_ingestion_errors
@@ -126,6 +128,41 @@ async def ask(
     """
     pipeline = TalkToDataPipeline()
     return await pipeline.run(request, user)
+
+
+@router.get("/traces/recent", response_model=list[RecentTraceItem], tags=["talk-to-data"])
+async def get_recent_traces(
+    user: Annotated[ResolvedUser, Depends(get_current_user)],
+    limit: int = Query(20, ge=1, le=100),
+) -> list[RecentTraceItem]:
+    """
+    Return the N most recent pipeline runs, newest first.
+
+    Used by the UI recent-questions panel. Each item is a compact summary —
+    full trace detail (SQL, token usage, per-stage latency) is omitted.
+    """
+    store = TraceStore()
+    raw_records = store.read_recent(limit=limit)
+    return [_to_recent_item(r) for r in raw_records]
+
+
+def _to_recent_item(raw: dict) -> RecentTraceItem:
+    latency = raw.get("latency_ms") or {}
+    answer = raw.get("answer")
+    if answer and len(answer) > 200:
+        answer = answer[:200] + "…"
+    return RecentTraceItem(
+        trace_id=raw.get("trace_id", ""),
+        timestamp=raw.get("timestamp", ""),
+        question=raw.get("question", ""),
+        execution_status=raw.get("execution_status"),
+        intent=raw.get("intent"),
+        selected_views=raw.get("selected_views") or [],
+        answer=answer,
+        refusal_reason=raw.get("refusal_reason"),
+        latency_total_ms=latency.get("total_ms") if isinstance(latency, dict) else None,
+        user_context=raw.get("user_context"),
+    )
 
 
 @router.get("/version", tags=["analytics"])

@@ -62,6 +62,34 @@ class TraceStore:
         except Exception as exc:
             logger.warning("trace_store.write_failed error=%s", exc)
 
+    def read_recent(self, limit: int = 20) -> list[dict]:
+        """
+        Return the last `limit` records from the JSONL file, newest-first.
+
+        Reads the whole file into memory — acceptable for the demo JSONL backend
+        where the trace file is small. A production SQL backend would do
+        SELECT ... ORDER BY timestamp DESC LIMIT N instead.
+        """
+        if not self._path.exists():
+            return []
+        try:
+            lines = self._path.read_text(encoding="utf-8").splitlines()
+            records: list[dict] = []
+            for line in reversed(lines):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    records.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+                if len(records) >= limit:
+                    break
+            return records
+        except Exception as exc:
+            logger.warning("trace_store.read_failed error=%s", exc)
+            return []
+
     def _write(self, line: str) -> None:
         """
         Write one JSON line to the JSONL file.

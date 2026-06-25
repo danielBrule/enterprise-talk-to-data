@@ -80,3 +80,17 @@ class TraceRecord(BaseModel):
     error: str | None = None
 
     access_enforcement_note: str = "Access enforced at execution stage."
+
+
+class RecentTraceItem(BaseModel):
+    """Compact trace summary returned by GET /traces/recent — one item per pipeline run."""
+    trace_id: str
+    timestamp: str
+    question: str
+    execution_status: str | None
+    intent: str | None
+    selected_views: list[str]
+    answer: str | None          # truncated to 200 chars for UI display
+    refusal_reason: str | None
+    latency_total_ms: float | None
+    user_context: str | None

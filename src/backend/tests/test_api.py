@@ -206,3 +206,81 @@ def test_ask_endpoint_missing_question_returns_422():
     """Request body without 'question' field should return HTTP 422."""
     response = client.post("/api/v0/ask", json={})
     assert response.status_code == 422
+
+
+# ── GET /api/v0/traces/recent ─────────────────────────────────────────────────
+
+def test_traces_recent_returns_200_with_records(monkeypatch):
+    import backend.app.api.routes as routes_module
+    from backend.app.core.trace_store import TraceStore
+
+    monkeypatch.setattr(
+        TraceStore,
+        "read_recent",
+        lambda self, limit: [
+            {
+                "trace_id": "abc-123",
+                "timestamp": "2026-06-25T20:00:00+00:00",
+                "question": "Which articles have the most comments?",
+                "execution_status": "success",
+                "intent": "article_engagement",
+                "selected_views": ["analytics.vw_article_engagement"],
+                "answer": "Article A has the most comments.",
+                "refusal_reason": None,
+                "latency_ms": {"total_ms": 1234.5},
+                "user_context": "role=analyst",
+            }
+        ],
+    )
+    response = client.get("/api/v0/traces/recent")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 1
+    assert data[0]["trace_id"] == "abc-123"
+    assert data[0]["question"] == "Which articles have the most comments?"
+    assert data[0]["execution_status"] == "success"
+    assert data[0]["latency_total_ms"] == 1234.5
+
+
+def test_traces_recent_returns_empty_list_when_no_traces(monkeypatch):
+    from backend.app.core.trace_store import TraceStore
+
+    monkeypatch.setattr(TraceStore, "read_recent", lambda self, limit: [])
+    response = client.get("/api/v0/traces/recent")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_traces_recent_truncates_long_answers(monkeypatch):
+    from backend.app.core.trace_store import TraceStore
+
+    long_answer = "x" * 300
+    monkeypatch.setattr(
+        TraceStore,
+        "read_recent",
+        lambda self, limit: [
+            {
+                "trace_id": "t1",
+                "timestamp": "2026-06-25T20:00:00+00:00",
+                "question": "q",
+                "execution_status": "success",
+                "intent": "article_engagement",
+                "selected_views": [],
+                "answer": long_answer,
+                "refusal_reason": None,
+                "latency_ms": {"total_ms": 100.0},
+                "user_context": None,
+            }
+        ],
+    )
+    response = client.get("/api/v0/traces/recent")
+    assert response.status_code == 200
+    returned_answer = response.json()[0]["answer"]
+    assert len(returned_answer) <= 205  # 200 chars + ellipsis
+    assert returned_answer.endswith("…")
+
+
+def test_traces_recent_limit_param_rejected_out_of_range():
+    """limit must be 1–100; outside that range FastAPI returns 422."""
+    assert client.get("/api/v0/traces/recent?limit=0").status_code == 422
+    assert client.get("/api/v0/traces/recent?limit=101").status_code == 422
