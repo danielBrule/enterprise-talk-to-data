@@ -18,6 +18,12 @@ columns:
     description: "Detailed error message returned by the pipeline."
   - name: attempted_at
     description: "Timestamp when the ingestion attempt was made."
+health_checks:
+  freshness_column: attempted_at
+  monitor_null_rate: []
+  sanity_non_negative: []
+  sanity_sentiment_range: []
+  high_row_count_is_bad: true
 allowed_aggregations:
   error_id: [COUNT]
   stage: [COUNT]

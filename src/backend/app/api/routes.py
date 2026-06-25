@@ -9,6 +9,7 @@ from ..services.article_service import get_article, list_articles
 from ..services.contributor_service import get_contributor, list_contributors
 from ..services.ingestion_error_service import list_ingestion_errors
 from ..services.keyword_service import get_keyword, list_keywords
+from ..services.data_quality_service import DataQualityService
 from ..services.metadata_service import (
     get_views_metadata,
     get_metrics_metadata,
@@ -24,6 +25,7 @@ from ..validators import (
 
 router = APIRouter(prefix=API_PREFIX, tags=["analytics"])
 metadata_router = APIRouter(prefix=f"{API_PREFIX}/metadata", tags=["metadata"])
+data_quality_router = APIRouter(prefix=f"{API_PREFIX}/data-quality", tags=["data-quality"])
 
 _auth_service = DemoAuthService()
 
@@ -129,3 +131,57 @@ async def ask(
 @router.get("/version", tags=["analytics"])
 async def read_version():
     return {"version": API_VERSION}
+
+
+@data_quality_router.post("/refresh")
+async def refresh_data_quality():
+    """
+    Run health checks for all analytics views and persist results to local SQLite.
+
+    Intended to be called once daily (manually or via an external scheduler).
+    Returns the full quality report immediately so callers can inspect results
+    without a separate GET call.
+    """
+    service = DataQualityService()
+    results = await service.refresh_all()
+    return {
+        "checked_at": results[0].checked_at if results else None,
+        "views": [
+            {
+                "view_name": r.view_name,
+                "row_count": r.row_count,
+                "freshness_days": r.freshness_days,
+                "null_rates": r.null_rates,
+                "sanity_issues": r.sanity_issues,
+                "error": r.error,
+            }
+            for r in results
+        ],
+    }
+
+
+@data_quality_router.get("")
+async def get_data_quality():
+    """
+    Return the most recent data quality report from local SQLite.
+
+    Returns an empty views list if no refresh has been run yet.
+    Call POST /data-quality/refresh to populate.
+    """
+    service = DataQualityService()
+    results = await service.get_latest()
+    checked_at = results[0].checked_at if results else None
+    return {
+        "checked_at": checked_at,
+        "views": [
+            {
+                "view_name": r.view_name,
+                "row_count": r.row_count,
+                "freshness_days": r.freshness_days,
+                "null_rates": r.null_rates,
+                "sanity_issues": r.sanity_issues,
+                "error": r.error,
+            }
+            for r in results
+        ],
+    }

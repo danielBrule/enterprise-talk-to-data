@@ -2,7 +2,7 @@ import time
 
 from fastapi import FastAPI, Request
 
-from .api.routes import router, metadata_router
+from .api.routes import router, metadata_router, data_quality_router
 from .core.config import API_VERSION
 from .core.logger import logger
 
@@ -57,3 +57,4 @@ async def version():
 
 app.include_router(router)
 app.include_router(metadata_router)
+app.include_router(data_quality_router)

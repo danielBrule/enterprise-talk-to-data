@@ -21,6 +21,7 @@ from ..core.input_safety import validate_user_input, InputSafetyError
 from ..core.logger import logger
 from ..core.trace_store import TraceStore
 from ..services.llm_service import APITimeoutError
+from ..db.data_quality_store import DataQualityStore
 from ..stages.answer import AnswerService, AnswerStage
 
 
@@ -73,6 +74,7 @@ class TalkToDataPipeline:
         sql_generation_service: SQLGenerationService | None = None,
         answer_service: AnswerService | None = None,
         trace_store: TraceStore | None = None,
+        quality_store: DataQualityStore | None = None,
     ):
         # Exposed as attributes so tests can inject mocks via pipeline.<service>.method = AsyncMock(...)
         self.intent_service = intent_service or IntentService()
@@ -81,6 +83,7 @@ class TalkToDataPipeline:
         self.answer_service = answer_service or AnswerService()
         # Injectable so tests can pass a MagicMock() and avoid writing to disk.
         self._trace_store = trace_store or TraceStore()
+        self._quality_store = quality_store or DataQualityStore()
 
         self.stages: "list[Stage]" = [
             IntentStage(self.intent_service),
@@ -89,7 +92,7 @@ class TalkToDataPipeline:
             SQLGenerationStage(self.sql_generation_service),
             SQLValidationStage(),
             ExecutionStage(),
-            AnswerStage(self.answer_service),
+            AnswerStage(self.answer_service, self._quality_store),
         ]
 
     async def run(self, request: AskRequest, user: ResolvedUser) -> AskResponse:

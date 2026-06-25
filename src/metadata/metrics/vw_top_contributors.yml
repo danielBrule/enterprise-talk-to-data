@@ -16,6 +16,12 @@ columns:
     description: "Aggregate number of replies received by the contributor's comments."
   - name: distinct_article_count
     description: "Number of distinct articles the contributor has commented on."
+health_checks:
+  freshness_column: null
+  monitor_null_rate: [avg_sentiment]
+  sanity_non_negative: [comment_count, total_replies, distinct_article_count]
+  sanity_sentiment_range: [avg_sentiment]
+  high_row_count_is_bad: false
 allowed_aggregations:
   comment_count: [SUM, AVG, MAX, MIN]
   avg_sentiment: [AVG, MIN, MAX]

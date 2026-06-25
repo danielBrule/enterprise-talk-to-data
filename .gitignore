@@ -14,6 +14,14 @@ src/infra/terraform/.terraform.lock.hcl
 # Trace store — runtime output, not committed
 traces/
 
+# Data quality store — local SQLite, populated at runtime via POST /data-quality/refresh.
+# Intentionally gitignored (unlike mlflow.db): quality results require a live Azure SQL
+# connection to generate, so committing them would be misleading for clone-and-explore users.
+# mlflow.db is committed because eval runs are generated offline and provide immediate value
+# (MLflow UI works after git clone with no credentials). Run POST /data-quality/refresh
+# once connected to populate.
+data_quality.db
+
 # OS
 .DS_Store
 Thumbs.db

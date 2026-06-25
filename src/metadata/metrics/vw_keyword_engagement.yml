@@ -18,6 +18,12 @@ columns:
     description: "Average sentiment score for comments on keyword-associated articles."
   - name: contributor_count
     description: "Number of distinct contributors who commented on keyword-associated articles."
+health_checks:
+  freshness_column: null
+  monitor_null_rate: [avg_comment_sentiment]
+  sanity_non_negative: [article_count, comment_count, contributor_count]
+  sanity_sentiment_range: [avg_comment_sentiment]
+  high_row_count_is_bad: false
 allowed_aggregations:
   article_count: [SUM, AVG, MAX, MIN]
   comment_count: [SUM, AVG, MAX, MIN]

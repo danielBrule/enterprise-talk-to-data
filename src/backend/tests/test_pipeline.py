@@ -82,12 +82,21 @@ def _make_answer_result() -> AnswerResult:
     )
 
 
+def _mock_quality_store():
+    store = MagicMock()
+    store.get_latest_results = AsyncMock(return_value=[])
+    return store
+
+
 def _build_pipeline(monkeypatch):
     """Build a pipeline with all LLM services and the trace store mocked out."""
     for mod in [intent_module, sql_gen_module, answer_module, vs_module]:
         monkeypatch.setattr(mod, "LLMService", MagicMock(side_effect=ValueError("no config")))
-    # Inject a no-op trace store so tests never write to disk.
-    return pipeline_module.TalkToDataPipeline(trace_store=MagicMock())
+    # Inject a no-op trace store and quality store so tests never write to disk.
+    return pipeline_module.TalkToDataPipeline(
+        trace_store=MagicMock(),
+        quality_store=_mock_quality_store(),
+    )
 
 
 async def test_pipeline_happy_path(monkeypatch):
