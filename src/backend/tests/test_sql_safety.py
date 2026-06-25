@@ -157,10 +157,8 @@ def test_validate_query_case_insensitive_keywords():
 
 
 def test_validate_query_dangerous_keyword_in_string_literal():
-    """Invalid: Dangerous keywords are detected even in string context (conservative approach)"""
-    # This is a limitation but safer to reject potentially dangerous patterns
-    with pytest.raises(SQLSafetyError, match="Keyword"):
-        validate_query("SELECT 'INSERT' FROM analytics.vw_article_engagement LIMIT 50")
+    """Valid: SQL keywords inside string literals are not treated as dangerous (AST parsing)"""
+    validate_query("SELECT 'INSERT' FROM analytics.vw_article_engagement LIMIT 50")
 
 
 def test_validate_query_merge_rejected():
