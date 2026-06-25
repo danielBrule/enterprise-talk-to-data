@@ -2,7 +2,7 @@ import json
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import date, datetime, timezone
+from datetime import date
 
 from ..services.llm_service import LLMService
 from ..prompts.answer_generation import PROMPT_VERSION, build_answer_generation_prompt
@@ -44,7 +44,6 @@ class AnswerService:
         quality_results: list[ViewHealthResult],
     ) -> list[str]:
         caveats: list[str] = []
-        today = date.today().isoformat()
 
         if not quality_results:
             caveats.append(
