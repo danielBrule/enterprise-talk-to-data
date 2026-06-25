@@ -119,6 +119,7 @@ handled uniformly.
 | 43 | **Model name tracking per stage** — actual model version (e.g. `gpt-4.1-mini-2025-04-14`) captured from the API response and logged to MLflow, enabling model comparison across eval runs | ✅ | `app/services/llm_service.py`, `evaluation_runner.py` |
 | 44 | **Evaluation results committed to git** — `evaluation_results/` JSON snapshots committed alongside code so regressions are visible in diff without a running server | ✅ | `evaluation_results/` |
 | 45 | **MLflow UI available locally** — `make mlflow-ui` launches MLflow at `localhost:5000` with no additional setup; `mlflow.db` and `mlruns/` are committed so the UI works immediately after `git clone`. Note: `data_quality.db` is intentionally gitignored — unlike MLflow eval snapshots (generated offline, no credentials needed), data quality results require a live Azure SQL connection to produce and would be misleading if committed. Run `POST /api/v1/data-quality/refresh` once connected. | ✅ | `Makefile`, `mlflow.db`, `mlruns/` |
+| 46e | **Access enforcement eval tests** — `ACCESS_TEST_CASES` in the golden runner injects SQL + role pairs directly into `ExecutionStage` (no LLM or DB required): denied cases confirm `security.access_denied` fires; allowed cases confirm access enforcement does not block legitimate queries. Pass rate logged to MLflow as `access_tests_pass_rate`. | ✅ | `app/evaluation/golden_runner.py`, `evaluation_runner.py` |
 
 ---
 

@@ -34,6 +34,7 @@ from typing import Any
 
 import yaml
 
+from ..core.auth import ResolvedUser
 from ..core.logger import logger
 from ..core.sql_safety import SQLSafetyError, validate_query
 from ..models.pipeline_context import PipelineContext
@@ -84,6 +85,45 @@ NEGATIVE_SQL_PATTERNS = [
     ),
 ]
 
+# Access enforcement test cases — SQL + role pairs verified against ExecutionStage.
+# No LLM or DB required: denied cases are blocked before the DB call; allowed cases
+# confirm access enforcement did not fire (DB errors are treated as "not denied").
+ACCESS_TEST_CASES = [
+    {
+        "description": "Editor denied: analytics.vw_ingestion_errors not in editor's allowed_views",
+        "sql": "SELECT TOP 10 stage, error_type, error_count FROM analytics.vw_ingestion_errors ORDER BY error_count DESC",
+        "role": "editor",
+        "allowed_views": ["analytics.vw_article_engagement", "analytics.vw_top_contributors"],
+        "expect": "denied",
+    },
+    {
+        "description": "Editor denied: analytics.vw_keyword_engagement not in editor's allowed_views",
+        "sql": "SELECT TOP 10 full_keyword, article_count FROM analytics.vw_keyword_engagement ORDER BY article_count DESC",
+        "role": "editor",
+        "allowed_views": ["analytics.vw_article_engagement", "analytics.vw_top_contributors"],
+        "expect": "denied",
+    },
+    {
+        "description": "Analyst allowed: analytics.vw_ingestion_errors is in analyst's allowed_views",
+        "sql": "SELECT TOP 10 stage, error_type, error_count FROM analytics.vw_ingestion_errors ORDER BY error_count DESC",
+        "role": "analyst",
+        "allowed_views": [
+            "analytics.vw_article_engagement",
+            "analytics.vw_keyword_engagement",
+            "analytics.vw_top_contributors",
+            "analytics.vw_ingestion_errors",
+        ],
+        "expect": "allowed",
+    },
+    {
+        "description": "Editor allowed: analytics.vw_article_engagement is in editor's allowed_views",
+        "sql": "SELECT TOP 10 article_id, title, comment_count FROM analytics.vw_article_engagement ORDER BY comment_count DESC",
+        "role": "editor",
+        "allowed_views": ["analytics.vw_article_engagement", "analytics.vw_top_contributors"],
+        "expect": "allowed",
+    },
+]
+
 
 @dataclass
 class GoldenEvalRecord:
@@ -91,7 +131,7 @@ class GoldenEvalRecord:
     expected_view: str
     expected_sql: str
     expected_expressions: list[str] = field(default_factory=list)
-    case_type: str = "positive"  # "positive" | "negative_question" | "negative_sql"
+    case_type: str = "positive"  # "positive" | "negative_question" | "negative_sql" | "access"
 
     # Per-check results (None = not applicable)
     intent_answerable: bool | None = None
@@ -123,24 +163,27 @@ class EvaluationReport:
     failed: int
     errors: int
     records: list[GoldenEvalRecord]
-    access_enforcement_note: str = (
-        "Access context is captured but not enforced in this MVP."
-    )
+    access_enforcement_note: str = "Access enforced at execution stage."
+    access_tests_passed: int = 0
+    access_tests_total: int = 0
 
     @property
     def pass_rate(self) -> float:
         return self.passed / self.total if self.total > 0 else 0.0
 
     def summary_lines(self) -> list[str]:
-        return [
+        lines = [
             f"Evaluation complete — {self.total} cases",
             f"  Pass:    {self.passed}",
             f"  Partial: {self.partial}",
             f"  Fail:    {self.failed}",
             f"  Error:   {self.errors}",
             f"  Pass rate: {self.pass_rate:.0%}",
-            f"  Note: {self.access_enforcement_note}",
         ]
+        if self.access_tests_total:
+            lines.append(f"  Access:  {self.access_tests_passed}/{self.access_tests_total} passed")
+        lines.append(f"  Note: {self.access_enforcement_note}")
+        return lines
 
     def print_summary(self) -> None:
         for line in self.summary_lines():
@@ -155,6 +198,8 @@ class EvaluationReport:
             "errors": self.errors,
             "pass_rate": self.pass_rate,
             "access_enforcement_note": self.access_enforcement_note,
+            "access_tests_passed": self.access_tests_passed,
+            "access_tests_total": self.access_tests_total,
             "records": [
                 {
                     "question": r.question,
@@ -447,6 +492,58 @@ class GoldenRunner:
             records.append(record)
         return records
 
+    async def _run_one_access_check(self, case: dict) -> GoldenEvalRecord:
+        """Run one access test case — ExecutionStage only, no LLM or DB required for denied cases."""
+        record = GoldenEvalRecord(
+            question=case["description"],
+            expected_view="",
+            expected_sql=case["sql"],
+            case_type="access",
+        )
+        ctx = _make_ctx(case["description"])
+        ctx.user = ResolvedUser(role=case["role"], allowed_views=case["allowed_views"])
+        ctx.sql = case["sql"]
+
+        try:
+            await self._execution_stage.run(ctx)
+        except Exception as exc:
+            record.status = "error"
+            record.failure_reasons.append(str(exc))
+            record.trace = ctx.trace
+            record.latency_ms = 0.0
+            return record
+
+        # "refused" means the access check fired; "failed" means the DB was unreachable after access passed.
+        execution_status = ctx.trace.execution_status or ""
+        if case["expect"] == "denied":
+            if execution_status == "refused":
+                record.status = "pass"
+            else:
+                record.status = "fail"
+                record.failure_reasons.append(
+                    f"Expected access denied for role '{case['role']}' but execution_status was '{execution_status}'"
+                )
+        else:  # "allowed"
+            if execution_status == "refused":
+                record.status = "fail"
+                record.failure_reasons.append(
+                    f"Role '{case['role']}' was incorrectly denied: {ctx.trace.refusal_reason}"
+                )
+            else:
+                record.status = "pass"
+
+        ctx.trace.latency_ms = build_latency(ctx)
+        record.trace = ctx.trace
+        record.latency_ms = ctx.trace.latency_ms.total_ms
+        return record
+
+    async def run_access_checks(self) -> list[GoldenEvalRecord]:
+        """Verify access enforcement using hardcoded SQL + role pairs. No LLM or DB required."""
+        records = []
+        for case in ACCESS_TEST_CASES:
+            records.append(await self._run_one_access_check(case))
+        return records
+
     async def _run_question_safe(self, q: dict, mode: str, sem: asyncio.Semaphore) -> GoldenEvalRecord:
         async with sem:
             try:
@@ -507,13 +604,17 @@ class GoldenRunner:
         negative_records = await asyncio.gather(
             *[self._run_negative_safe(neg, sem) for neg in NEGATIVE_QUESTIONS]
         )
+        access_records = await self.run_access_checks()
 
         records: list[GoldenEvalRecord] = [*positive_records, *negative_records]
         records.extend(self.run_negative_sql_checks())
+        records.extend(access_records)
 
         counts: dict[str, int] = {"pass": 0, "partial": 0, "fail": 0, "error": 0}
         for r in records:
             counts[r.status] = counts.get(r.status, 0) + 1
+
+        access_passed = sum(1 for r in access_records if r.status == "pass")
 
         report = EvaluationReport(
             total=len(records),
@@ -522,9 +623,12 @@ class GoldenRunner:
             failed=counts["fail"],
             errors=counts["error"],
             records=records,
+            access_tests_passed=access_passed,
+            access_tests_total=len(access_records),
         )
         logger.info(
-            "golden_runner.complete total=%d pass=%d partial=%d fail=%d error=%d",
+            "golden_runner.complete total=%d pass=%d partial=%d fail=%d error=%d access=%d/%d",
             report.total, report.passed, report.partial, report.failed, report.errors,
+            access_passed, len(access_records),
         )
         return report

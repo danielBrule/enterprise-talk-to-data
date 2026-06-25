@@ -79,7 +79,4 @@ class TraceRecord(BaseModel):
     # Error detail
     error: str | None = None
 
-    # Access note — explicit MVP boundary
-    access_enforcement_note: str = (
-        "Access context is captured but not enforced in this MVP."
-    )
+    access_enforcement_note: str = "Access enforced at execution stage."

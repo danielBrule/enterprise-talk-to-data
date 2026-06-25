@@ -13,9 +13,11 @@ import backend.app.stages.intent as intent_module
 import backend.app.stages.sql_generation as sql_gen_module
 import backend.app.stages.view_selection as vs_module
 from backend.app.evaluation.golden_runner import (
+    ACCESS_TEST_CASES,
     GoldenRunner,
     NEGATIVE_SQL_PATTERNS,
 )
+from backend.app.stages.execution import ExecutionStage
 from backend.app.stages.intent import IntentResult
 from backend.app.stages.sql_generation import SQLGenResult
 
@@ -85,7 +87,7 @@ async def test_run_question_pass(monkeypatch):
     assert record.trace.execution_status == "skipped"  # fast mode
     assert record.trace.latency_ms.total_ms is not None
     assert record.latency_ms is not None
-    assert "Access context is captured" in record.trace.access_enforcement_note
+    assert "Access enforced" in record.trace.access_enforcement_note
 
 
 async def test_run_question_wrong_view(monkeypatch):
@@ -209,7 +211,7 @@ async def test_run_all_returns_report(monkeypatch):
     assert report.total == report.passed + report.partial + report.failed + report.errors
     assert 0.0 <= report.pass_rate <= 1.0
     assert report.records
-    assert "Access context is captured" in report.access_enforcement_note
+    assert "Access enforced" in report.access_enforcement_note
 
     summary = report.summary_lines()
     assert any("Pass" in line for line in summary)
@@ -222,6 +224,113 @@ async def test_run_all_returns_report(monkeypatch):
     first = as_dict["records"][0]
     assert "trace_id" in first
     assert "checks" in first
+
+
+async def test_run_one_access_check_denied():
+    """Editor requesting a denied view must produce status='pass' (correctly blocked)."""
+    runner = GoldenRunner.__new__(GoldenRunner)
+    runner._execution_stage = ExecutionStage()
+
+    case = {
+        "description": "Editor denied: analytics.vw_ingestion_errors not in editor's allowed_views",
+        "sql": "SELECT TOP 10 stage, error_type FROM analytics.vw_ingestion_errors ORDER BY error_count DESC",
+        "role": "editor",
+        "allowed_views": ["analytics.vw_article_engagement", "analytics.vw_top_contributors"],
+        "expect": "denied",
+    }
+    record = await runner._run_one_access_check(case)
+
+    assert record.status == "pass"
+    assert record.case_type == "access"
+    assert record.trace is not None
+    assert record.trace.execution_status == "refused"
+    assert not record.failure_reasons
+
+
+async def test_run_one_access_check_allowed(monkeypatch):
+    """Role with access must not be blocked — DB errors are treated as 'not denied'."""
+    import backend.app.stages.execution as exec_module
+    monkeypatch.setattr(exec_module, "execute_query", AsyncMock(return_value=[]))
+
+    runner = GoldenRunner.__new__(GoldenRunner)
+    runner._execution_stage = ExecutionStage()
+
+    case = {
+        "description": "Analyst allowed: analytics.vw_ingestion_errors is in analyst's allowed_views",
+        "sql": "SELECT TOP 10 stage, error_type FROM analytics.vw_ingestion_errors ORDER BY error_count DESC",
+        "role": "analyst",
+        "allowed_views": [
+            "analytics.vw_article_engagement",
+            "analytics.vw_keyword_engagement",
+            "analytics.vw_top_contributors",
+            "analytics.vw_ingestion_errors",
+        ],
+        "expect": "allowed",
+    }
+    record = await runner._run_one_access_check(case)
+
+    assert record.status == "pass"
+    assert record.case_type == "access"
+    assert record.trace is not None
+    assert record.trace.execution_status != "refused"
+    assert not record.failure_reasons
+
+
+async def test_run_one_access_check_allowed_wrong_role_fails():
+    """If an 'allowed' test unexpectedly gets refused, the record status is 'fail'."""
+    runner = GoldenRunner.__new__(GoldenRunner)
+    runner._execution_stage = ExecutionStage()
+
+    case = {
+        "description": "Editor incorrectly expected to be allowed on denied view",
+        "sql": "SELECT TOP 10 stage, error_type FROM analytics.vw_ingestion_errors ORDER BY error_count DESC",
+        "role": "editor",
+        "allowed_views": ["analytics.vw_article_engagement"],
+        "expect": "allowed",  # wrong — editor can't reach ingestion_errors
+    }
+    record = await runner._run_one_access_check(case)
+
+    assert record.status == "fail"
+    assert record.failure_reasons
+
+
+async def test_run_access_checks_all_pass(monkeypatch):
+    """All ACCESS_TEST_CASES pass: denied cases blocked, allowed cases pass-through."""
+    import backend.app.stages.execution as exec_module
+    monkeypatch.setattr(exec_module, "execute_query", AsyncMock(return_value=[]))
+
+    runner = GoldenRunner.__new__(GoldenRunner)
+    runner._execution_stage = ExecutionStage()
+
+    records = await runner.run_access_checks()
+
+    assert len(records) == len(ACCESS_TEST_CASES)
+    for r in records:
+        assert r.case_type == "access"
+        assert r.status == "pass", f"Access check failed: {r.question} — {r.failure_reasons}"
+
+
+async def test_run_all_includes_access_records(monkeypatch):
+    """run_all() report includes access test counters."""
+    runner = _build_runner(monkeypatch)
+    runner.intent_service.classify = AsyncMock(return_value=_make_intent(True))
+    runner.view_selection_service.select_views = AsyncMock(return_value={
+        "selected_views": ["analytics.vw_article_engagement"],
+        "confidence": 0.9,
+        "reason": "ok",
+    })
+    runner.sql_generation_service.generate = AsyncMock(return_value=_make_sql(SAFE_SQL))
+
+    import backend.app.stages.execution as exec_module
+    monkeypatch.setattr(exec_module, "execute_query", AsyncMock(return_value=[]))
+
+    report = await runner.run_all()
+
+    assert report.access_tests_total == len(ACCESS_TEST_CASES)
+    assert report.access_tests_passed == len(ACCESS_TEST_CASES)
+    access_recs = [r for r in report.records if r.case_type == "access"]
+    assert len(access_recs) == len(ACCESS_TEST_CASES)
+    assert "Access" in "\n".join(report.summary_lines())
 
 
 @pytest.mark.integration

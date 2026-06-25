@@ -118,6 +118,10 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
         total_sql_retries = sum(
             r.trace.sql_retries for r in report.records if r.trace
         )
+        access_pass_rate = (
+            round(report.access_tests_passed / report.access_tests_total, 4)
+            if report.access_tests_total else 0.0
+        )
         mlflow.log_metrics({
             "pass_rate": round(report.pass_rate, 4),
             "passed": report.passed,
@@ -128,6 +132,9 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "eval_duration_s": round(duration_s, 1),
             "questions_with_sql_retries": questions_with_retries,
             "total_sql_retries": total_sql_retries,
+            "access_tests_passed": report.access_tests_passed,
+            "access_tests_total": report.access_tests_total,
+            "access_tests_pass_rate": access_pass_rate,
             **token_metrics,
         })
 
