@@ -1,6 +1,12 @@
-from dataclasses import dataclass
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 from .trace import TraceRecord
+
+if TYPE_CHECKING:
+    from ..core.auth import ResolvedUser
 
 
 @dataclass
@@ -17,6 +23,11 @@ class PipelineContext:
     trace: TraceRecord
     latency: dict[str, float]
     pipeline_start: float
+
+    # Resolved at the API layer and carried through for access enforcement
+    # (Task 11). None when the pipeline is called outside the HTTP context
+    # (e.g. evaluation runner, tests).
+    user: ResolvedUser | None = None
 
     # Populated progressively — None until the responsible stage completes
     selected_views: list[str] | None = None

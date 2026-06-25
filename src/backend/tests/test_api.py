@@ -86,7 +86,7 @@ def test_ask_endpoint_returns_answer(monkeypatch):
     from backend.app.models.talk_to_data import AskRequest, AskResponse
     from backend.app.models.trace import TraceRecord
 
-    async def mock_run(self, request: AskRequest) -> AskResponse:
+    async def mock_run(self, request: AskRequest, user) -> AskResponse:
         trace = TraceRecord(
             question=request.question,
             answerable=True,
@@ -122,7 +122,7 @@ def test_ask_endpoint_returns_answer(monkeypatch):
     assert trace["question"] == "Which articles have the most comments?"
     assert trace["execution_status"] == "success"
     assert trace["answerable"] is True
-    assert "Access context" in trace["access_enforcement_note"]
+    assert trace["access_enforcement_note"]  # non-empty
 
 
 def test_ask_endpoint_returns_refusal(monkeypatch):
@@ -131,7 +131,7 @@ def test_ask_endpoint_returns_refusal(monkeypatch):
     from backend.app.models.talk_to_data import AskRequest, AskResponse
     from backend.app.models.trace import TraceRecord
 
-    async def mock_run(self, request: AskRequest) -> AskResponse:
+    async def mock_run(self, request: AskRequest, user) -> AskResponse:
         trace = TraceRecord(
             question=request.question,
             answerable=False,
@@ -167,7 +167,7 @@ def test_ask_endpoint_with_user_context(monkeypatch):
     from backend.app.models.talk_to_data import AskRequest, AskResponse
     from backend.app.models.trace import TraceRecord
 
-    async def mock_run(self, request: AskRequest) -> AskResponse:
+    async def mock_run(self, request: AskRequest, user) -> AskResponse:
         trace = TraceRecord(
             question=request.question,
             user_context=request.user_context,

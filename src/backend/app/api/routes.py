@@ -1,5 +1,8 @@
-from fastapi import APIRouter, HTTPException, Query
+from typing import Annotated
 
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
+
+from ..core.auth import AuthError, DemoAuthService, ResolvedUser
 from ..core.config import API_PREFIX, API_VERSION
 from ..models.talk_to_data import AskRequest, AskResponse
 from ..services.article_service import get_article, list_articles
@@ -21,6 +24,24 @@ from ..validators import (
 
 router = APIRouter(prefix=API_PREFIX, tags=["analytics"])
 metadata_router = APIRouter(prefix=f"{API_PREFIX}/metadata", tags=["metadata"])
+
+_auth_service = DemoAuthService()
+
+
+async def get_current_user(
+    x_user_role: Annotated[str | None, Header(alias="X-User-Role")] = None,
+) -> ResolvedUser:
+    """
+    FastAPI dependency that resolves the caller's role from the X-User-Role header.
+
+    DEMO ONLY — see app/core/auth.py for the production replacement pattern.
+    In production this dependency would validate a Bearer token (Azure AD / OIDC)
+    and extract role claims from the verified JWT, never from a plain header.
+    """
+    try:
+        return _auth_service.resolve(x_user_role)
+    except AuthError as exc:
+        raise HTTPException(status_code=401, detail=str(exc))
 
 
 @router.get("/articles", response_model=list[ArticleResponse])
@@ -87,16 +108,22 @@ async def get_glossary():
 
 
 @router.post("/ask", response_model=AskResponse, tags=["talk-to-data"])
-async def ask(request: AskRequest) -> AskResponse:
+async def ask(
+    request: AskRequest,
+    user: Annotated[ResolvedUser, Depends(get_current_user)],
+) -> AskResponse:
     """
     Answer a natural language analytics question.
 
     Returns a grounded answer, caveats, and a full trace of every pipeline
     stage. When the question is out of scope, unsafe, or unanswerable,
     the response is refused with an explicit reason — never a silent failure.
+
+    Requires an X-User-Role header (analyst / editor / admin). Missing header
+    defaults to analyst. Unknown role returns 401.
     """
     pipeline = TalkToDataPipeline()
-    return await pipeline.run(request)
+    return await pipeline.run(request, user)
 
 
 @router.get("/version", tags=["analytics"])

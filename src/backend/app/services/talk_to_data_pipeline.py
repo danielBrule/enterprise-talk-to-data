@@ -15,6 +15,7 @@ from ..stages.metadata import MetadataStage
 from ..stages.sql_generation import SQLGenerationService, SQLGenerationStage
 from ..stages.sql_validation import SQLValidationStage
 from ..stages.execution import ExecutionStage
+from ..core.auth import ResolvedUser
 from ..core.config import settings
 from ..core.input_safety import validate_user_input, InputSafetyError
 from ..core.logger import logger
@@ -91,13 +92,22 @@ class TalkToDataPipeline:
             AnswerStage(self.answer_service),
         ]
 
-    async def run(self, request: AskRequest) -> AskResponse:
+    async def run(self, request: AskRequest, user: ResolvedUser) -> AskResponse:
         ctx = PipelineContext(
             question=request.question,
             user_context=request.user_context,
             trace=TraceRecord(question=request.question, user_context=request.user_context),
             latency={},
             pipeline_start=time.perf_counter(),
+            user=user,
+        )
+        # Record resolved identity in the trace so every response is self-documenting.
+        # "Enforcement planned (Task 11)" is intentional — the note tracks what IS
+        # enforced, not what will be. Update this string when enforcement is wired in.
+        ctx.trace.access_enforcement_note = (
+            f"Role '{user.role}' resolved via X-User-Role header. "
+            f"Allowed views: {user.allowed_views}. "
+            f"Access enforcement at execution stage: planned."
         )
 
         try:

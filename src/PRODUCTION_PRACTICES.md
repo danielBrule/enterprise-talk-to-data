@@ -88,7 +88,7 @@ handled uniformly.
 | 25 | **Domain vocabulary aliases** — alternative names for metrics are loaded from view metadata so intent classification understands synonyms | ✅ | `app/stages/intent.py`, `src/metadata/metrics/` |
 | 26 | **Answer caveats from metadata** — answer stage injects the `limitations` declared in view YAML as explicit caveats | ✅ | `app/stages/answer.py` |
 | 27 | **Data quality caveats** — freshness / NULL rate / row count health injected as caveats at answer time | 🔜 | planned |
-| 28 | **Persona-based access control** — role-to-view mapping; views outside a user's role are excluded from view selection | 🔜 | planned |
+| 28 | **Persona-based access control** — `DemoAuthService` resolves `X-User-Role` header to one of three personas (analyst / editor / admin), each with an explicit allowed-views list. Role is stamped on the trace. **DEMO ONLY** — in production replace with Azure AD / OIDC JWT validation; never resolve permissions from a plain header. See `app/core/auth.py` module docstring for the production replacement pattern. | ✅ | `app/core/auth.py`, `app/api/routes.py` |
 | 29 | **Access enforcement at execution** — access context validated in the execution stage; query refused if it references views the user cannot see | 🔜 | planned |
 | 30 | **Approved join register** — cross-view joins blocked unless declared in a central join allowlist | 🔜 | planned |
 | 31 | **Clarification stage** — ambiguous questions returned with a clarifying question rather than a low-confidence guess | 🔜 | planned |
