@@ -6,10 +6,25 @@ from backend.app.main import app
 client = TestClient(app)
 
 
-def test_health_endpoint():
+def test_health_endpoint(monkeypatch):
+    import backend.app.main as main_module
+
+    async def _mock_ok():
+        return {
+            "status": "ok",
+            "timestamp": "2026-06-25T00:00:00+00:00",
+            "checks": {
+                "database": {"status": "ok", "detail": "Connected"},
+                "llm_config": {"status": "ok", "detail": "All 3 task deployments configured"},
+                "metadata": {"status": "ok", "detail": "4 view schema(s), 4 metric definition(s) loaded"},
+            },
+        }
+
+    monkeypatch.setattr(main_module, "run_health_checks", _mock_ok)
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    assert response.json()["status"] == "ok"
+    assert "checks" in response.json()
 
 
 def test_version_endpoint():

@@ -1,10 +1,11 @@
 import time
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 
 from .api.routes import router, metadata_router, data_quality_router
 from .core.config import API_VERSION
 from .core.logger import logger
+from .services.health_service import run_health_checks
 
 app = FastAPI(
     title="Newspaper Talk to Data API",
@@ -46,8 +47,11 @@ async def log_requests(request: Request, call_next):
 
 
 @app.get("/health", tags=["health"])
-async def health():
-    return {"status": "ok"}
+async def health(response: Response):
+    result = await run_health_checks()
+    if result["status"] == "error":
+        response.status_code = 503
+    return result
 
 
 @app.get("/version", tags=["health"])
