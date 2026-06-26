@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 from .trace import TraceRecord, StageLatency
@@ -38,6 +40,6 @@ class AskResponse(BaseModel):
     row_count: int | None = None
     confidence: float | None = None
     latency_ms: StageLatency | None = None
-    token_usage: dict[str, dict[str, int]] = Field(default_factory=dict)
+    token_usage: dict[str, dict[str, Any]] = Field(default_factory=dict)
 
     trace: TraceRecord

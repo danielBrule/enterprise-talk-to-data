@@ -20,6 +20,10 @@ data/
 data_quality.db
 traces/
 
+# Node (belt-and-suspenders — src/frontend/.gitignore also covers these)
+node_modules/
+dist/
+
 # OS
 .DS_Store
 Thumbs.db

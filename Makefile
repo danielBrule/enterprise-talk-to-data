@@ -15,7 +15,7 @@ else
     PWSH ?= pwsh
 endif
 
-.PHONY: help env pdf clean-pdf install check start-backend apply-sql-views apply-sql-indexes infra-init infra-apply tests eval mlflow-ui install-frontend start-frontend build-frontend
+.PHONY: help env pdf clean-pdf install check start-backend apply-sql-views apply-sql-indexes infra-init infra-apply tests eval mlflow-ui scaffold-frontend install-frontend start-frontend build-frontend
 
 help:   ## show this help
 	@echo ""
@@ -39,9 +39,10 @@ help:   ## show this help
 	@echo ""
 	@echo "  Frontend  (requires Node.js LTS)"
 	@echo "  --------"
-	@echo "  install-frontend  npm install in src/frontend"
-	@echo "  start-frontend    vite dev server at http://localhost:5173"
-	@echo "  build-frontend    production build to src/frontend/dist"
+	@echo "  scaffold-frontend  create src/frontend with React + Vite (run once)"
+	@echo "  install-frontend   npm install in src/frontend"
+	@echo "  start-frontend     vite dev server at http://localhost:5173"
+	@echo "  build-frontend     production build to src/frontend/dist"
 	@echo ""
 	@echo "  SQL"
 	@echo "  ---"
@@ -92,14 +93,17 @@ start-backend: install  ## start the FastAPI backend server
 
 # ── Frontend ──────────────────────────────────────────────────────────────────
 
+scaffold-frontend:  ## create src/frontend with React + Vite template (run once)
+	@$(PWSH) -NoProfile -Command "npm.cmd create vite@latest src/frontend -- --template react"
+
 install-frontend:  ## npm install in src/frontend (requires Node.js LTS)
-	cd src/frontend && npm install
+	@$(PWSH) -NoProfile -Command "Set-Location src/frontend; npm.cmd install"
 
 start-frontend:  ## start Vite dev server at http://localhost:5173
-	cd src/frontend && npm run dev
+	@$(PWSH) -NoProfile -Command "Set-Location src/frontend; npm.cmd run dev"
 
 build-frontend:  ## production build to src/frontend/dist
-	cd src/frontend && npm run build
+	@$(PWSH) -NoProfile -Command "Set-Location src/frontend; npm.cmd run build"
 
 # ── SQL ───────────────────────────────────────────────────────────────────────
 

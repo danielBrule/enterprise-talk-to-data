@@ -1,5 +1,17 @@
 # Tech Stack
 
+## Frontend
+
+| Library | Version | Role |
+|---|---|---|
+| **React** | 19 | UI framework — component-based chat interface |
+| **Vite** | 8 | Build tool and dev server — HMR, proxy to FastAPI backend |
+| **Tailwind CSS** | 4 | Utility-first styling — no separate CSS files |
+
+Single-page app in `src/frontend/`. Dev server proxies `/api/*` to `http://localhost:8000` so there are no CORS issues during development. Production build outputs to `src/frontend/dist/` for static serving via FastAPI `StaticFiles`.
+
+---
+
 ## Cloud & infrastructure
 
 | Technology | Role |
