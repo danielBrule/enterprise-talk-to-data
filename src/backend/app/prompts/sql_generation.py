@@ -1,4 +1,4 @@
-PROMPT_VERSION = "sql_gen_v7"
+PROMPT_VERSION = "sql_gen_v8"
 
 
 def _format_history(conversation_history: list) -> str:
@@ -52,7 +52,7 @@ def build_sql_generation_prompt(
         "Every query must use SELECT TOP N where N is between 1 and 500. "
         "Never use LIMIT, FETCH FIRST, or OFFSET — this is T-SQL, not standard SQL. "
         "Never query any table outside the analytics schema. "
-        "Respond only with valid JSON containing a single key 'sql'. "
+        "Respond only with valid JSON containing keys 'sql' and 'filters'. "
         "No markdown fences, no explanation outside the JSON."
     )
     history_section = _format_history(conversation_history or [])
@@ -90,8 +90,11 @@ query the single most relevant view instead.
 
 Respond with exactly this JSON:
 {{
-  "sql": "<SELECT TOP N col1, col2 FROM analytics.vw_name [WHERE ...] [ORDER BY ...]>"
-}}"""
+  "sql": "<SELECT TOP N col1, col2 FROM analytics.vw_name [WHERE ...] [ORDER BY ...]>",
+  "filters": ["<short description of each WHERE condition, e.g. 'publication_date >= 2025'>"]
+}}
+
+If no WHERE conditions are applied, return an empty list for "filters"."""
     messages = [
         {"role": "system", "content": system},
         {"role": "user", "content": user},

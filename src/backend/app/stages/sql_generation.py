@@ -18,6 +18,7 @@ class SQLGenResult:
     model_deployment: str
     latency_ms: float
     token_usage: dict = field(default_factory=dict)
+    filters: list = field(default_factory=list)
 
 
 class SQLGenerationService:
@@ -102,10 +103,12 @@ class SQLGenerationService:
             clean = re.sub(r"```(?:json|sql)?", "", raw).strip().strip("`").strip()
             result = json.loads(clean)
             sql = result.get("sql", "").strip()
+            filters = [str(f) for f in result.get("filters", []) if f]
             logger.info(
-                "sql_generation.generated question=%s sql_preview=%s",
+                "sql_generation.generated question=%s sql_preview=%s filters=%s",
                 question[:60],
                 sql[:80],
+                filters,
             )
             return SQLGenResult(
                 sql=sql,
@@ -113,6 +116,7 @@ class SQLGenerationService:
                 model_deployment=deployment,
                 latency_ms=(time.perf_counter() - start) * 1000,
                 token_usage=usage,
+                filters=filters,
             )
         except (json.JSONDecodeError, KeyError) as e:
             logger.error(
@@ -165,6 +169,7 @@ class SQLGenerationStage(Stage):
 
         ctx.trace.sql_attempts.append(result.sql)  # always recorded — empty string included for debug
         ctx.trace.generated_sql = result.sql  # overwritten each attempt; final value = last attempt
+        ctx.trace.filters_applied = result.filters  # overwritten on retry; final value = last attempt
         ctx.trace.prompt_versions["sql_generation"] = result.prompt_version
         ctx.trace.model_deployments["sql_generation"] = result.model_deployment
         ctx.sql = result.sql

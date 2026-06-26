@@ -465,3 +465,60 @@ async def test_pipeline_access_denied_at_execution(monkeypatch):
     assert "vw_ingestion_errors" in response.refusal_reason
     assert response.trace.execution_status == "refused"
     mock_exec.assert_not_awaited()  # database must never be called
+
+
+# ── enrichment fields ──────────────────────────────────────────────────────────
+
+async def test_pipeline_happy_path_enrichment_fields(monkeypatch):
+    """On a successful run all AskResponse enrichment fields must be populated."""
+    pipeline = _build_pipeline(monkeypatch)
+
+    pipeline.intent_service.classify = AsyncMock(return_value=_make_intent(True))
+    pipeline.view_selection_service.select_views = AsyncMock(return_value={
+        "selected_views": ["analytics.vw_article_engagement"],
+        "confidence": 0.95,
+        "reason": "matches article domain",
+    })
+    monkeypatch.setattr(metadata_stage_module, "get_context_for_views", AsyncMock(return_value=MOCK_METADATA))
+    sql_result = SQLGenResult(
+        sql=SAFE_SQL,
+        prompt_version="sql_gen_v8",
+        model_deployment="test-deploy",
+        latency_ms=1.0,
+        filters=["comment_count > 0"],
+    )
+    pipeline.sql_generation_service.generate = AsyncMock(return_value=sql_result)
+    monkeypatch.setattr(execution_stage_module, "execute_query", AsyncMock(return_value=MOCK_ROWS))
+    pipeline.answer_service.generate = AsyncMock(return_value=_make_answer_result())
+
+    response = await pipeline.run(AskRequest(question="Which articles have comments?"), _ANALYST)
+
+    assert response.refused is False
+    assert response.source_view == "analytics.vw_article_engagement"
+    expected_col_names = {c["name"] for c in MOCK_METADATA["analytics.vw_article_engagement"]["columns"]}
+    assert {m.name for m in response.metric_definitions} == expected_col_names
+    comment_count = next(m for m in response.metric_definitions if m.name == "comment_count")
+    assert comment_count.allowed_aggregations == ["SUM", "AVG", "MAX", "MIN"]
+    assert response.filters_applied == ["comment_count > 0"]
+    assert response.sql == SAFE_SQL
+    assert response.row_count == 2
+    assert response.confidence == 0.95
+    assert response.latency_ms is not None
+    assert response.latency_ms.total_ms is not None
+    assert isinstance(response.token_usage, dict)
+
+
+async def test_pipeline_refused_enrichment_fields_default_empty(monkeypatch):
+    """On an intent refusal (no view selected) enrichment fields are absent/empty."""
+    pipeline = _build_pipeline(monkeypatch)
+    pipeline.intent_service.classify = AsyncMock(return_value=_make_intent(False))
+
+    response = await pipeline.run(AskRequest(question="What will engagement be next year?"), _ANALYST)
+
+    assert response.refused is True
+    assert response.source_view is None
+    assert response.metric_definitions == []
+    assert response.filters_applied == []
+    assert response.sql is None
+    assert response.row_count is None
+    assert response.confidence is None

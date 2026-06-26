@@ -57,6 +57,7 @@ class TraceRecord(BaseModel):
     model_deployments: dict[str, str] = Field(default_factory=dict)
 
     # SQL
+    filters_applied: list[str] = Field(default_factory=list)  # self-reported by SQL generation LLM
     generated_sql: str | None = None  # final accepted SQL (last attempt)
     sql_attempts: list[str] = Field(default_factory=list)  # all attempts including failed ones
     validation_result: ValidationResult | None = None

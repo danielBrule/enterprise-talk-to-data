@@ -8,8 +8,9 @@ if TYPE_CHECKING:
 
 from ..models.pipeline_context import PipelineContext
 from ..stages.base import Refusal, Success
-from ..models.talk_to_data import AskRequest, AskResponse
+from ..models.talk_to_data import AskRequest, AskResponse, MetricDefinition
 from ..models.trace import TraceRecord
+from ..stages.base import build_latency
 from ..stages.intent import IntentService, IntentStage
 from ..stages.view_selection import ViewSelectionService, ViewSelectionStage
 from ..stages.metadata import MetadataStage
@@ -160,11 +161,36 @@ class TalkToDataPipeline:
         budget = settings.max_tokens_per_request
         max_sql_retries = settings.max_sql_retries
 
+        def _enrichment() -> dict:
+            source_view = ctx.trace.selected_views[0] if ctx.trace.selected_views else None
+            metric_defs = []
+            if ctx.metadata_context and source_view:
+                view_data = ctx.metadata_context.get(source_view, {})
+                allowed_aggs = view_data.get("allowed_aggregations", {})
+                for col in view_data.get("columns", []):
+                    name = col.get("name", "")
+                    metric_defs.append(MetricDefinition(
+                        name=name,
+                        description=col.get("description", ""),
+                        allowed_aggregations=allowed_aggs.get(name, []),
+                    ))
+            return {
+                "source_view": source_view,
+                "metric_definitions": metric_defs,
+                "filters_applied": list(ctx.trace.filters_applied),
+                "sql": ctx.trace.executed_sql,
+                "row_count": ctx.trace.row_count,
+                "confidence": ctx.trace.view_selection_confidence,
+                "latency_ms": ctx.trace.latency_ms,
+                "token_usage": dict(ctx.trace.token_usage),
+            }
+
         def _to_response(outcome) -> AskResponse | None:
+            e = _enrichment()
             if isinstance(outcome, Refusal):
-                return AskResponse(refused=True, refusal_reason=outcome.reason, session_id=session_id, trace=outcome.trace)
+                return AskResponse(refused=True, refusal_reason=outcome.reason, session_id=session_id, trace=outcome.trace, **e)
             if isinstance(outcome, Success):
-                return AskResponse(answer=outcome.answer, caveats=outcome.caveats, refused=False, session_id=session_id, trace=outcome.trace)
+                return AskResponse(answer=outcome.answer, caveats=outcome.caveats, refused=False, session_id=session_id, trace=outcome.trace, **e)
             return None
 
         def _budget_response() -> AskResponse | None:
@@ -175,7 +201,8 @@ class TalkToDataPipeline:
                     logger.warning("cost.budget_exceeded total_tokens=%s limit=%s", used, budget)
                     ctx.trace.refusal_reason = reason
                     ctx.trace.execution_status = "refused"
-                    return AskResponse(refused=True, refusal_reason=reason, session_id=session_id, trace=ctx.trace)
+                    ctx.trace.latency_ms = build_latency(ctx)
+                    return AskResponse(refused=True, refusal_reason=reason, session_id=session_id, trace=ctx.trace, **_enrichment())
             return None
 
         # Stages 1–3: intent, view_selection, metadata (linear, no retry)
@@ -215,7 +242,8 @@ class TalkToDataPipeline:
                 )
                 ctx.trace.refusal_reason = reason
                 ctx.trace.execution_status = "refused"
-                return AskResponse(refused=True, refusal_reason=reason, session_id=session_id, trace=ctx.trace)
+                ctx.trace.latency_ms = build_latency(ctx)
+                return AskResponse(refused=True, refusal_reason=reason, session_id=session_id, trace=ctx.trace, **_enrichment())
 
             logger.info(
                 "sql_generation.retrying attempt=%d error=%s",

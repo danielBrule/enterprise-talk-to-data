@@ -202,3 +202,50 @@ async def test_generate_without_history_unchanged(monkeypatch):
 
     prompt_text = " ".join(m["content"] for m in captured[0])
     assert "Prior conversation" not in prompt_text
+
+
+# ── filters_applied ────────────────────────────────────────────────────────────
+
+async def test_generate_returns_filters(monkeypatch):
+    """Filters declared in the LLM response are surfaced in SQLGenResult.filters."""
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = AsyncMock(
+        return_value=(
+            json.dumps({"sql": SAFE_SQL, "filters": ["publication_date >= 2025", "comment_count > 5"]}),
+            _MOCK_USAGE,
+        )
+    )
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    service = sql_gen_module.SQLGenerationService()
+    result = await service.generate("Articles from 2025 with more than 5 comments?", SAMPLE_METADATA)
+
+    assert result.filters == ["publication_date >= 2025", "comment_count > 5"]
+
+
+async def test_generate_returns_empty_filters_when_no_where_clause(monkeypatch):
+    """Empty filters list is returned when the LLM reports no WHERE conditions."""
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = AsyncMock(
+        return_value=(json.dumps({"sql": SAFE_SQL, "filters": []}), _MOCK_USAGE)
+    )
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    service = sql_gen_module.SQLGenerationService()
+    result = await service.generate("Which articles have the most comments?", SAMPLE_METADATA)
+
+    assert result.filters == []
+
+
+async def test_generate_filters_defaults_to_empty_when_key_absent(monkeypatch):
+    """If the LLM omits the 'filters' key (old response format), result.filters defaults to []."""
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = AsyncMock(
+        return_value=(json.dumps({"sql": SAFE_SQL}), _MOCK_USAGE)
+    )
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    service = sql_gen_module.SQLGenerationService()
+    result = await service.generate("Which articles have the most comments?", SAMPLE_METADATA)
+
+    assert result.filters == []

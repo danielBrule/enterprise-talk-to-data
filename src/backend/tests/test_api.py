@@ -252,6 +252,54 @@ def test_ask_endpoint_echoes_client_session_id(monkeypatch):
     assert response.json()["session_id"] == client_session_id
 
 
+def test_ask_endpoint_enrichment_fields_present(monkeypatch):
+    """Enrichment fields set by the pipeline appear in the /ask JSON response."""
+    from backend.app.services.talk_to_data_pipeline import TalkToDataPipeline
+    from backend.app.models.talk_to_data import AskRequest, AskResponse, MetricDefinition
+    from backend.app.models.trace import TraceRecord, StageLatency
+
+    async def mock_run(self, request: AskRequest, user) -> AskResponse:
+        trace = TraceRecord(
+            question=request.question,
+            execution_status="success",
+            answerable=True,
+            selected_views=["analytics.vw_article_engagement"],
+        )
+        return AskResponse(
+            answer="Article A has the most comments.",
+            refused=False,
+            session_id="test-session-id",
+            source_view="analytics.vw_article_engagement",
+            metric_definitions=[
+                MetricDefinition(name="article_id", description="Primary identifier"),
+                MetricDefinition(name="comment_count", description="Total comments", allowed_aggregations=["SUM", "AVG"]),
+            ],
+            filters_applied=["publication_date >= 2025"],
+            sql="SELECT TOP 10 article_id FROM analytics.vw_article_engagement",
+            row_count=10,
+            confidence=0.92,
+            latency_ms=StageLatency(total_ms=1500.0),
+            token_usage={"intent": {"total_tokens": 100}},
+            trace=trace,
+        )
+
+    monkeypatch.setattr(TalkToDataPipeline, "run", mock_run)
+    response = client.post("/api/v0/ask", json={"question": "Which articles have the most comments?"})
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["source_view"] == "analytics.vw_article_engagement"
+    assert len(data["metric_definitions"]) == 2
+    assert data["metric_definitions"][1]["name"] == "comment_count"
+    assert data["metric_definitions"][1]["allowed_aggregations"] == ["SUM", "AVG"]
+    assert data["filters_applied"] == ["publication_date >= 2025"]
+    assert data["sql"] == "SELECT TOP 10 article_id FROM analytics.vw_article_engagement"
+    assert data["row_count"] == 10
+    assert data["confidence"] == 0.92
+    assert data["latency_ms"]["total_ms"] == 1500.0
+    assert data["token_usage"] == {"intent": {"total_tokens": 100}}
+
+
 def test_ask_endpoint_accepts_conversation_history(monkeypatch):
     """conversation_history is forwarded to the pipeline without error."""
     from backend.app.services.talk_to_data_pipeline import TalkToDataPipeline
