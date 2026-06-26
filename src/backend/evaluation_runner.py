@@ -73,6 +73,7 @@ def _aggregate_token_usage(report) -> dict[str, dict[str, int]]:
 
 
 def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: float) -> None:
+    from backend.app.core.config import settings
     from backend.app.prompts.intent import build_intent_prompt
     from backend.app.prompts.sql_generation import build_sql_generation_prompt
 
@@ -91,6 +92,12 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "model_view_selection": stage_models.get("view_selection", "unknown"),
             "model_sql_gen": stage_models.get("sql_generation", "unknown"),
             "model_answer": stage_models.get("answer_generation", "unknown"),
+            # Pipeline tuning parameters — logged so each eval run is fully reproducible
+            "max_history_turns": settings.max_history_turns,
+            "max_history_answer_chars": settings.max_history_answer_chars,
+            "max_sql_retries": settings.max_sql_retries,
+            "max_tokens_per_request": settings.max_tokens_per_request,
+            "pipeline_timeout_s": settings.pipeline_timeout_seconds,
         })
 
         # Aggregate token usage across all records
@@ -122,6 +129,10 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             round(report.access_tests_passed / report.access_tests_total, 4)
             if report.access_tests_total else 0.0
         )
+        conversation_pass_rate = (
+            round(report.conversation_tests_passed / report.conversation_tests_total, 4)
+            if report.conversation_tests_total else 0.0
+        )
         mlflow.log_metrics({
             "pass_rate": round(report.pass_rate, 4),
             "passed": report.passed,
@@ -135,6 +146,9 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "access_tests_passed": report.access_tests_passed,
             "access_tests_total": report.access_tests_total,
             "access_tests_pass_rate": access_pass_rate,
+            "conversation_tests_passed": report.conversation_tests_passed,
+            "conversation_tests_total": report.conversation_tests_total,
+            "conversation_tests_pass_rate": conversation_pass_rate,
             **token_metrics,
         })
 

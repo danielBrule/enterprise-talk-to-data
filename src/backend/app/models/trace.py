@@ -32,6 +32,9 @@ class TraceRecord(BaseModel):
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )
 
+    # Conversation threading — links all turns of one session; client-generated
+    session_id: str | None = None
+
     # Input
     question: str
     user_context: str | None = None
@@ -94,3 +97,4 @@ class RecentTraceItem(BaseModel):
     refusal_reason: str | None
     latency_total_ms: float | None
     user_context: str | None
+    session_id: str | None = None

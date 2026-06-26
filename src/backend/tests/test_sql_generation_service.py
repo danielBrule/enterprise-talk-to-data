@@ -101,3 +101,104 @@ async def test_generate_llm_unavailable_returns_empty(monkeypatch):
 
     assert result.sql == ""
     assert result.model_deployment == "none"
+
+
+# ── conversation history ───────────────────────────────────────────────────────
+
+async def test_generate_injects_conversation_history_into_prompt(monkeypatch):
+    """Prior turns must appear in the prompt sent to the LLM."""
+    from backend.app.models.talk_to_data import ConversationTurn
+
+    captured: list[list] = []
+
+    async def capture_messages(messages, **kwargs):
+        captured.append(messages)
+        return json.dumps({"sql": SAFE_SQL}), _MOCK_USAGE
+
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = capture_messages
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    history = [
+        ConversationTurn(
+            question="Which articles have the most comments?",
+            sql="SELECT TOP 10 article_id FROM analytics.vw_article_engagement ORDER BY comment_count DESC",
+            answer="Article A has the most comments.",
+        )
+    ]
+    service = sql_gen_module.SQLGenerationService()
+    await service.generate("What about last month?", SAMPLE_METADATA, conversation_history=history)
+
+    prompt_text = " ".join(m["content"] for m in captured[0])
+    assert "Which articles have the most comments?" in prompt_text
+    assert "SELECT TOP 10 article_id" in prompt_text
+    assert "Article A has the most comments" in prompt_text
+
+
+async def test_generate_truncates_long_answers_in_history(monkeypatch):
+    """Answers longer than MAX_HISTORY_ANSWER_CHARS (default 300) must be truncated in the prompt."""
+    from backend.app.models.talk_to_data import ConversationTurn
+
+    captured: list[list] = []
+
+    async def capture_messages(messages, **kwargs):
+        captured.append(messages)
+        return json.dumps({"sql": SAFE_SQL}), _MOCK_USAGE
+
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = capture_messages
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    long_answer = "Article " + "X" * 400  # 408 chars — exceeds default 300-char limit
+    history = [ConversationTurn(question="q", sql="SELECT TOP 1 article_id FROM analytics.vw_article_engagement", answer=long_answer)]
+    service = sql_gen_module.SQLGenerationService()
+    await service.generate("follow-up?", SAMPLE_METADATA, conversation_history=history)
+
+    prompt_text = " ".join(m["content"] for m in captured[0])
+    assert long_answer not in prompt_text
+    assert "…" in prompt_text
+
+
+async def test_generate_caps_history_at_three_turns(monkeypatch):
+    """Only the 3 most recent turns must appear; older turns must be dropped."""
+    from backend.app.models.talk_to_data import ConversationTurn
+
+    captured: list[list] = []
+
+    async def capture_messages(messages, **kwargs):
+        captured.append(messages)
+        return json.dumps({"sql": SAFE_SQL}), _MOCK_USAGE
+
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = capture_messages
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    history = [ConversationTurn(question=f"question {i}", sql=None, answer=None) for i in range(5)]
+    service = sql_gen_module.SQLGenerationService()
+    await service.generate("current question", SAMPLE_METADATA, conversation_history=history)
+
+    prompt_text = " ".join(m["content"] for m in captured[0])
+    assert "question 4" in prompt_text  # most recent
+    assert "question 3" in prompt_text
+    assert "question 2" in prompt_text
+    assert "question 1" not in prompt_text  # dropped (4th oldest)
+    assert "question 0" not in prompt_text  # dropped (oldest)
+
+
+async def test_generate_without_history_unchanged(monkeypatch):
+    """No conversation_history must produce the same prompt as before (no history section)."""
+    captured: list[list] = []
+
+    async def capture_messages(messages, **kwargs):
+        captured.append(messages)
+        return json.dumps({"sql": SAFE_SQL}), _MOCK_USAGE
+
+    mock_llm = MagicMock()
+    mock_llm.generate_sql_generation = capture_messages
+    monkeypatch.setattr(sql_gen_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    service = sql_gen_module.SQLGenerationService()
+    await service.generate("Which articles have comments?", SAMPLE_METADATA)
+
+    prompt_text = " ".join(m["content"] for m in captured[0])
+    assert "Prior conversation" not in prompt_text

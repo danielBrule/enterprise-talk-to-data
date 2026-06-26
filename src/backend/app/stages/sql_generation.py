@@ -81,7 +81,7 @@ class SQLGenerationService:
 
         return "\n".join(parts)
 
-    async def generate(self, question: str, metadata_context: dict, joins: dict | None = None, correction: str | None = None) -> SQLGenResult:
+    async def generate(self, question: str, metadata_context: dict, joins: dict | None = None, correction: str | None = None, conversation_history: list | None = None) -> SQLGenResult:
         start = time.perf_counter()
         deployment = settings.get_azure_openai_deployment("sql_generation")
 
@@ -95,7 +95,7 @@ class SQLGenerationService:
             )
 
         views_context = self._build_views_context(metadata_context, joins)
-        messages = build_sql_generation_prompt(question, views_context, correction=correction)
+        messages = build_sql_generation_prompt(question, views_context, correction=correction, conversation_history=conversation_history)
 
         try:
             raw, usage = await self.llm.generate_sql_generation(messages, temperature=0)
@@ -147,8 +147,9 @@ class SQLGenerationStage(Stage):
         result = await self.sql_generation_service.generate(
             ctx.question,
             ctx.metadata_context or {},
-            joins=ctx.joins_config,  # pre-fetched once by the pipeline before the retry loop
+            joins=ctx.joins_config,
             correction=ctx.sql_validation_error,
+            conversation_history=ctx.conversation_history or None,
         )
 
         # Accumulate latency and tokens across attempts so totals are accurate

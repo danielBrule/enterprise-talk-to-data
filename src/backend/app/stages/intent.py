@@ -32,7 +32,7 @@ class IntentService:
             self.llm = None
             self.llm_available = False
 
-    async def classify(self, question: str) -> IntentResult:
+    async def classify(self, question: str, conversation_history: list | None = None) -> IntentResult:
         start = time.perf_counter()
         deployment = settings.get_azure_openai_deployment("schema_retrieval")
 
@@ -49,7 +49,7 @@ class IntentService:
             )
 
         aliases = await get_view_aliases()
-        messages = build_intent_prompt(question, aliases=aliases)
+        messages = build_intent_prompt(question, aliases=aliases, conversation_history=conversation_history)
         try:
             raw, usage = await self.llm.generate_schema_retrieval(messages, temperature=0)
             result = json.loads(raw.strip())
@@ -88,7 +88,7 @@ class IntentStage(Stage):
 
     async def run(self, ctx: PipelineContext) -> Refusal | None:
         t0 = time.perf_counter()
-        result = await self.intent_service.classify(ctx.question)
+        result = await self.intent_service.classify(ctx.question, conversation_history=ctx.conversation_history)
         ctx.latency["intent_ms"] = (time.perf_counter() - t0) * 1000
 
         ctx.trace.intent = result.domain

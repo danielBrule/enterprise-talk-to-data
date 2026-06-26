@@ -94,6 +94,52 @@ async def test_classify_prompt_version_in_result(monkeypatch):
     assert result.prompt_version == PROMPT_VERSION
 
 
+# ── conversation history ───────────────────────────────────────────────────────
+
+async def test_classify_injects_conversation_history_into_prompt(monkeypatch):
+    """Prior questions must appear in the prompt sent to the LLM."""
+    from backend.app.models.talk_to_data import ConversationTurn
+
+    captured: list[list] = []
+
+    async def capture_messages(messages, **kwargs):
+        captured.append(messages)
+        return json.dumps({
+            "answerable": True, "reason": "follow-up", "domain": "article_engagement", "suggested_metrics": []
+        }), _MOCK_USAGE
+
+    mock_llm = MagicMock()
+    mock_llm.generate_schema_retrieval = capture_messages
+    monkeypatch.setattr(intent_service_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    history = [ConversationTurn(question="Which articles have the most comments?", sql=None, answer=None)]
+    service = intent_service_module.IntentService()
+    await service.classify("What about last month?", conversation_history=history)
+
+    prompt_text = " ".join(m["content"] for m in captured[0])
+    assert "Which articles have the most comments?" in prompt_text
+
+
+async def test_classify_without_history_has_no_context_section(monkeypatch):
+    captured: list[list] = []
+
+    async def capture_messages(messages, **kwargs):
+        captured.append(messages)
+        return json.dumps({
+            "answerable": True, "reason": "ok", "domain": "article_engagement", "suggested_metrics": []
+        }), _MOCK_USAGE
+
+    mock_llm = MagicMock()
+    mock_llm.generate_schema_retrieval = capture_messages
+    monkeypatch.setattr(intent_service_module, "LLMService", MagicMock(return_value=mock_llm))
+
+    service = intent_service_module.IntentService()
+    await service.classify("Which articles have comments?")
+
+    prompt_text = " ".join(m["content"] for m in captured[0])
+    assert "Prior conversation" not in prompt_text
+
+
 async def test_classify_contributor_domain(monkeypatch):
     mock_llm = MagicMock()
     mock_llm.generate_schema_retrieval = AsyncMock(

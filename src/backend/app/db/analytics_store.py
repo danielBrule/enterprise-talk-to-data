@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS traces (
     user_context    TEXT,
     sql_retries     INTEGER DEFAULT 0,
     pipeline_env    TEXT,
+    session_id      TEXT,
     raw_json        TEXT NOT NULL
 );
 
@@ -61,6 +62,11 @@ class AnalyticsStore:
             self._db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self._db_path) as conn:
                 conn.executescript(_SCHEMA)
+                # Migration: add session_id column if not present (added in v2 schema)
+                try:
+                    conn.execute("ALTER TABLE traces ADD COLUMN session_id TEXT")
+                except sqlite3.OperationalError:
+                    pass  # column already exists
         except Exception as exc:
             logger.warning("analytics_store.schema_init_failed error=%s", exc)
 
@@ -72,8 +78,8 @@ class AnalyticsStore:
                     """INSERT OR IGNORE INTO traces
                        (trace_id, timestamp, question, intent, execution_status,
                         selected_views, answer, refusal_reason, latency_total_ms,
-                        user_context, sql_retries, pipeline_env, raw_json)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        user_context, sql_retries, pipeline_env, session_id, raw_json)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         raw.get("trace_id"),
                         raw.get("timestamp"),
@@ -87,6 +93,7 @@ class AnalyticsStore:
                         raw.get("user_context"),
                         raw.get("sql_retries", 0),
                         raw.get("pipeline_env"),
+                        raw.get("session_id"),
                         json.dumps(raw),
                     ),
                 )
@@ -100,7 +107,7 @@ class AnalyticsStore:
                 rows = conn.execute(
                     """SELECT trace_id, timestamp, question, intent, execution_status,
                               selected_views, answer, refusal_reason, latency_total_ms,
-                              user_context
+                              user_context, session_id
                        FROM traces
                        ORDER BY timestamp DESC
                        LIMIT ?""",

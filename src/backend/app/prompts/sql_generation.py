@@ -1,10 +1,36 @@
-PROMPT_VERSION = "sql_gen_v6"
+PROMPT_VERSION = "sql_gen_v7"
+
+
+def _format_history(conversation_history: list) -> str:
+    """Format the last N turns for prompt injection. Answer truncated, SQL verbatim."""
+    if not conversation_history:
+        return ""
+    from ..core.config import settings
+    max_turns = settings.max_history_turns
+    max_answer_chars = settings.max_history_answer_chars
+    turns = conversation_history[-max_turns:]
+    lines = ["Prior conversation (use to resolve follow-up references — 'that', 'same', 'instead', 'last month', etc.):"]
+    for i, turn in enumerate(reversed(turns)):
+        label = "Most recent turn" if i == 0 else f"Turn -{i + 1}"
+        q = getattr(turn, "question", "") or ""
+        sql = getattr(turn, "sql", None) or ""
+        ans = getattr(turn, "answer", None) or ""
+        if ans and len(ans) > max_answer_chars:
+            ans = ans[:max_answer_chars] + "…"
+        lines.append(f"[{label}]")
+        lines.append(f"  Q: \"{q}\"")
+        if sql:
+            lines.append(f"  SQL: {sql}")
+        if ans:
+            lines.append(f"  A: {ans}")
+    return "\n".join(lines) + "\n\n"
 
 
 def build_sql_generation_prompt(
     question: str,
     views_context: str,
     correction: str | None = None,
+    conversation_history: list | None = None,
 ) -> list[dict]:
     """
     Build the SQL generation prompt.
@@ -29,7 +55,8 @@ def build_sql_generation_prompt(
         "Respond only with valid JSON containing a single key 'sql'. "
         "No markdown fences, no explanation outside the JSON."
     )
-    user = f"""Generate a T-SQL SELECT statement to answer this question:
+    history_section = _format_history(conversation_history or [])
+    user = f"""{history_section}Generate a T-SQL SELECT statement to answer this question:
 "{question}"
 
 Approved views and columns:

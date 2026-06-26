@@ -75,6 +75,14 @@ class Settings:
         # Total attempts = 1 + MAX_SQL_RETRIES. Set to 0 to disable retries.
         self.max_sql_retries: int = int(os.getenv("MAX_SQL_RETRIES", "2"))
 
+        # ── Conversation context ──────────────────────────────────────────────
+        # Number of prior turns injected into the SQL generation and intent prompts.
+        # Sliding window — oldest turns are dropped first.
+        self.max_history_turns: int = int(os.getenv("MAX_HISTORY_TURNS", "3"))
+        # Characters of a prior answer included in the injected context.
+        # Longer answers are truncated with "…" to keep prompts from growing unboundedly.
+        self.max_history_answer_chars: int = int(os.getenv("MAX_HISTORY_ANSWER_CHARS", "300"))
+
         # ── Trace store ───────────────────────────────────────────────────────
         # Path for the JSONL trace file (relative to the working directory, i.e. repo root).
         # In production, replace TraceStore._write() with an Azure SQL or App Insights call;

@@ -51,7 +51,23 @@ _EXAMPLE_ASSISTANT = json.dumps({
 })
 
 
-def build_intent_prompt(question: str, aliases: dict[str, list[str]] | None = None) -> list[dict]:
+def _format_history(conversation_history: list) -> str:
+    if not conversation_history:
+        return ""
+    from ..core.config import settings
+    turns = conversation_history[-settings.max_history_turns:]
+    prior = [
+        f'"{getattr(t, "question", "") or ""}"'
+        for t in reversed(turns)
+    ]
+    return (
+        "Prior conversation (this question may be a follow-up — use for context):\n"
+        + "\n".join(f"- {q}" for q in prior)
+        + "\n\n"
+    )
+
+
+def build_intent_prompt(question: str, aliases: dict[str, list[str]] | None = None, conversation_history: list | None = None) -> list[dict]:
     today = date.today().isoformat()
     current_year = date.today().year
     system = (
@@ -67,7 +83,8 @@ def build_intent_prompt(question: str, aliases: dict[str, list[str]] | None = No
             parts.append(f"{quoted} → {view_name}")
         alias_lines = "\n- Domain vocabulary: " + "; ".join(parts) + "."
 
-    user = f"""Classify this question: "{question}"
+    history_section = _format_history(conversation_history or [])
+    user = f"""{history_section}Classify this question: "{question}"
 
 Available analytics domains: {_KNOWN_DOMAINS}
 Available views: {_KNOWN_VIEWS}

@@ -208,6 +208,40 @@ def test_ask_endpoint_missing_question_returns_422():
     assert response.status_code == 422
 
 
+def test_ask_endpoint_accepts_conversation_history(monkeypatch):
+    """conversation_history is forwarded to the pipeline without error."""
+    from backend.app.services.talk_to_data_pipeline import TalkToDataPipeline
+    from backend.app.models.talk_to_data import AskRequest, AskResponse
+    from backend.app.models.trace import TraceRecord
+
+    received: list[AskRequest] = []
+
+    async def mock_run(self, request: AskRequest, user) -> AskResponse:
+        received.append(request)
+        trace = TraceRecord(question=request.question, execution_status="success", answerable=True)
+        return AskResponse(answer="Article A.", refused=False, trace=trace)
+
+    monkeypatch.setattr(TalkToDataPipeline, "run", mock_run)
+    response = client.post(
+        "/api/v0/ask",
+        json={
+            "question": "What about last month?",
+            "conversation_history": [
+                {
+                    "question": "Which articles have the most comments?",
+                    "sql": "SELECT TOP 10 article_id FROM analytics.vw_article_engagement",
+                    "answer": "Article A has the most comments.",
+                }
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+    assert len(received) == 1
+    assert len(received[0].conversation_history) == 1
+    assert received[0].conversation_history[0].question == "Which articles have the most comments?"
+
+
 # ── GET /api/v0/traces/recent ─────────────────────────────────────────────────
 
 def _patch_analytics_store(monkeypatch, return_value):

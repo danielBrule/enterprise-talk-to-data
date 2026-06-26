@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from .trace import TraceRecord
@@ -28,6 +28,11 @@ class PipelineContext:
     # (Task 11). None when the pipeline is called outside the HTTP context
     # (e.g. evaluation runner, tests).
     user: ResolvedUser | None = None
+
+    # Prior turns sent by the client. The pipeline injects the last 3 into the
+    # SQL generation and intent prompts so follow-up questions resolve correctly.
+    # The client owns the full history — the server never accumulates it.
+    conversation_history: list = field(default_factory=list)  # list[ConversationTurn]
 
     # Populated progressively — None until the responsible stage completes
     selected_views: list[str] | None = None

@@ -112,10 +112,15 @@ class TalkToDataPipeline:
         ctx = PipelineContext(
             question=request.question,
             user_context=request.user_context,
-            trace=TraceRecord(question=request.question, user_context=request.user_context),
+            trace=TraceRecord(
+                question=request.question,
+                user_context=request.user_context,
+                session_id=request.session_id,
+            ),
             latency={},
             pipeline_start=time.perf_counter(),
             user=user,
+            conversation_history=request.conversation_history,
         )
         # Record resolved identity in the trace so every response is self-documenting.
         # "Enforcement planned (Task 11)" is intentional — the note tracks what IS

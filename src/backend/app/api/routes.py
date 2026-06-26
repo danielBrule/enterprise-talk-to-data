@@ -193,6 +193,7 @@ def _to_recent_item(raw: dict) -> RecentTraceItem:
         refusal_reason=raw.get("refusal_reason"),
         latency_total_ms=latency_total_ms,
         user_context=raw.get("user_context"),
+        session_id=raw.get("session_id"),
     )
 
 

@@ -1,0 +1,66 @@
+# Golden conversation test cases
+#
+# Each entry is a 2-turn conversation:
+#   turn_1 — run exactly like a positive golden question
+#   turn_2 — run with turn_1's SQL + answer injected as conversation_history
+#
+# Checks on turn_2:
+#   - intent classified as answerable
+#   - expected_view still selected and referenced in generated SQL
+#   - SQL passes validation
+#   - expected_sql_contains: terms that MUST appear in the generated SQL (case-insensitive)
+#     These validate that the follow-up signal was picked up — e.g. a new filter value,
+#     a different ORDER BY column, or a WHERE threshold.
+#
+# Try these questions at the /ask endpoint in sequence (pass the turn_1 result as
+# conversation_history in the turn_2 request):
+
+- description: "Add a date filter to an articles query"
+  turn_1:
+    natural_language_question: "Which articles have the highest comment volume?"
+    expected_view: analytics.vw_article_engagement
+    expected_sql: >
+      SELECT TOP 10 article_id, title, comment_count
+      FROM analytics.vw_article_engagement
+      ORDER BY comment_count DESC
+    expected_result_shape:
+      columns: []
+  turn_2:
+    natural_language_question: "Same but only for articles with a publication date in 2025"
+    expected_view: analytics.vw_article_engagement
+    expected_sql_contains:
+      - "2025"
+      - "publication_date"
+
+- description: "Switch ranking metric from article count to sentiment"
+  turn_1:
+    natural_language_question: "Show top keywords by article count"
+    expected_view: analytics.vw_keyword_engagement
+    expected_sql: >
+      SELECT TOP 10 keyword_id, full_keyword, article_count
+      FROM analytics.vw_keyword_engagement
+      ORDER BY article_count DESC
+    expected_result_shape:
+      columns: []
+  turn_2:
+    natural_language_question: "Now rank them by average comment sentiment instead"
+    expected_view: analytics.vw_keyword_engagement
+    expected_sql_contains:
+      - "avg_comment_sentiment"
+
+- description: "Add a threshold filter to contributor results"
+  turn_1:
+    natural_language_question: "Who are the top contributors by comment count?"
+    expected_view: analytics.vw_top_contributors
+    expected_sql: >
+      SELECT TOP 10 contributor_id, comment_count
+      FROM analytics.vw_top_contributors
+      ORDER BY comment_count DESC
+    expected_result_shape:
+      columns: []
+  turn_2:
+    natural_language_question: "Show only those contributors with more than 20 comments"
+    expected_view: analytics.vw_top_contributors
+    expected_sql_contains:
+      - "comment_count"
+      - "20"

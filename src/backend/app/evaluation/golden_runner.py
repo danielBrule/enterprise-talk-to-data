@@ -166,6 +166,8 @@ class EvaluationReport:
     access_enforcement_note: str = "Access enforced at execution stage."
     access_tests_passed: int = 0
     access_tests_total: int = 0
+    conversation_tests_passed: int = 0
+    conversation_tests_total: int = 0
 
     @property
     def pass_rate(self) -> float:
@@ -181,7 +183,9 @@ class EvaluationReport:
             f"  Pass rate: {self.pass_rate:.0%}",
         ]
         if self.access_tests_total:
-            lines.append(f"  Access:  {self.access_tests_passed}/{self.access_tests_total} passed")
+            lines.append(f"  Access:       {self.access_tests_passed}/{self.access_tests_total} passed")
+        if self.conversation_tests_total:
+            lines.append(f"  Conversation: {self.conversation_tests_passed}/{self.conversation_tests_total} passed")
         lines.append(f"  Note: {self.access_enforcement_note}")
         return lines
 
@@ -200,6 +204,8 @@ class EvaluationReport:
             "access_enforcement_note": self.access_enforcement_note,
             "access_tests_passed": self.access_tests_passed,
             "access_tests_total": self.access_tests_total,
+            "conversation_tests_passed": self.conversation_tests_passed,
+            "conversation_tests_total": self.conversation_tests_total,
             "records": [
                 {
                     "question": r.question,
@@ -278,13 +284,14 @@ def _check_answer_quality(answer: str, rows: list[dict]) -> bool:
     return False
 
 
-def _make_ctx(question: str) -> PipelineContext:
+def _make_ctx(question: str, conversation_history: list | None = None) -> PipelineContext:
     return PipelineContext(
         question=question,
         user_context=None,
         trace=TraceRecord(question=question),
         latency={},
         pipeline_start=time.perf_counter(),
+        conversation_history=conversation_history or [],
     )
 
 
@@ -316,7 +323,7 @@ class GoldenRunner:
         with open(self.golden_questions_path, "r") as f:
             return yaml.safe_load(f) or []
 
-    async def run_question(self, q: dict, mode: str = "fast") -> GoldenEvalRecord:
+    async def run_question(self, q: dict, mode: str = "fast", conversation_history: list | None = None) -> GoldenEvalRecord:
         """Run one positive golden question. Fast mode: stages 1-5 (no DB). Full mode: all 7 stages."""
         record = GoldenEvalRecord(
             question=q["natural_language_question"],
@@ -325,7 +332,7 @@ class GoldenRunner:
             expected_expressions=q.get("expected_result_shape", {}).get("columns", []),
             case_type="positive",
         )
-        ctx = _make_ctx(record.question)
+        ctx = _make_ctx(record.question, conversation_history=conversation_history)
 
         # Stage 1 — stop if refused; positive questions must be answerable
         outcome = await self._intent_stage.run(ctx)
@@ -544,6 +551,125 @@ class GoldenRunner:
             records.append(await self._run_one_access_check(case))
         return records
 
+    def _load_conversation_cases(self) -> list[dict]:
+        path = (
+            Path(__file__).resolve().parents[3]
+            / "metadata" / "example_questions" / "golden_conversations.yml"
+        )
+        if not path.exists():
+            return []
+        with open(path, "r") as f:
+            return yaml.safe_load(f) or []
+
+    async def run_conversation_check(self, case: dict, mode: str = "fast") -> GoldenEvalRecord:
+        """Run a 2-turn conversation test: stage turn 1 to build history, then evaluate turn 2 with it."""
+        from ..models.talk_to_data import ConversationTurn
+
+        # Turn 1: run normally to populate history
+        turn1_dict = case["turn_1"]
+        turn1_result = await self.run_question(turn1_dict, mode=mode)
+
+        history = [ConversationTurn(
+            question=turn1_dict["natural_language_question"],
+            sql=turn1_result.generated_sql,
+            answer=turn1_result.answer,
+        )]
+
+        # Turn 2: run with history injected
+        turn2_dict = case["turn_2"]
+        record = GoldenEvalRecord(
+            question=f"[conv] {turn2_dict['natural_language_question']}",
+            expected_view=turn2_dict.get("expected_view", ""),
+            expected_sql="",
+            expected_expressions=turn2_dict.get("expected_sql_contains", []),
+            case_type="conversation",
+        )
+        ctx = _make_ctx(turn2_dict["natural_language_question"], conversation_history=history)
+
+        outcome = await self._intent_stage.run(ctx)
+        record.intent_answerable = ctx.trace.answerable
+        if isinstance(outcome, Refusal):
+            record.status = "fail"
+            record.failure_reasons.append(f"Turn 2 intent refused: {outcome.reason}")
+            ctx.trace.execution_status = "skipped"
+            ctx.trace.latency_ms = build_latency(ctx)
+            record.trace = ctx.trace
+            record.latency_ms = ctx.trace.latency_ms.total_ms
+            return record
+
+        await self._view_selection_stage.run(ctx)
+        await self._metadata_stage.run(ctx)
+        await self._sql_generation_stage.run(ctx)
+        await self._validation_stage.run(ctx)
+
+        record.generated_sql = ctx.sql
+
+        record.view_match = record.expected_view in (ctx.selected_views or [])
+        if not record.view_match:
+            record.failure_reasons.append(
+                f"View: expected '{record.expected_view}', got {ctx.selected_views}"
+            )
+
+        if ctx.trace.validation_result:
+            record.validation_pass = ctx.trace.validation_result.passed
+            if not record.validation_pass:
+                record.failure_reasons.append(f"Validation: {ctx.trace.validation_result.reason}")
+        else:
+            record.validation_pass = False
+            record.failure_reasons.append("Validation: no result")
+
+        gen_upper = (ctx.sql or "").upper()
+        view_token = record.expected_view.split(".")[-1].upper()
+        record.view_in_sql = view_token in gen_upper or record.expected_view.upper() in gen_upper
+        if not record.view_in_sql:
+            record.failure_reasons.append(f"SQL: '{record.expected_view}' not referenced in generated SQL")
+
+        if record.expected_expressions:
+            exprs_upper = [e.upper() for e in record.expected_expressions]
+            missing = [e for e in exprs_upper if e not in gen_upper]
+            record.metric_present = len(missing) == 0
+            if not record.metric_present:
+                record.failure_reasons.append(f"Expected terms missing from SQL: {missing}")
+
+        mandatory = [record.view_match, record.view_in_sql, record.validation_pass]
+        optional = [c for c in [record.metric_present] if c is not None]
+        all_checks = [c for c in mandatory if c is not None] + optional
+
+        if all(all_checks):
+            record.status = "pass"
+        elif any(all_checks):
+            record.status = "partial"
+        else:
+            record.status = "fail"
+
+        ctx.trace.execution_status = "skipped"
+        ctx.trace.latency_ms = build_latency(ctx)
+        record.trace = ctx.trace
+        record.latency_ms = ctx.trace.latency_ms.total_ms
+        return record
+
+    async def run_conversation_checks(self, mode: str = "fast") -> list[GoldenEvalRecord]:
+        """Run all 2-turn conversation test cases from golden_conversations.yml."""
+        cases = self._load_conversation_cases()
+        if not cases:
+            return []
+        records = []
+        for case in cases:
+            try:
+                records.append(await self.run_conversation_check(case, mode=mode))
+            except Exception as exc:
+                logger.exception("golden_runner.conversation_error desc=%s", case.get("description", "?"))
+                rec = GoldenEvalRecord(
+                    question=f"[conv] {case.get('turn_2', {}).get('natural_language_question', 'unknown')}",
+                    expected_view="",
+                    expected_sql="",
+                    case_type="conversation",
+                    status="error",
+                )
+                rec.failure_reasons.append(str(exc))
+                records.append(rec)
+        return records
+
     async def _run_question_safe(self, q: dict, mode: str, sem: asyncio.Semaphore) -> GoldenEvalRecord:
         async with sem:
             try:
@@ -605,16 +731,19 @@ class GoldenRunner:
             *[self._run_negative_safe(neg, sem) for neg in NEGATIVE_QUESTIONS]
         )
         access_records = await self.run_access_checks()
+        conversation_records = await self.run_conversation_checks(mode=mode)
 
         records: list[GoldenEvalRecord] = [*positive_records, *negative_records]
         records.extend(self.run_negative_sql_checks())
         records.extend(access_records)
+        records.extend(conversation_records)
 
         counts: dict[str, int] = {"pass": 0, "partial": 0, "fail": 0, "error": 0}
         for r in records:
             counts[r.status] = counts.get(r.status, 0) + 1
 
         access_passed = sum(1 for r in access_records if r.status == "pass")
+        conversation_passed = sum(1 for r in conversation_records if r.status == "pass")
 
         report = EvaluationReport(
             total=len(records),
@@ -625,10 +754,12 @@ class GoldenRunner:
             records=records,
             access_tests_passed=access_passed,
             access_tests_total=len(access_records),
+            conversation_tests_passed=conversation_passed,
+            conversation_tests_total=len(conversation_records),
         )
         logger.info(
-            "golden_runner.complete total=%d pass=%d partial=%d fail=%d error=%d access=%d/%d",
+            "golden_runner.complete total=%d pass=%d partial=%d fail=%d error=%d access=%d/%d conv=%d/%d",
             report.total, report.passed, report.partial, report.failed, report.errors,
-            access_passed, len(access_records),
+            access_passed, len(access_records), conversation_passed, len(conversation_records),
         )
         return report
