@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import Markdown from 'react-markdown'
 import './App.css'
 
 const ROLES = ['analyst', 'editor', 'admin']
@@ -129,7 +130,9 @@ function Message({ msg, onFeedback }) {
             ? 'bg-amber-50 border border-amber-200 text-amber-800'
             : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
         }`}>
-          {msg.text}
+          <div className="md-body">
+            <Markdown>{msg.text}</Markdown>
+          </div>
         </div>
 
         {/* Metadata row — source view + filters + feedback */}
