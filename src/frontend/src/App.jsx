@@ -67,40 +67,42 @@ function Message({ msg, onFeedback }) {
         </div>
 
         {/* Metadata row */}
-        {!msg.refused && (
-          <div className="flex items-center gap-3 px-1 flex-wrap">
-            {msg.sourceView && (
-              <span className="text-xs text-gray-400">
-                {msg.sourceView.replace('analytics.', '')}
-              </span>
-            )}
-            {msg.filtersApplied?.length > 0 && (
-              <span className="text-xs text-gray-400 truncate max-w-[200px]">
-                {msg.filtersApplied.join(' · ')}
-              </span>
-            )}
-            {msg.rowCount != null && (
-              <span className="text-xs text-gray-400">{msg.rowCount} rows</span>
-            )}
-            {msg.confidence != null && (
-              <span className="text-xs text-gray-400">
-                {Math.round(msg.confidence * 100)}% conf.
-              </span>
-            )}
-            <div className="flex gap-1 ml-auto">
-              <button
-                onClick={() => onFeedback(msg.id, msg.traceId, 1)}
-                title="Good answer"
-                className={`text-sm transition-opacity ${msg.feedback === 1 ? 'opacity-100' : 'opacity-25 hover:opacity-60'}`}
-              >👍</button>
-              <button
-                onClick={() => onFeedback(msg.id, msg.traceId, -1)}
-                title="Bad answer"
-                className={`text-sm transition-opacity ${msg.feedback === -1 ? 'opacity-100' : 'opacity-25 hover:opacity-60'}`}
-              >👎</button>
-            </div>
+        <div className="flex items-center gap-3 px-1 flex-wrap">
+          {!msg.refused && (
+            <>
+              {msg.sourceView && (
+                <span className="text-xs text-gray-400">
+                  {msg.sourceView.replace('analytics.', '')}
+                </span>
+              )}
+              {msg.filtersApplied?.length > 0 && (
+                <span className="text-xs text-gray-400 truncate max-w-[200px]">
+                  {msg.filtersApplied.join(' · ')}
+                </span>
+              )}
+              {msg.rowCount != null && (
+                <span className="text-xs text-gray-400">{msg.rowCount} rows</span>
+              )}
+              {msg.confidence != null && (
+                <span className="text-xs text-gray-400">
+                  {Math.round(msg.confidence * 100)}% conf.
+                </span>
+              )}
+            </>
+          )}
+          <div className="flex gap-1 ml-auto">
+            <button
+              onClick={() => onFeedback(msg.id, msg.traceId, 1)}
+              title="Good answer"
+              className={`text-sm transition-opacity ${msg.feedback === 1 ? 'opacity-100' : 'opacity-25 hover:opacity-60'}`}
+            >👍</button>
+            <button
+              onClick={() => onFeedback(msg.id, msg.traceId, -1)}
+              title="Bad answer"
+              className={`text-sm transition-opacity ${msg.feedback === -1 ? 'opacity-100' : 'opacity-25 hover:opacity-60'}`}
+            >👎</button>
           </div>
-        )}
+        </div>
 
         {/* SQL expandable */}
         {msg.sql && (
