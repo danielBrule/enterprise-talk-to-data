@@ -150,7 +150,16 @@ class TalkToDataPipeline:
                 reason = f"Request timed out after {timeout}s — please try a simpler question."
                 ctx.trace.refusal_reason = reason
                 ctx.trace.execution_status = "failed"
-                return AskResponse(refused=True, refusal_reason=reason, session_id=session_id, trace=ctx.trace)
+                ctx.trace.latency_ms = build_latency(ctx)
+                return AskResponse(
+                    refused=True,
+                    refusal_reason=reason,
+                    session_id=session_id,
+                    trace=ctx.trace,
+                    sql=ctx.trace.generated_sql,
+                    latency_ms=ctx.trace.latency_ms,
+                    token_usage=dict(ctx.trace.token_usage),
+                )
         finally:
             # Append the trace on every code path: answered, refused, and timed out.
             # Python's finally guarantee fires this even when the try block contains
