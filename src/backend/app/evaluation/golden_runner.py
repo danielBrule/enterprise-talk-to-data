@@ -131,7 +131,7 @@ class GoldenEvalRecord:
     expected_view: str
     expected_sql: str
     expected_expressions: list[str] = field(default_factory=list)
-    case_type: str = "positive"  # "positive" | "negative_question" | "negative_sql" | "access"
+    case_type: str = "positive"  # "positive" | "negative_question" | "negative_sql" | "access" | "conversation" | "system_info"
 
     # Per-check results (None = not applicable)
     intent_answerable: bool | None = None
@@ -145,6 +145,8 @@ class GoldenEvalRecord:
     # Outcome
     status: str = "pending"  # "pass" | "partial" | "fail" | "error"
     failure_reasons: list[str] = field(default_factory=list)
+    # Primary failure category for failing/partial records: semantic | retrieval | sql | access | answer | other
+    failure_category: str | None = None
 
     # Artefacts
     generated_sql: str | None = None
@@ -153,6 +155,52 @@ class GoldenEvalRecord:
     answer_quality_pass: bool | None = None
     trace: TraceRecord | None = None
     latency_ms: float | None = None
+
+
+_FAILURE_CATEGORIES = ("semantic", "retrieval", "sql", "access", "answer", "other")
+
+
+def _categorize_failure(record: GoldenEvalRecord) -> str | None:
+    """Return the primary failure category for a failing/partial record.
+
+    Priority order mirrors pipeline stage order: semantic (intent) → retrieval
+    (view selection) → sql (generation/validation) → access → answer.
+    """
+    if record.status not in ("fail", "partial"):
+        return None
+
+    # semantic — intent classified the question wrong
+    if record.intent_answerable is False:
+        return "semantic"
+    if record.case_type == "system_info" and record.status in ("fail", "partial"):
+        return "semantic"
+    # negative question not refused → semantic misclassification
+    if record.case_type == "negative_question" and record.status == "fail":
+        return "semantic"
+
+    # retrieval — correct intent but wrong view selected or not referenced in SQL
+    if record.view_match is False or record.view_in_sql is False:
+        return "retrieval"
+
+    # sql — view right but SQL generation or validation broke
+    if record.validation_pass is False:
+        return "sql"
+    if record.metric_present is False or record.grouping_present is False or record.filter_present is False:
+        return "sql"
+
+    # access — execution blocked by role enforcement
+    if record.case_type == "access" and record.status == "fail":
+        return "access"
+    if record.execution_status == "failed" and any(
+        "denied" in r.lower() or "access" in r.lower() for r in record.failure_reasons
+    ):
+        return "access"
+
+    # answer — SQL executed fine but answer quality check failed (full mode)
+    if record.answer_quality_pass is False:
+        return "answer"
+
+    return "other"
 
 
 @dataclass
@@ -170,6 +218,7 @@ class EvaluationReport:
     conversation_tests_total: int = 0
     system_info_tests_passed: int = 0
     system_info_tests_total: int = 0
+    failure_distribution: dict[str, int] = field(default_factory=dict)
 
     @property
     def pass_rate(self) -> float:
@@ -184,6 +233,13 @@ class EvaluationReport:
             f"  Error:   {self.errors}",
             f"  Pass rate: {self.pass_rate:.0%}",
         ]
+        if self.failure_distribution:
+            dist_parts = "  |  ".join(
+                f"{cat}: {self.failure_distribution.get(cat, 0)}"
+                for cat in _FAILURE_CATEGORIES
+                if self.failure_distribution.get(cat, 0) > 0
+            )
+            lines.append(f"  Failure breakdown: {dist_parts}")
         if self.access_tests_total:
             lines.append(f"  Access:       {self.access_tests_passed}/{self.access_tests_total} passed")
         if self.conversation_tests_total:
@@ -212,11 +268,13 @@ class EvaluationReport:
             "conversation_tests_total": self.conversation_tests_total,
             "system_info_tests_passed": self.system_info_tests_passed,
             "system_info_tests_total": self.system_info_tests_total,
+            "failure_distribution": self.failure_distribution,
             "records": [
                 {
                     "question": r.question,
                     "case_type": r.case_type,
                     "status": r.status,
+                    "failure_category": r.failure_category,
                     "expected_view": r.expected_view,
                     "generated_sql": r.generated_sql,
                     "expected_sql": r.expected_sql,
@@ -806,9 +864,18 @@ class GoldenRunner:
         records.extend(conversation_records)
         records.extend(system_info_records)
 
+        # Assign failure categories to all failing/partial records
+        for r in records:
+            r.failure_category = _categorize_failure(r)
+
         counts: dict[str, int] = {"pass": 0, "partial": 0, "fail": 0, "error": 0}
         for r in records:
             counts[r.status] = counts.get(r.status, 0) + 1
+
+        failure_distribution: dict[str, int] = {cat: 0 for cat in _FAILURE_CATEGORIES}
+        for r in records:
+            if r.failure_category:
+                failure_distribution[r.failure_category] = failure_distribution.get(r.failure_category, 0) + 1
 
         access_passed = sum(1 for r in access_records if r.status == "pass")
         conversation_passed = sum(1 for r in conversation_records if r.status == "pass")
@@ -827,6 +894,7 @@ class GoldenRunner:
             conversation_tests_total=len(conversation_records),
             system_info_tests_passed=system_info_passed,
             system_info_tests_total=len(system_info_records),
+            failure_distribution=failure_distribution,
         )
         logger.info(
             "golden_runner.complete total=%d pass=%d partial=%d fail=%d error=%d "

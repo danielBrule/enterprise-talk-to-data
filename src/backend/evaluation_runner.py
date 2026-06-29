@@ -158,6 +158,8 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "system_info_tests_passed": report.system_info_tests_passed,
             "system_info_tests_total": report.system_info_tests_total,
             "system_info_tests_pass_rate": system_info_pass_rate,
+            **{f"failures_{cat}": report.failure_distribution.get(cat, 0)
+               for cat in ("semantic", "retrieval", "sql", "access", "answer", "other")},
             **token_metrics,
         })
 
