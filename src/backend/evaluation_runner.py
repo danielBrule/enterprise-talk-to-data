@@ -158,6 +158,12 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "system_info_tests_passed": report.system_info_tests_passed,
             "system_info_tests_total": report.system_info_tests_total,
             "system_info_tests_pass_rate": system_info_pass_rate,
+            "clarification_tests_passed": report.clarification_tests_passed,
+            "clarification_tests_total": report.clarification_tests_total,
+            "clarification_tests_pass_rate": (
+                round(report.clarification_tests_passed / report.clarification_tests_total, 4)
+                if report.clarification_tests_total else 0.0
+            ),
             **{f"failures_{cat}": report.failure_distribution.get(cat, 0)
                for cat in ("semantic", "retrieval", "sql", "access", "answer", "other")},
             **token_metrics,

@@ -573,3 +573,43 @@ async def test_pipeline_system_info_filters_by_role(monkeypatch):
     assert response.refused is False
     assert "analytics.vw_article_engagement" in response.answer
     assert "analytics.vw_ingestion_errors" not in response.answer
+
+
+async def test_pipeline_clarification_returned_for_ambiguous_question(monkeypatch):
+    """Ambiguous intent with clarifying_question short-circuits before view selection."""
+    pipeline = _build_pipeline(monkeypatch)
+    ambiguous = IntentResult(
+        answerable=False,
+        reason="Ambiguous — could be keyword_engagement or article_keywords",
+        domain="unknown",
+        suggested_metrics=[],
+        prompt_version="intent_v18",
+        model_deployment="test-deploy",
+        latency_ms=1.0,
+        clarifying_question="Do you want engagement metrics for that keyword, or a list of articles tagged with it?",
+    )
+    pipeline.intent_service.classify = AsyncMock(return_value=ambiguous)
+    pipeline.view_selection_service.select_views = AsyncMock()
+    pipeline.sql_generation_service.generate = AsyncMock()
+
+    response = await pipeline.run(AskRequest(question="show me the data about france"), _ANALYST)
+
+    assert response.refused is False
+    assert response.clarifying_question == ambiguous.clarifying_question
+    assert response.answer is None
+    assert response.trace.execution_status == "clarifying"
+    pipeline.view_selection_service.select_views.assert_not_called()
+    pipeline.sql_generation_service.generate.assert_not_called()
+
+
+async def test_pipeline_no_clarification_for_out_of_scope_question(monkeypatch):
+    """Out-of-scope refusal without clarifying_question is still a plain refusal."""
+    pipeline = _build_pipeline(monkeypatch)
+    pipeline.intent_service.classify = AsyncMock(
+        return_value=_make_intent(False, domain="unknown")
+    )
+
+    response = await pipeline.run(AskRequest(question="What will engagement be next quarter?"), _ANALYST)
+
+    assert response.refused is True
+    assert response.clarifying_question is None

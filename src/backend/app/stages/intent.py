@@ -21,6 +21,7 @@ class IntentResult:
     model_deployment: str
     latency_ms: float
     token_usage: dict = field(default_factory=dict)
+    clarifying_question: str | None = None
 
 
 class IntentService:
@@ -59,6 +60,7 @@ class IntentService:
                 result.get("answerable"),
                 result.get("domain"),
             )
+            cq = result.get("clarifying_question") or None
             return IntentResult(
                 answerable=bool(result.get("answerable", False)),
                 reason=result.get("reason", ""),
@@ -68,6 +70,7 @@ class IntentService:
                 model_deployment=deployment,
                 latency_ms=(time.perf_counter() - start) * 1000,
                 token_usage=usage,
+                clarifying_question=cq,
             )
         except (json.JSONDecodeError, KeyError) as e:
             logger.error("intent.parse_failed error=%s", str(e))
@@ -93,6 +96,7 @@ class IntentStage(Stage):
 
         ctx.trace.intent = result.domain
         ctx.trace.answerable = result.answerable
+        ctx.trace.clarifying_question = result.clarifying_question
         ctx.trace.prompt_versions["intent"] = result.prompt_version
         ctx.trace.model_deployments["intent"] = result.model_deployment
         ctx.trace.token_usage["intent"] = result.token_usage

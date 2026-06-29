@@ -127,9 +127,11 @@ function Message({ msg, onFeedback }) {
 
         {/* Answer bubble */}
         <div className={`rounded-2xl rounded-bl-sm px-4 py-3 text-sm leading-relaxed ${
-          msg.refused
-            ? 'bg-amber-50 border border-amber-200 text-amber-800'
-            : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
+          msg.clarifying
+            ? 'bg-blue-50 border border-blue-200 text-blue-800'
+            : msg.refused
+              ? 'bg-amber-50 border border-amber-200 text-amber-800'
+              : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
         }`}>
           <div className="md-body">
             <Markdown remarkPlugins={[remarkGfm]}>{msg.text}</Markdown>
@@ -221,11 +223,15 @@ export default function App() {
 
       setSessionId(data.session_id || sessionId)
 
+      const isClarifying = !!data.clarifying_question
       const assistantMsg = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        text: data.refused ? (data.refusal_reason ?? 'Refused.') : (data.answer ?? ''),
+        text: isClarifying
+          ? data.clarifying_question
+          : data.refused ? (data.refusal_reason ?? 'Refused.') : (data.answer ?? ''),
         refused: data.refused,
+        clarifying: isClarifying,
         traceId: data.trace?.trace_id ?? null,
         sql: data.sql ?? null,
         sourceView: data.source_view ?? null,
@@ -238,11 +244,12 @@ export default function App() {
       }
       setMessages(prev => [...prev, assistantMsg])
 
+      // Include clarifying exchanges in history so the next intent has context
       if (!data.refused) {
         setTurns(prev => [...prev, {
           question: q,
           sql: data.sql ?? null,
-          answer: data.answer ?? null,
+          answer: isClarifying ? data.clarifying_question : (data.answer ?? null),
         }])
       }
     } catch {

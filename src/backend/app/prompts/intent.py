@@ -1,7 +1,7 @@
 from datetime import date
 import json
 
-PROMPT_VERSION = "intent_v17"
+PROMPT_VERSION = "intent_v18"
 
 
 _KNOWN_DOMAINS = (
@@ -48,7 +48,8 @@ Respond with exactly this JSON:
   "answerable": "<boolean>",
   "reason": "<brief explanation>",
   "domain": "<article_engagement | article_keywords | keyword_engagement | contributor_behaviour | ingestion_errors | system_info | unknown>",
-  "suggested_metrics": ["<column_name_or_aggregate_expression>"]
+  "suggested_metrics": ["<column_name_or_aggregate_expression>"],
+  "clarifying_question": null
 }}""".format(domains=_KNOWN_DOMAINS, views=_KNOWN_VIEWS)
 
 _EXAMPLE_ASSISTANT = json.dumps({
@@ -56,6 +57,7 @@ _EXAMPLE_ASSISTANT = json.dumps({
     "reason": "2025 is a past year (current year is 2026) — historical sentiment data for articles published in 2025 is available in vw_article_engagement.",
     "domain": "article_engagement",
     "suggested_metrics": ["avg_comment_sentiment"],
+    "clarifying_question": None,
 })
 
 
@@ -124,14 +126,23 @@ what views or data are available, what topics can be queried, what questions can
 - suggested_metrics should be column names or aggregate expressions from the available views.
 - Any question mentioning "top contributors" refers to the contributor_behaviour domain \
 (vw_top_contributors). The word "top" is part of the view name — not a filter. This view covers \
-ALL contributors and provides: total_replies, comment_count, avg_sentiment, distinct_article_count.{alias_lines}
+ALL contributors and provides: total_replies, comment_count, avg_sentiment, distinct_article_count.
+- If the question is vague but potentially answerable (e.g. could match multiple domains, or \
+references a subject without saying what metric is wanted), set answerable=false, domain=unknown, \
+and populate clarifying_question with a short, specific question that helps the user narrow their \
+intent. Example: "Do you want engagement metrics for that keyword, or a list of articles tagged \
+with it?"
+- Only set clarifying_question when the question is ambiguous about which domain or metric to use. \
+Leave it null when the question is clearly out of scope (forecasting, causal, external data) — \
+those should be refused without a clarifying question.{alias_lines}
 
 Respond with exactly this JSON:
 {{
   "answerable": "<boolean>",
   "reason": "<brief explanation of why the question is or is not answerable>",
-  "domain": "<article_engagement | keyword_engagement | contributor_behaviour | ingestion_errors | unknown>",
-  "suggested_metrics": ["<column_name_or_aggregate_expression>"]
+  "domain": "<article_engagement | article_keywords | keyword_engagement | contributor_behaviour | ingestion_errors | system_info | unknown>",
+  "suggested_metrics": ["<column_name_or_aggregate_expression>"],
+  "clarifying_question": "<short question to resolve ambiguity, or null if not ambiguous>"
 }}"""
     return [
         {"role": "system", "content": system},

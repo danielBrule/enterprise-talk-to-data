@@ -214,8 +214,23 @@ class TalkToDataPipeline:
                     return AskResponse(refused=True, refusal_reason=reason, session_id=session_id, trace=ctx.trace, **_enrichment())
             return None
 
-        # Stage 1: intent (separate so we can branch on system_info before view selection)
-        if r := _to_response(await self._pre_sql_stages[0].run(ctx)):
+        # Stage 1: intent (separate so we can branch on clarification and system_info)
+        stage1_outcome = await self._pre_sql_stages[0].run(ctx)
+
+        # Clarification short-circuit: ambiguous question → return a clarifying question
+        if stage1_outcome is not None and ctx.trace.clarifying_question:
+            ctx.trace.execution_status = "clarifying"
+            ctx.trace.latency_ms = build_latency(ctx)
+            return AskResponse(
+                clarifying_question=ctx.trace.clarifying_question,
+                refused=False,
+                session_id=session_id,
+                trace=ctx.trace,
+                latency_ms=ctx.trace.latency_ms,
+                token_usage=dict(ctx.trace.token_usage),
+            )
+
+        if r := _to_response(stage1_outcome):
             return r
 
         # Short-circuit for meta-questions about the system itself

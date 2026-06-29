@@ -30,6 +30,7 @@ class AskResponse(BaseModel):
     caveats: list[str] = Field(default_factory=list)
     refused: bool = False
     refusal_reason: str | None = None
+    clarifying_question: str | None = None
     session_id: str | None = None  # echo back on every subsequent turn as AskRequest.session_id
 
     # Enrichment — populated from pipeline context, exposed for UI panels and debug

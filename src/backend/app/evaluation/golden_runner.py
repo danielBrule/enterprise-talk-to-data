@@ -71,6 +71,23 @@ NEGATIVE_QUESTIONS = [
     },
 ]
 
+# Questions that are ambiguous (not out-of-scope) — must produce a clarifying_question
+# rather than a plain refusal. Confirms intent_v18 clarification rule is working.
+CLARIFICATION_QUESTIONS = [
+    {
+        "question": "show me the data about france",
+        "reason": "Vague — 'france' could refer to keyword_engagement or article_keywords",
+    },
+    {
+        "question": "what about comments?",
+        "reason": "No subject — ambiguous without prior context",
+    },
+    {
+        "question": "give me the engagement numbers",
+        "reason": "Unclear metric and domain — article or keyword engagement?",
+    },
+]
+
 # SQL patterns that must fail validate_query — confirms the validator blocks them
 NEGATIVE_SQL_PATTERNS = [
     ("INSERT INTO analytics.vw_article_engagement VALUES (1)", "INSERT not allowed"),
@@ -218,6 +235,8 @@ class EvaluationReport:
     conversation_tests_total: int = 0
     system_info_tests_passed: int = 0
     system_info_tests_total: int = 0
+    clarification_tests_passed: int = 0
+    clarification_tests_total: int = 0
     failure_distribution: dict[str, int] = field(default_factory=dict)
 
     @property
@@ -246,6 +265,8 @@ class EvaluationReport:
             lines.append(f"  Conversation: {self.conversation_tests_passed}/{self.conversation_tests_total} passed")
         if self.system_info_tests_total:
             lines.append(f"  System-info:  {self.system_info_tests_passed}/{self.system_info_tests_total} passed")
+        if self.clarification_tests_total:
+            lines.append(f"  Clarification:{self.clarification_tests_passed}/{self.clarification_tests_total} passed")
         lines.append(f"  Note: {self.access_enforcement_note}")
         return lines
 
@@ -268,6 +289,8 @@ class EvaluationReport:
             "conversation_tests_total": self.conversation_tests_total,
             "system_info_tests_passed": self.system_info_tests_passed,
             "system_info_tests_total": self.system_info_tests_total,
+            "clarification_tests_passed": self.clarification_tests_passed,
+            "clarification_tests_total": self.clarification_tests_total,
             "failure_distribution": self.failure_distribution,
             "records": [
                 {
@@ -712,6 +735,57 @@ class GoldenRunner:
         record.latency_ms = ctx.trace.latency_ms.total_ms
         return record
 
+    async def run_clarification_question(self, cq: dict) -> GoldenEvalRecord:
+        """Verify that an ambiguous question produces a clarifying_question, not a plain refusal."""
+        record = GoldenEvalRecord(
+            question=cq["question"],
+            expected_view="",
+            expected_sql="",
+            case_type="clarification",
+        )
+        ctx = _make_ctx(cq["question"])
+
+        await self._intent_stage.run(ctx)
+        record.intent_answerable = ctx.trace.answerable
+
+        if ctx.trace.clarifying_question:
+            record.status = "pass"
+        elif not ctx.trace.answerable:
+            record.status = "fail"
+            record.failure_reasons.append(
+                f"Ambiguous question refused without clarifying_question (expected one). "
+                f"Reason: {ctx.trace.refusal_reason or 'none'}"
+            )
+        else:
+            record.status = "fail"
+            record.failure_reasons.append(
+                "Ambiguous question incorrectly classified as answerable — should have asked for clarification."
+            )
+
+        ctx.trace.execution_status = "skipped"
+        ctx.trace.latency_ms = build_latency(ctx)
+        record.trace = ctx.trace
+        record.latency_ms = ctx.trace.latency_ms.total_ms
+        return record
+
+    async def run_clarification_checks(self) -> list[GoldenEvalRecord]:
+        records = []
+        for cq in CLARIFICATION_QUESTIONS:
+            try:
+                records.append(await self.run_clarification_question(cq))
+            except Exception as exc:
+                logger.exception("golden_runner.clarification_error q=%s", cq.get("question", "?"))
+                rec = GoldenEvalRecord(
+                    question=cq.get("question", "unknown"),
+                    expected_view="",
+                    expected_sql="",
+                    case_type="clarification",
+                    status="error",
+                )
+                rec.failure_reasons.append(str(exc))
+                records.append(rec)
+        return records
+
     async def run_system_info_question(self, q: dict) -> GoldenEvalRecord:
         """Run a system_info question — intent stage only; no SQL pipeline."""
         record = GoldenEvalRecord(
@@ -857,12 +931,14 @@ class GoldenRunner:
         access_records = await self.run_access_checks()
         conversation_records = await self.run_conversation_checks(mode=mode)
         system_info_records = await self.run_system_info_checks(system_info_questions)
+        clarification_records = await self.run_clarification_checks()
 
         records: list[GoldenEvalRecord] = [*positive_records, *negative_records]
         records.extend(self.run_negative_sql_checks())
         records.extend(access_records)
         records.extend(conversation_records)
         records.extend(system_info_records)
+        records.extend(clarification_records)
 
         # Assign failure categories to all failing/partial records
         for r in records:
@@ -880,6 +956,7 @@ class GoldenRunner:
         access_passed = sum(1 for r in access_records if r.status == "pass")
         conversation_passed = sum(1 for r in conversation_records if r.status == "pass")
         system_info_passed = sum(1 for r in system_info_records if r.status == "pass")
+        clarification_passed = sum(1 for r in clarification_records if r.status == "pass")
 
         report = EvaluationReport(
             total=len(records),
@@ -894,6 +971,8 @@ class GoldenRunner:
             conversation_tests_total=len(conversation_records),
             system_info_tests_passed=system_info_passed,
             system_info_tests_total=len(system_info_records),
+            clarification_tests_passed=clarification_passed,
+            clarification_tests_total=len(clarification_records),
             failure_distribution=failure_distribution,
         )
         logger.info(
