@@ -11,9 +11,9 @@ as a *governed analytics product*, paired with a reference implementation of the
 describes.
 
 The failure mode it is built to prevent is specific: a system that returns **fluent, plausible
-and wrong** answers. In an enterprise context that is not a minor limitation — it is a trust,
+and wrong** answers. In an enterprise context, this is not a minor limitation — it is a trust,
 governance and adoption failure. Fluency is not evidence of correctness, and most of the delivery
-work in T2D sits *around* the model, not in it.
+work in T2D falls *around* the model, not in it.
 
 The opposite failure matters just as much. A system so cautious that it refuses or caveats
 everything is safe and useless, and it will not be adopted. The goal is a capability that stays
@@ -45,24 +45,50 @@ flowchart TD
     L --> E["Evaluation and quality-monitoring loop"]
 ```
 
-## The reference implementation (in active development)
+## Implementation: proving the blueprint works
 
-The blueprint is not only prose. A reference implementation is being built in [`src/`](src/) to
-demonstrate the patterns the documents argue for, using OpenAI, Python, SQL, Azure, Terraform and
-Docker. What it sets out to demonstrate:
+The blueprint is not only prose. A working implementation lives in [`src/`](src/), built with
+Python, FastAPI, Azure OpenAI, Azure SQL and Terraform.
 
-- **Access-aware querying** — results are filtered to the tables, columns and rows each user is
-  permitted to see, enforced in the query and execution path, not requested in the prompt.
-- **Deterministic query validation** — writes, drops, unrestricted joins, missing row limits and
-  forbidden tables are blocked *before* execution, not reviewed after.
-- **Metadata grounding** — queries are constrained to approved metric definitions, rather than
-  inferred from the user's wording.
-- **Safe failure** — the system clarifies, caveats, refuses or escalates instead of guessing.
-- **Evaluation harness** — roughly 70 golden questions, with expected answers and safe-failure
-  cases, across ~20 tables and ~30 governed views.
+**Data source.** The pipeline runs against real article data from Le Figaro scraped by
+[lefigaro-harvester](https://github.com/danielBrule/lefigaro-harvester) — a companion project
+(Python 3.13, Dockerised, Azure Container Instances, Azure Service Bus for async processing,
+Key Vault for secrets, federated identity CI/CD). This is production scraped data, not synthetic
+fixtures.
 
-When the code is public, each claim above will map to where it is implemented, so the blueprint and
-the build can be checked against each other.
+**What it demonstrates:**
+
+- **Access-aware querying** — role-based view enforcement at execution time, not at the prompt level
+- **Deterministic SQL validation** — AST-based (sqlglot) rejection of DDL, unscoped joins, missing
+  row limits and forbidden views, before the query reaches the database
+- **Metadata grounding** — SQL generated against approved metric definitions, grain contracts,
+  mandatory filters and an approved join register, not inferred from user wording
+- **Safe failure** — clarifying questions, data quality reports and refusals without touching SQL
+  or the analytics database (short-circuit after intent stage)
+- **Evaluation harness** — curated golden questions run through the live pipeline; pass rate, token
+  usage and model names per stage logged to MLflow on every run
+- **Answer verification** — spot checks on expected answers for curated questions are part of the
+  pytest suite, validated against known outputs from the production dataset
+
+**Deliberate scope decisions:**
+
+- **Evaluation breadth** — questions are self-authored against a known dataset. No holdout set, no
+  adversarial cases written by a second party. The pass rate measures pipeline stability; a
+  production eval would extend to second-party questions and systematic ground-truth scoring.
+- **Auth** — role is a plain HTTP header. Production requires Azure AD group membership mapped to
+  allowed views, with row-level security enforced in SQL. The architecture is stateless so this is
+  a bounded change to `auth.py`.
+- **Scale** — five analytics views over one data source. Real view disambiguation — 50+ overlapping
+  views, competing metric definitions, schema drift — is the problem this sidesteps.
+- **Conversation window** — 3-turn sliding window, configurable via `MAX_HISTORY_TURNS`. Set to 3
+  for cost control on a self-funded build; production would extend this based on observed user
+  session length.
+- **Monitoring** — traces and feedback are collected (SQLite locally, Azure SQL in production) but
+  there is no operational dashboard yet. The data model supports it: refusal rate, token cost per
+  question, failure category distribution and session volume are all queryable from the existing
+  schema.
+
+The blueprint documents what closing each gap requires in a full delivery.
 
 ## What "governed" means in practice
 
