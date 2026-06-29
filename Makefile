@@ -79,7 +79,7 @@ clean-pdf: ## remove generated PDFs
 check: install  ## syntax-check all Python files under src/backend/
 	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; poetry run python -c \"import py_compile, pathlib; [py_compile.compile(str(p), doraise=True) for p in pathlib.Path('src/backend').rglob('*.py')]\""
 
-tests: install  ## run pytest against src/backend/tests/
+tests: install check  ## run pytest against src/backend/tests/
 	@$(PWSH) -NoProfile -Command "$$env:PATH = \"$$env:APPDATA\Python\Scripts;$$env:PATH\"; $$env:PYTHONPATH = 'src'; poetry run pytest src/backend/tests/ -v"
 
 eval: install  ## run golden evaluation — MODE=fast|full (default fast), OUTPUT=path, LIMIT=N, RUN=label, CONCURRENCY=N (default 5; use 3-5 for full mode)
