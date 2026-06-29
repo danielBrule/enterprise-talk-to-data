@@ -4,9 +4,9 @@
 .env
 *.msi
 .git/
-mlruns/
-mlflow.db
-evaluation_results/
+src/mlruns/
+src/mlflow.db
+src/evaluation_results/
 docs/
 src/infra/
 .github/

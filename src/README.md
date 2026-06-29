@@ -26,6 +26,11 @@ The request passes through 7 sequential stages. Each stage either passes control
 
 ```
 src/
+  Dockerfile           — container image (build context: repo root)
+  docker-compose.yml   — local container stack
+  mlflow.db            — MLflow experiment metadata (SQLite, committed)
+  mlruns/              — MLflow artifact store (committed alongside mlflow.db)
+  evaluation_results/  — golden evaluation JSON reports, one per run
   backend/
     app/
       api/           — FastAPI routes (/ask, /metadata/*, /articles, …)
@@ -38,7 +43,7 @@ src/
       stages/        — one file per pipeline step: service + stage + result type
     tests/
       integration/   — endpoint smoke tests (requires running server)
-      test_*.py      — unit tests (218 tests, no external dependencies)
+      test_*.py      — unit tests (225 tests, no external dependencies)
   frontend/          — React + Vite + Tailwind chat UI (see Frontend section below)
   metadata/
     schema_descriptions/  — column-level view documentation (YAML)
@@ -151,7 +156,7 @@ curl -X POST http://localhost:8000/api/v0/ask \
 ## Testing
 
 ```powershell
-make tests   # 218 unit tests, no external dependencies required
+make tests   # 225 unit tests, no external dependencies required
 make eval    # golden runner — requires a live .env with Azure OpenAI credentials
 ```
 

@@ -37,7 +37,8 @@ from backend.app.prompts.sql_generation import PROMPT_VERSION as SQL_GEN_VERSION
 from backend.app.prompts.answer_generation import PROMPT_VERSION as ANSWER_GEN_VERSION
 
 MLFLOW_EXPERIMENT = "talk-to-data-eval"
-MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"
+# Path is relative to this file (src/backend/evaluation_runner.py → src/mlflow.db)
+MLFLOW_TRACKING_URI = f"sqlite:///{Path(__file__).parent.parent / 'mlflow.db'}"
 
 
 def _golden_questions_hash() -> str:

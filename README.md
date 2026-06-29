@@ -126,16 +126,23 @@ annex pack (practical material to adapt, not follow mechanically).
 ```text
 README.md              This file — the pitch and a map of the repo
 Makefile               Task runner (install, eval, mlflow-ui, tests, infra-*)
-src/                   Reference implementation — see src/README.md
 docs/                  The blueprint — see docs/README.md
   master.md            Strategic overview: logic, risks, gates, operating model
   phases/              The nine phase guides
   annexes/             Templates, checklists, registers, worked examples
   pdf/                 Formatted PDF versions of every document
-evaluation_results/    Golden evaluation JSON reports, one file per run (git commit hash embedded)
-mlflow.db              MLflow experiment metadata (SQLite, ~100 KB) — committed so the UI works on clone
-mlruns/                MLflow artifact store (per-question CSV results) — committed alongside mlflow.db
+src/                   Reference implementation — see src/README.md
+  Dockerfile           Container image (build context: repo root)
+  docker-compose.yml   Local container stack
+  mlflow.db            MLflow experiment metadata (SQLite) — committed so the UI works on clone
+  mlruns/              MLflow artifact store — committed alongside mlflow.db
                        (run `make mlflow-ui` to browse results at http://localhost:5000)
+  evaluation_results/  Golden evaluation JSON reports, one file per run (git commit hash embedded)
+  backend/             FastAPI pipeline, stages, prompts, evaluation runner, tests
+  frontend/            React + Vite chat UI
+  metadata/            View schemas, metrics, glossary, golden questions
+  sql/                 View DDL and security scripts
+  infra/               Terraform modules for Azure deployment
 ```
 
 > **Why `mlflow.db` and `mlruns/` are committed.** Committing them means `make mlflow-ui` works

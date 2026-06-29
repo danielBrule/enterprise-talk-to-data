@@ -14,7 +14,9 @@ src/infra/terraform/.terraform.lock.hcl
 # Runtime-generated local data — not committed.
 # data/analytics/ : traces.jsonl, feedback.jsonl (raw append logs) + analytics.db (SQLite)
 # data/data_quality/ : data_quality.db (SQLite, populated by POST /data-quality/refresh)
-# mlflow.db is committed (eval runs generated offline, MLflow UI works after clone).
+# src/mlflow.db and src/mlruns/ are committed (eval runs generated offline, MLflow UI works after clone).
+# Ignore a stale mlflow.db at root in case the old path lingers after the move to src/.
+mlflow.db
 data/
 # Legacy paths — no longer written by the app but gitignored as a safety net.
 data_quality.db
