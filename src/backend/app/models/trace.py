@@ -70,10 +70,11 @@ class TraceRecord(BaseModel):
     row_count: int | None = None
     result_sample: list[dict[str, Any]] | None = None
 
-    # Answer / clarification
+    # Answer / clarification / data quality
     caveats: list[str] = Field(default_factory=list)
     answer: str | None = None
     clarifying_question: str | None = None
+    data_quality_action: str | None = None
 
     # Token usage per LLM stage (prompt_tokens, completion_tokens, total_tokens, model_name)
     token_usage: dict[str, dict[str, Any]] = Field(default_factory=dict)

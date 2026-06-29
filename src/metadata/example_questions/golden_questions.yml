@@ -715,3 +715,18 @@
 - natural_language_question: "What topics or domains does this system cover?"
   expected_intent: system_info
   notes: "Another phrasing — must route to system_info, not unknown/refused."
+
+# Data quality questions — answered from DataQualityStore without SQL (intent domain: data_quality).
+# The golden runner handles these with run_data_quality_question: intent stage only, no SQL pipeline.
+- natural_language_question: "What is the current data quality status?"
+  expected_intent: data_quality
+  notes: "Must route to data_quality domain. data_quality_action=show."
+
+- natural_language_question: "When was the data last checked?"
+  expected_intent: data_quality
+  notes: "Must route to data_quality domain. data_quality_action=show."
+
+- natural_language_question: "Refresh the data quality checks."
+  expected_intent: data_quality
+  expected_data_quality_action: refresh
+  notes: "Must route to data_quality domain with data_quality_action=refresh."

@@ -72,7 +72,7 @@ NEGATIVE_QUESTIONS = [
 ]
 
 # Questions that are ambiguous (not out-of-scope) — must produce a clarifying_question
-# rather than a plain refusal. Confirms intent_v18 clarification rule is working.
+# rather than a plain refusal. Confirms intent_v19 clarification rule is working.
 CLARIFICATION_QUESTIONS = [
     {
         "question": "show me the data about france",
@@ -86,6 +86,13 @@ CLARIFICATION_QUESTIONS = [
         "question": "give me the engagement numbers",
         "reason": "Unclear metric and domain — article or keyword engagement?",
     },
+]
+
+# Questions that must route to data_quality domain — confirmed by intent stage only.
+DATA_QUALITY_QUESTIONS = [
+    {"question": "What is the current data quality status?"},
+    {"question": "When was the data last checked?"},
+    {"question": "Refresh the data quality checks.", "expected_action": "refresh"},
 ]
 
 # SQL patterns that must fail validate_query — confirms the validator blocks them
@@ -148,7 +155,7 @@ class GoldenEvalRecord:
     expected_view: str
     expected_sql: str
     expected_expressions: list[str] = field(default_factory=list)
-    case_type: str = "positive"  # "positive" | "negative_question" | "negative_sql" | "access" | "conversation" | "system_info"
+    case_type: str = "positive"  # "positive" | "negative_question" | "negative_sql" | "access" | "conversation" | "system_info" | "clarification" | "data_quality"
 
     # Per-check results (None = not applicable)
     intent_answerable: bool | None = None
@@ -237,6 +244,8 @@ class EvaluationReport:
     system_info_tests_total: int = 0
     clarification_tests_passed: int = 0
     clarification_tests_total: int = 0
+    data_quality_tests_passed: int = 0
+    data_quality_tests_total: int = 0
     failure_distribution: dict[str, int] = field(default_factory=dict)
 
     @property
@@ -267,6 +276,8 @@ class EvaluationReport:
             lines.append(f"  System-info:  {self.system_info_tests_passed}/{self.system_info_tests_total} passed")
         if self.clarification_tests_total:
             lines.append(f"  Clarification:{self.clarification_tests_passed}/{self.clarification_tests_total} passed")
+        if self.data_quality_tests_total:
+            lines.append(f"  Data quality: {self.data_quality_tests_passed}/{self.data_quality_tests_total} passed")
         lines.append(f"  Note: {self.access_enforcement_note}")
         return lines
 
@@ -291,6 +302,8 @@ class EvaluationReport:
             "system_info_tests_total": self.system_info_tests_total,
             "clarification_tests_passed": self.clarification_tests_passed,
             "clarification_tests_total": self.clarification_tests_total,
+            "data_quality_tests_passed": self.data_quality_tests_passed,
+            "data_quality_tests_total": self.data_quality_tests_total,
             "failure_distribution": self.failure_distribution,
             "records": [
                 {
@@ -786,6 +799,71 @@ class GoldenRunner:
                 records.append(rec)
         return records
 
+    async def run_data_quality_question(self, dq: dict) -> GoldenEvalRecord:
+        """Verify that a data quality question routes to domain=data_quality (intent stage only)."""
+        record = GoldenEvalRecord(
+            question=dq["question"],
+            expected_view="",
+            expected_sql="",
+            case_type="data_quality",
+        )
+        ctx = _make_ctx(dq["question"])
+
+        await self._intent_stage.run(ctx)
+        record.intent_answerable = ctx.trace.answerable
+
+        domain_ok = ctx.trace.intent == "data_quality"
+        answerable_ok = ctx.trace.answerable is True
+        expected_action = dq.get("expected_action")
+        action_ok = (
+            expected_action is None
+            or ctx.trace.data_quality_action == expected_action
+        )
+
+        if answerable_ok and domain_ok and action_ok:
+            record.status = "pass"
+        elif answerable_ok and domain_ok:
+            record.status = "partial"
+            record.failure_reasons.append(
+                f"Correct domain but data_quality_action={ctx.trace.data_quality_action!r} "
+                f"(expected {expected_action!r})"
+            )
+        elif answerable_ok:
+            record.status = "partial"
+            record.failure_reasons.append(
+                f"Answerable but domain={ctx.trace.intent!r} (expected 'data_quality')"
+            )
+        else:
+            record.status = "fail"
+            record.failure_reasons.append(
+                f"data_quality question refused or not answerable "
+                f"(domain={ctx.trace.intent!r}, answerable={ctx.trace.answerable})"
+            )
+
+        ctx.trace.execution_status = "skipped"
+        ctx.trace.latency_ms = build_latency(ctx)
+        record.trace = ctx.trace
+        record.latency_ms = ctx.trace.latency_ms.total_ms
+        return record
+
+    async def run_data_quality_checks(self) -> list[GoldenEvalRecord]:
+        records = []
+        for dq in DATA_QUALITY_QUESTIONS:
+            try:
+                records.append(await self.run_data_quality_question(dq))
+            except Exception as exc:
+                logger.exception("golden_runner.data_quality_error q=%s", dq.get("question", "?"))
+                rec = GoldenEvalRecord(
+                    question=dq.get("question", "unknown"),
+                    expected_view="",
+                    expected_sql="",
+                    case_type="data_quality",
+                    status="error",
+                )
+                rec.failure_reasons.append(str(exc))
+                records.append(rec)
+        return records
+
     async def run_system_info_question(self, q: dict) -> GoldenEvalRecord:
         """Run a system_info question — intent stage only; no SQL pipeline."""
         record = GoldenEvalRecord(
@@ -909,16 +987,20 @@ class GoldenRunner:
     async def run_all(self, mode: str = "fast", limit: int | None = None, concurrency: int = 5) -> EvaluationReport:
         all_questions = self._load_golden_questions()
 
-        # Split: system_info questions use intent-only path; all others go through the SQL pipeline
+        # Split: system_info and data_quality questions use intent-only paths; all others go through the SQL pipeline
         system_info_questions = [q for q in all_questions if q.get("expected_intent") == "system_info"]
-        sql_questions = [q for q in all_questions if q.get("expected_intent") != "system_info"]
+        data_quality_golden = [q for q in all_questions if q.get("expected_intent") == "data_quality"]
+        sql_questions = [
+            q for q in all_questions
+            if q.get("expected_intent") not in ("system_info", "data_quality")
+        ]
 
         if limit is not None:
             sql_questions = sql_questions[:limit]
 
         logger.info(
-            "golden_runner.start mode=%s total_sql=%d total_system_info=%d concurrency=%d",
-            mode, len(sql_questions), len(system_info_questions), concurrency,
+            "golden_runner.start mode=%s total_sql=%d total_system_info=%d total_data_quality=%d concurrency=%d",
+            mode, len(sql_questions), len(system_info_questions), len(DATA_QUALITY_QUESTIONS), concurrency,
         )
 
         sem = asyncio.Semaphore(concurrency)
@@ -932,6 +1014,7 @@ class GoldenRunner:
         conversation_records = await self.run_conversation_checks(mode=mode)
         system_info_records = await self.run_system_info_checks(system_info_questions)
         clarification_records = await self.run_clarification_checks()
+        data_quality_records = await self.run_data_quality_checks()
 
         records: list[GoldenEvalRecord] = [*positive_records, *negative_records]
         records.extend(self.run_negative_sql_checks())
@@ -939,6 +1022,7 @@ class GoldenRunner:
         records.extend(conversation_records)
         records.extend(system_info_records)
         records.extend(clarification_records)
+        records.extend(data_quality_records)
 
         # Assign failure categories to all failing/partial records
         for r in records:
@@ -957,6 +1041,7 @@ class GoldenRunner:
         conversation_passed = sum(1 for r in conversation_records if r.status == "pass")
         system_info_passed = sum(1 for r in system_info_records if r.status == "pass")
         clarification_passed = sum(1 for r in clarification_records if r.status == "pass")
+        data_quality_passed = sum(1 for r in data_quality_records if r.status == "pass")
 
         report = EvaluationReport(
             total=len(records),
@@ -973,14 +1058,17 @@ class GoldenRunner:
             system_info_tests_total=len(system_info_records),
             clarification_tests_passed=clarification_passed,
             clarification_tests_total=len(clarification_records),
+            data_quality_tests_passed=data_quality_passed,
+            data_quality_tests_total=len(data_quality_records),
             failure_distribution=failure_distribution,
         )
         logger.info(
             "golden_runner.complete total=%d pass=%d partial=%d fail=%d error=%d "
-            "access=%d/%d conv=%d/%d sysinfo=%d/%d",
+            "access=%d/%d conv=%d/%d sysinfo=%d/%d dq=%d/%d",
             report.total, report.passed, report.partial, report.failed, report.errors,
             access_passed, len(access_records),
             conversation_passed, len(conversation_records),
             system_info_passed, len(system_info_records),
+            data_quality_passed, len(data_quality_records),
         )
         return report

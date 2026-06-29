@@ -1,7 +1,7 @@
 from datetime import date
 import json
 
-PROMPT_VERSION = "intent_v18"
+PROMPT_VERSION = "intent_v19"
 
 
 _KNOWN_DOMAINS = (
@@ -13,7 +13,8 @@ _KNOWN_DOMAINS = (
     "keyword_engagement (keyword_id, full_keyword, article_count, comment_count, avg_comment_sentiment, contributor_count), "
     "contributor_behaviour [= vw_top_contributors; 'top' is the view name not a filter — covers ALL contributors] "
     "(contributor_id, comment_count, avg_sentiment, distinct_article_count, total_replies), "
-    "ingestion_errors (error_id, stage, data_id, error_type, error_message, attempted_at)"
+    "ingestion_errors (error_id, stage, data_id, error_type, error_message, attempted_at), "
+    "data_quality [= not a SQL view; answered from a pre-computed quality store — per-view row counts, freshness, null rates, sanity issues]"
 )
 
 _KNOWN_VIEWS = (
@@ -37,19 +38,21 @@ Rules:
 - If the question requires forecasting future values, causal explanation ("why", "what causes"), external data, or data not covered by the views above, set answerable to false.
 - Date filtering on publication_date or insert_date is supported and should be classified as answerable.
 - Today's date is 2026-06-24. The current year is 2026. Years before 2026 (e.g. 2025, 2024, 2023) are in the past — historical data exists for them and questions about them are answerable. Only dates strictly after today require forecasting.
-- domain must be one of: article_engagement, article_keywords, keyword_engagement, contributor_behaviour, ingestion_errors, system_info, or unknown.
+- domain must be one of: article_engagement, article_keywords, keyword_engagement, contributor_behaviour, ingestion_errors, system_info, data_quality, or unknown.
 - Use domain=article_keywords when the question asks for the list of keywords associated with a specific article, or the list of articles tagged with a specific keyword.
 - Use domain=article_engagement when the question asks for keyword COUNT on an article (keyword_count column) — NOT article_keywords.
 - Use domain=system_info (and answerable=true) when the question asks about the system itself: what views or data are available, what topics can be queried, what questions can be asked, etc.
+- Use domain=data_quality (and answerable=true) when the question asks about data freshness, data quality status, when data was last checked, or requests running a data quality refresh. Set data_quality_action to "refresh" if the user explicitly wants to re-run or refresh checks, otherwise "show".
 - suggested_metrics should be column names or aggregate expressions from the available views.
 
 Respond with exactly this JSON:
 {{
   "answerable": "<boolean>",
   "reason": "<brief explanation>",
-  "domain": "<article_engagement | article_keywords | keyword_engagement | contributor_behaviour | ingestion_errors | system_info | unknown>",
+  "domain": "<article_engagement | article_keywords | keyword_engagement | contributor_behaviour | ingestion_errors | system_info | data_quality | unknown>",
   "suggested_metrics": ["<column_name_or_aggregate_expression>"],
-  "clarifying_question": null
+  "clarifying_question": null,
+  "data_quality_action": null
 }}""".format(domains=_KNOWN_DOMAINS, views=_KNOWN_VIEWS)
 
 _EXAMPLE_ASSISTANT = json.dumps({
@@ -58,6 +61,7 @@ _EXAMPLE_ASSISTANT = json.dumps({
     "domain": "article_engagement",
     "suggested_metrics": ["avg_comment_sentiment"],
     "clarifying_question": None,
+    "data_quality_action": None,
 })
 
 
@@ -116,13 +120,17 @@ external data, or data not covered by the views above, set answerable to false.
 data exists for them and questions about them are answerable. Only dates strictly after today \
 require forecasting.
 - domain must be one of: article_engagement, article_keywords, keyword_engagement, \
-contributor_behaviour, ingestion_errors, system_info, or unknown.
+contributor_behaviour, ingestion_errors, system_info, data_quality, or unknown.
 - Use domain=article_keywords when the question asks for the list of keywords for a specific \
 article, or the list of articles tagged with a specific keyword.
 - Use domain=article_engagement when the question asks for keyword COUNT on an article \
 (keyword_count column) — NOT article_keywords.
 - Use domain=system_info (and answerable=true) when the question asks about the system itself: \
 what views or data are available, what topics can be queried, what questions can be asked, etc.
+- Use domain=data_quality (and answerable=true) when the question asks about data freshness, \
+data quality status, when data was last checked, or requests running/refreshing quality checks. \
+Set data_quality_action to "refresh" if the user explicitly wants to re-run or refresh checks \
+(e.g. "refresh data quality", "run quality checks"), otherwise set it to "show".
 - suggested_metrics should be column names or aggregate expressions from the available views.
 - Any question mentioning "top contributors" refers to the contributor_behaviour domain \
 (vw_top_contributors). The word "top" is part of the view name — not a filter. This view covers \
@@ -140,9 +148,10 @@ Respond with exactly this JSON:
 {{
   "answerable": "<boolean>",
   "reason": "<brief explanation of why the question is or is not answerable>",
-  "domain": "<article_engagement | article_keywords | keyword_engagement | contributor_behaviour | ingestion_errors | system_info | unknown>",
+  "domain": "<article_engagement | article_keywords | keyword_engagement | contributor_behaviour | ingestion_errors | system_info | data_quality | unknown>",
   "suggested_metrics": ["<column_name_or_aggregate_expression>"],
-  "clarifying_question": "<short question to resolve ambiguity, or null if not ambiguous>"
+  "clarifying_question": "<short question to resolve ambiguity, or null if not ambiguous>",
+  "data_quality_action": "<show | refresh | null — only set when domain=data_quality>"
 }}"""
     return [
         {"role": "system", "content": system},

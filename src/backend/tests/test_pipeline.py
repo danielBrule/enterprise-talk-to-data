@@ -613,3 +613,114 @@ async def test_pipeline_no_clarification_for_out_of_scope_question(monkeypatch):
 
     assert response.refused is True
     assert response.clarifying_question is None
+
+
+async def test_pipeline_data_quality_show_returns_report(monkeypatch):
+    """data_quality intent short-circuits after Stage 1 and returns a quality report."""
+    from backend.app.db.data_quality_store import ViewHealthResult
+
+    pipeline = _build_pipeline(monkeypatch)
+    pipeline.intent_service.classify = AsyncMock(
+        return_value=IntentResult(
+            answerable=True,
+            reason="data quality check",
+            domain="data_quality",
+            suggested_metrics=[],
+            prompt_version="intent_v19",
+            model_deployment="test-deploy",
+            latency_ms=1.0,
+            data_quality_action="show",
+        )
+    )
+
+    sample_results = [
+        ViewHealthResult(
+            view_name="analytics.vw_article_engagement",
+            checked_at="2026-06-29T12:00:00+00:00",
+            row_count=12450,
+            freshness_days=2,
+            null_rates={"avg_comment_sentiment": 8.3},
+            sanity_issues=[],
+        )
+    ]
+    pipeline._quality_store.get_latest_results = AsyncMock(return_value=sample_results)
+    pipeline.view_selection_service.select_views = AsyncMock()
+    pipeline.sql_generation_service.generate = AsyncMock()
+
+    response = await pipeline.run(AskRequest(question="What is the current data quality status?"), _ANALYST)
+
+    assert response.refused is False
+    assert response.answer is not None
+    assert "Data Quality Report" in response.answer
+    assert "vw_article_engagement" in response.answer
+    assert "12,450" in response.answer
+    assert response.trace.execution_status == "answered"
+    assert response.trace.intent == "data_quality"
+    pipeline.view_selection_service.select_views.assert_not_called()
+    pipeline.sql_generation_service.generate.assert_not_called()
+
+
+async def test_pipeline_data_quality_refresh_calls_service(monkeypatch):
+    """data_quality with action=refresh calls DataQualityService.refresh_all."""
+    from backend.app.db.data_quality_store import ViewHealthResult
+    from unittest.mock import patch
+
+    pipeline = _build_pipeline(monkeypatch)
+    pipeline.intent_service.classify = AsyncMock(
+        return_value=IntentResult(
+            answerable=True,
+            reason="data quality refresh",
+            domain="data_quality",
+            suggested_metrics=[],
+            prompt_version="intent_v19",
+            model_deployment="test-deploy",
+            latency_ms=1.0,
+            data_quality_action="refresh",
+        )
+    )
+
+    refreshed_results = [
+        ViewHealthResult(
+            view_name="analytics.vw_article_engagement",
+            checked_at="2026-06-29T14:00:00+00:00",
+            row_count=12500,
+            freshness_days=0,
+            null_rates={},
+            sanity_issues=[],
+        )
+    ]
+    mock_refresh = AsyncMock(return_value=refreshed_results)
+
+    with patch("backend.app.services.talk_to_data_pipeline.DataQualityService") as MockDQService:
+        MockDQService.return_value.refresh_all = mock_refresh
+        response = await pipeline.run(AskRequest(question="Refresh the data quality checks."), _ANALYST)
+
+    assert response.refused is False
+    assert "Data Quality Report" in response.answer
+    assert "refreshed" in response.answer
+    assert response.trace.execution_status == "answered"
+    mock_refresh.assert_awaited_once()
+
+
+async def test_pipeline_data_quality_empty_store_returns_guidance(monkeypatch):
+    """data_quality with no stored results returns a helpful message."""
+    pipeline = _build_pipeline(monkeypatch)
+    pipeline.intent_service.classify = AsyncMock(
+        return_value=IntentResult(
+            answerable=True,
+            reason="data quality check",
+            domain="data_quality",
+            suggested_metrics=[],
+            prompt_version="intent_v19",
+            model_deployment="test-deploy",
+            latency_ms=1.0,
+            data_quality_action="show",
+        )
+    )
+    pipeline._quality_store.get_latest_results = AsyncMock(return_value=[])
+
+    response = await pipeline.run(AskRequest(question="When was the data last checked?"), _ANALYST)
+
+    assert response.refused is False
+    assert "No data quality results" in response.answer
+    assert "refresh" in response.answer.lower()

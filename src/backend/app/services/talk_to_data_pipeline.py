@@ -25,8 +25,60 @@ from ..core.trace_store import TraceStore
 from ..services.llm_service import APITimeoutError
 from ..services.metadata_service import get_approved_joins, get_views_metadata
 from ..db.analytics_store import AnalyticsStore
-from ..db.data_quality_store import DataQualityStore
+from ..db.data_quality_store import DataQualityStore, ViewHealthResult
+from ..services.data_quality_service import DataQualityService
 from ..stages.answer import AnswerService, AnswerStage
+
+
+def _format_quality_report(results: list[ViewHealthResult], action: str) -> str:
+    """Format a list of ViewHealthResult objects into a markdown quality report."""
+    if not results:
+        return (
+            "No data quality results are available yet. "
+            'Say **"refresh data quality"** to run a full check against all analytics views.'
+        )
+
+    latest_date = max((r.checked_at for r in results), default="")
+    try:
+        from datetime import datetime
+        dt = datetime.fromisoformat(latest_date)
+        date_str = dt.strftime("%Y-%m-%d %H:%M UTC")
+    except Exception:
+        date_str = latest_date or "unknown"
+
+    action_note = "refreshed" if action == "refresh" else "last checked"
+    lines = [
+        "## Data Quality Report",
+        f"*Data {action_note}: {date_str}*",
+        "",
+        "| View | Rows | Freshness | Null rates | Issues |",
+        "|------|------|-----------|------------|--------|",
+    ]
+
+    total_issues = 0
+    for r in results:
+        view = r.view_name.split(".")[-1]
+        rows = f"{r.row_count:,}" if r.row_count is not None else "—"
+        freshness = f"{r.freshness_days}d old" if r.freshness_days is not None else "—"
+        null_rates = (
+            "; ".join(f"{col}: {rate:.1f}%" for col, rate in r.null_rates.items())
+            if r.null_rates else "—"
+        )
+        if r.error:
+            issues = f"Error: {r.error[:80]}"
+            total_issues += 1
+        elif r.sanity_issues:
+            issues = "; ".join(r.sanity_issues)
+            total_issues += len(r.sanity_issues)
+        else:
+            issues = "—"
+        lines.append(f"| {view} | {rows} | {freshness} | {null_rates} | {issues} |")
+
+    n = len(results)
+    issue_summary = f"{total_issues} issue{'s' if total_issues != 1 else ''} found" if total_issues else "all clear"
+    lines.append("")
+    lines.append(f"**{n} view{'s' if n != 1 else ''} checked — {issue_summary}.**")
+    return "\n".join(lines)
 
 
 class TalkToDataPipeline:
@@ -248,6 +300,25 @@ class TalkToDataPipeline:
             ctx.trace.latency_ms = build_latency(ctx)
             return AskResponse(
                 answer="\n".join(lines),
+                refused=False,
+                session_id=session_id,
+                trace=ctx.trace,
+                **_enrichment(),
+            )
+
+        # Short-circuit for data quality commands — no SQL pipeline, reads/refreshes quality store
+        if ctx.trace.intent == "data_quality":
+            action = ctx.trace.data_quality_action or "show"
+            if action == "refresh":
+                dq_service = DataQualityService(self._quality_store)
+                results = await dq_service.refresh_all()
+            else:
+                results = await self._quality_store.get_latest_results()
+            answer = _format_quality_report(results, action)
+            ctx.trace.execution_status = "answered"
+            ctx.trace.latency_ms = build_latency(ctx)
+            return AskResponse(
+                answer=answer,
                 refused=False,
                 session_id=session_id,
                 trace=ctx.trace,
