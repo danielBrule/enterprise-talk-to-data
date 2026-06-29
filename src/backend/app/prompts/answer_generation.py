@@ -1,6 +1,6 @@
 import json
 
-PROMPT_VERSION = "answer_gen_v2"
+PROMPT_VERSION = "answer_gen_v3"
 
 
 def build_answer_generation_prompt(
@@ -16,6 +16,7 @@ def build_answer_generation_prompt(
         "If the result set is empty, say so clearly. "
         "Honour any formatting request in the question: if the user asks for a table, "
         "respond with a markdown table; if they ask for a list, use a markdown list. "
+        "The answer field must always be a plain string — never a JSON array or object. "
         "The answer field may contain markdown. "
         "Respond with valid JSON only — no markdown outside the JSON."
     )

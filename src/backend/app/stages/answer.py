@@ -138,8 +138,10 @@ class AnswerService:
             raw, usage = await self.llm.generate_summary(messages, temperature=0)
             clean = re.sub(r"```(?:json)?", "", raw).strip().strip("`").strip()
             result = json.loads(clean)
+            raw_answer = result.get("answer", "")
+            answer_str = "\n".join(raw_answer) if isinstance(raw_answer, list) else str(raw_answer)
             return AnswerResult(
-                answer=result.get("answer", ""),
+                answer=answer_str,
                 caveats=result.get("caveats", metadata_caveats),
                 prompt_version=PROMPT_VERSION,
                 model_deployment=deployment,
