@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import './App.css'
 
 const ROLES = ['analyst', 'editor', 'admin']
@@ -131,7 +132,7 @@ function Message({ msg, onFeedback }) {
             : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
         }`}>
           <div className="md-body">
-            <Markdown>{msg.text}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]}>{msg.text}</Markdown>
           </div>
         </div>
 

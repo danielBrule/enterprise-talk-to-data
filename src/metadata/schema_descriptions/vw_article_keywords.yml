@@ -7,6 +7,8 @@ columns:
     description: "Article title — use for filtering by article name."
   - name: publication_date
     description: "Original publication date of the article."
+  - name: url
+    description: "Full URL of the article."
   - name: keyword_id
     description: "Keyword identifier — matches keyword_id in vw_keyword_engagement."
   - name: full_keyword

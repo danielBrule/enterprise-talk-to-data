@@ -13,15 +13,18 @@ SELECT
     a.title,
     a.publication_date,
     a.insert_date,
+    au.url,
     COUNT(c.id) AS comment_count,
     COALESCE(AVG(CAST(c.sentiment AS FLOAT)), 0.0) AS avg_comment_sentiment,
     SUM(c.replies_count) AS total_replies,
     COUNT(DISTINCT ak.keyword_id) AS keyword_count
 FROM dbo.core_articles AS a
+LEFT JOIN dbo.core_articles_urls AS au ON au.id = a.id
 LEFT JOIN dbo.core_comments AS c ON c.article_id = a.id
 LEFT JOIN dbo.core_article_keywords AS ak ON ak.article_id = a.id
 GROUP BY
     a.id,
     a.title,
     a.publication_date,
-    a.insert_date;
+    a.insert_date,
+    au.url;
