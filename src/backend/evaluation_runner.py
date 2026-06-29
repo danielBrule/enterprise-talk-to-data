@@ -34,6 +34,7 @@ import mlflow
 from backend.app.evaluation.golden_runner import GoldenRunner, _GOLDEN_QUESTIONS_PATH
 from backend.app.prompts.intent import PROMPT_VERSION as INTENT_VERSION
 from backend.app.prompts.sql_generation import PROMPT_VERSION as SQL_GEN_VERSION
+from backend.app.prompts.answer_generation import PROMPT_VERSION as ANSWER_GEN_VERSION
 
 MLFLOW_EXPERIMENT = "talk-to-data-eval"
 MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"
@@ -86,6 +87,7 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
             "git_commit": commit[:8],
             "intent_version": INTENT_VERSION,
             "sql_gen_version": SQL_GEN_VERSION,
+            "answer_gen_version": ANSWER_GEN_VERSION,
             "golden_questions_hash": _golden_questions_hash(),
             "eval_run": eval_run,
             "model_intent": stage_models.get("intent", "unknown"),
@@ -181,10 +183,13 @@ def _log_to_mlflow(report, mode: str, commit: str, eval_run: str, duration_s: fl
         mlflow.log_text(json.dumps(traces, indent=2, default=str), "traces.json")
 
         # Prompt system messages — static per version, useful for diffing across runs
+        from backend.app.prompts.answer_generation import build_answer_generation_prompt
         intent_system = build_intent_prompt("__placeholder__")[0]["content"]
         sql_gen_system = build_sql_generation_prompt("__placeholder__", "__views__")[0]["content"]
+        answer_system = build_answer_generation_prompt("__placeholder__", "__sql__", [], [])[0]["content"]
         mlflow.log_text(intent_system, "prompts/intent_system.txt")
         mlflow.log_text(sql_gen_system, "prompts/sql_gen_system.txt")
+        mlflow.log_text(answer_system, "prompts/answer_system.txt")
 
 
 async def _run(mode: str, output: Path | None, limit: int | None, eval_run: str, concurrency: int) -> int:
