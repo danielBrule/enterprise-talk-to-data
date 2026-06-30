@@ -15,6 +15,8 @@ Runs before any LLM call or database access.
 | **Injection attempts refused, not stripped** — SQL comments (`--`, `/*`), prompt-override phrases (`ignore previous instructions`, `you are now…`, LLM token markers), control characters and questions over `MAX_QUESTION_LENGTH` (default 1 000) all trigger an immediate refusal with a structured `security.injection_attempt` log entry | `app/core/input_safety.py` | `MAX_QUESTION_LENGTH` |
 | **Refuse, don't sanitise** — stripping injection attempts silently allows the question through and hides the signal; refusing and logging is the correct call for an enterprise system | `app/core/input_safety.py` |
 
+**Coarse pre-filter, not the safety boundary.** Regex/keyword matching only catches phrasings someone thought to list; it is trivially bypassed by paraphrase, translation or encoding (base64, unicode homoglyphs). It is not relied on as the actual control — that's [query safety](#query-safety) below, which allow-lists what SQL can ever execute regardless of what the LLM was tricked into generating. A stronger input-side filter — e.g. Azure AI Content Safety's **Prompt Shields**, a classifier rather than a pattern list, already available since this runs on Azure OpenAI — would catch more attempts (paraphrase, obfuscation) at the cost of added latency and a per-call charge. Not implemented here; the deterministic downstream control was judged sufficient for this build's scope.
+
 ---
 
 ## Query safety
