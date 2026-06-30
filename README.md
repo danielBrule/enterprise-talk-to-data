@@ -171,6 +171,10 @@ fixtures.
   there is no operational dashboard yet. The data model supports it: refusal rate, token cost per
   question, failure category distribution and session volume are all queryable from the existing
   schema.
+- **Deployment** — CI runs lint and tests on every push; there is no CD and no hosted instance. The
+  `Dockerfile` is deploy-ready, but trace, feedback and quality stores are local SQLite/JSONL files,
+  which cap a real deployment at a single replica until they move to Azure SQL — a bounded, known
+  change, not a redesign.
 
 The blueprint documents what closing each gap requires in a full delivery.
 
