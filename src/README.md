@@ -72,6 +72,7 @@ src/
   sql/               — view DDL and security scripts
   infra/             — Terraform modules for Azure deployment
 
+Makefile              — task runner for all `make` commands above (repo root, sibling to src/)
 .github/workflows/    — CI: lint + pytest on every push/PR to main (repo root, sibling to src/)
 ```
 

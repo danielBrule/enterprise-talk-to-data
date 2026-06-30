@@ -20,8 +20,20 @@ everything is safe and useless, and it will not be adopted. The goal is a capabi
 useful inside a *deliberately designed* scope — not one that maximises caution at the expense of
 value, and not one that maximises coverage at the expense of trust.
 
+## What this proves
+
+This repository demonstrates that I can:
+- design an enterprise GenAI capability beyond a chatbot demo;
+- implement a governed text-to-SQL pipeline end to end;
+- apply deterministic controls around probabilistic model outputs;
+- build evaluation, tracing, feedback and deployment scaffolding;
+- distinguish MVP evidence from production readiness.
+
+— **Daniel Brule**, Technical Delivery Lead (ex-PwC, AlixPartners, Ekimetrics) · [LinkedIn](https://www.linkedin.com/in/danielbrule/)
+
 ## Contents
 
+- [What this proves](#what-this-proves)
 - [How to use this repo](#how-to-use-this-repo)
 - [How a question becomes a governed answer](#how-a-question-becomes-a-governed-answer)
 - [What "governed" means in practice](#what-governed-means-in-practice)

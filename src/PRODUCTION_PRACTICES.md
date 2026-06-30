@@ -36,7 +36,7 @@ Stage 5 validation runs before the query touches the database. No LLM involved �
 
 ## Resilience
 
-Three independent timeout layers, each targeting a different failure mode.
+Three timeout layers, each targeting a different failure mode. The first two are independent; the pipeline timeout is the outer boundary that contains them — see the retry-loop note below.
 
 | Layer | Covers | Env var |
 |---|---|---|
@@ -47,6 +47,8 @@ Three independent timeout layers, each targeting a different failure mode.
 All three return a user-facing refusal with a clear message. Both `asyncio.TimeoutError` and `openai.APITimeoutError` are caught and handled uniformly — no bare 500s.
 
 **SQL self-correction retry loop** — when SQL validation fails, the error is fed back to the SQL generation stage as a correction hint and the query is regenerated. Up to `MAX_SQL_RETRIES` retries (default 2) before refusing. Token usage and latency accumulate across all attempts so the budget check is accurate. | `app/services/talk_to_data_pipeline.py` | `MAX_SQL_RETRIES`
+
+**Retries share the pipeline timeout — they don't get their own budget.** The loop itself has no timeout; only each individual SQL-generation call inside it is bounded by `LLM_TIMEOUT_SECONDS`. The loop as a whole draws down the same `PIPELINE_TIMEOUT_SECONDS` clock as every other stage (intent, view selection, execution, answer generation). Worst case — `MAX_SQL_RETRIES + 1` slow attempts — can exhaust the pipeline timeout before the loop's own "retries exhausted" refusal fires, in which case the caller gets the generic timeout message instead of the more diagnostic retry-exhaustion one.
 
 **Per-request token budget** — accumulated `total_tokens` across all LLM stages is checked after each call; the pipeline refuses early if the budget is exceeded. Set to 0 to disable. | `app/services/talk_to_data_pipeline.py` | `MAX_TOKENS_PER_REQUEST` (default 10 000)
 
